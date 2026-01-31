@@ -1,0 +1,19 @@
+# KGCN Hyperparameter Configuration
+# Paper: Knowledge Graph Convolutional Networks for Recommender Systems (WWW 2019)
+
+# Embedding dimensions
+embedding_size: 64              # (int) Dimension of user, item and entity embeddings. Paper uses 16-64, with 32 for MovieLens-20M, 64 for Book-Crossing, 16 for Last.FM.
+
+# Graph propagation parameters
+n_iter: 2                       # (int) Number of propagation iterations (H in paper). Paper recommends 1-2 to avoid model collapse. 2 for MovieLens-20M, 1 for Book-Crossing/Last.FM.
+neighbor_sample_size: 8         # (int) Number of neighbors to sample for each entity (K in paper). Paper uses 4 for MovieLens-20M, 8 for Book-Crossing/Last.FM. Best performance at K=4 or 8.
+
+# Aggregator type
+aggregator: 'sum'               # (str) Type of aggregator function. Options: 'sum', 'concat', 'neighbor'. Paper primarily uses 'sum' aggregator.
+
+# Regularization
+reg_weight: 1.0e-7              # (float) L2 regularization weight for user and entity embeddings. Paper uses 1e-7 for MovieLens-20M, 2e-5 for Book-Crossing, 1e-4 for Last.FM.
+
+# Training parameters
+learning_rate: 0.02             # (float) Learning rate for optimizer. Paper uses 2e-2 for MovieLens-20M, 2e-4 for Book-Crossing, 5e-4 for Last.FM.
+train_batch_size: 1024          # (int) Batch size for training. Paper uses 65536 for MovieLens-20M, 256 for Book-Crossing, 128 for Last.FM. Adjusted to 1024 for general use.

@@ -1,0 +1,6 @@
+{
+  "id": "LR_2003",
+  "model_name": "LR",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,139 @@
+============================================================
+Task: GeneralRecommendation
+Total nodes: 33
+Total edges: 62
+============================================================
+
+[ADMMSLIM_2012] <- 0 connections (no incoming edges)
+
+[AsymKNN_2011] <- 0 connections (no incoming edges)
+
+[BPR_2009] <- 1 connections:
+    <- NGCF_2019 (rank: rank1)
+
+[CDAE_2015] <- 2 connections:
+    <- MultiVAE_2018 (rank: rank1)
+    <- NGCF_2019 (rank: rank2)
+
+[ConvNCF_2018] <- 0 connections (no incoming edges)
+
+[DGCF_2020] <- 3 connections:
+    <- MacridVAE_2019 (rank: rank1)
+    <- NGCF_2019 (rank: rank2)
+    <- GCMC_2018 (rank: rank3)
+
+[DMF_2015] <- 1 connections:
+    <- NGCF_2019 (rank: rank1)
+
+[DiffRec_2022] <- 0 connections (no incoming edges)
+
+[EASE_2019] <- 3 connections:
+    <- MultiVAE_2018 (rank: rank1)
+    <- CDAE_2015 (rank: rank2)
+    <- SLIMElastic_2011 (rank: rank4)
+
+[ENMF_2011] <- 1 connections:
+    <- NGCF_2019 (rank: rank2)
+
+[FISM_2013] <- 1 connections:
+    <- NGCF_2019 (rank: rank1)
+
+[GCMC_2018] <- 2 connections:
+    <- MultiVAE_2018 (rank: rank1)
+    <- CDAE_2015 (rank: rank2)
+
+[ItemKNN_2001] <- 4 connections:
+    <- ItemKNN_2001 (rank: rank1)
+    <- FISM_2013 (rank: rank3)
+    <- CDAE_2015 (rank: rank4)
+    <- MultiVAE_2018 (rank: rank5)
+
+[LDiffRec_2023] <- 4 connections:
+    <- MultiVAE_2018 (rank: rank1)
+    <- LightGCN_2020 (rank: rank2)
+    <- CDAE_2015 (rank: rank4)
+    <- BPR_2009 (rank: rank5)
+
+[LINE_2015] <- 4 connections:
+    <- LightGCN_2020 (rank: rank1)
+    <- NGCF_2019 (rank: rank2)
+    <- GCMC_2018 (rank: rank3)
+    <- MultiVAE_2018 (rank: rank4)
+
+[LightGCN_2020] <- 2 connections:
+    <- NGCF_2019 (rank: rank1)
+    <- MultiVAE_2018 (rank: rank2)
+
+[MacridVAE_2019] <- 1 connections:
+    <- MultiVAE_2018 (rank: rank1)
+
+[MultiDAE_2018] <- 0 connections (no incoming edges)
+
+[MultiVAE_2018] <- 3 connections:
+    <- CDAE_2015 (rank: rank1)
+    <- NGCF_2019 (rank: rank2)
+    <- SLIMElastic_2011 (rank: rank3)
+
+[NAIS_2018] <- 3 connections:
+    <- NGCF_2019 (rank: rank1)
+    <- FISM_2013 (rank: rank2)
+    <- BPR_2009 (rank: rank3)
+
+[NCEPLRec_2021] <- 3 connections:
+    <- MultiVAE_2018 (rank: rank1)
+    <- CDAE_2015 (rank: rank2)
+    <- BPR_2009 (rank: rank3)
+
+[NCL_2021] <- 0 connections (no incoming edges)
+
+[NGCF_2019] <- 3 connections:
+    <- GCMC_2018 (rank: rank1)
+    <- NGCF_2019 (rank: rank2)
+    <- BPR_2009 (rank: rank3)
+
+[NNCF_2020] <- 2 connections:
+    <- NGCF_2019 (rank: rank1)
+    <- BPR_2009 (rank: rank2)
+
+[NeuMF_2017] <- 0 connections (no incoming edges)
+
+[Pop_1995] <- 0 connections (no incoming edges)
+
+[RaCT_2021] <- 0 connections (no incoming edges)
+
+[Random_1990] <- 0 connections (no incoming edges)
+
+[RecVAE_2019] <- 4 connections:
+    <- EASE_2019 (rank: rank1)
+    <- MultiVAE_2018 (rank: rank3)
+    <- CDAE_2015 (rank: rank4)
+    <- SLIMElastic_2011 (rank: rank5)
+
+[SGL_2021] <- 3 connections:
+    <- LightGCN_2020 (rank: rank1)
+    <- NGCF_2019 (rank: rank2)
+    <- MultiVAE_2018 (rank: rank3)
+
+[SLIMElastic_2011] <- 4 connections:
+    <- EASE_2019 (rank: rank1)
+    <- LightGCN_2020 (rank: rank2)
+    <- MultiVAE_2018 (rank: rank4)
+    <- NGCF_2019 (rank: rank5)
+
+[SimpleX_2021] <- 5 connections:
+    <- SGL_2021 (rank: rank1)
+    <- DGCF_2020 (rank: rank2)
+    <- LightGCN_2020 (rank: rank3)
+    <- EASE_2019 (rank: rank4)
+    <- RecVAE_2019 (rank: rank5)
+
+[SpectralCF_2018] <- 3 connections:
+    <- GCMC_2018 (rank: rank1)
+    <- NGCF_2019 (rank: rank2)
+    <- BPR_2009 (rank: rank3)
+
+============================================================
+Summary:
+  Nodes with incoming edges: 23
+  Nodes without incoming edges: 10
+============================================================

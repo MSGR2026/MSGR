@@ -1,0 +1,18 @@
+# MRFF模型超参数配置 (通用推荐版本)
+
+# ===== 基础参数 =====
+n_layers: 2                     # (int) 交互层数
+hidden_size: 64                 # (int) 隐藏层维度/嵌入维度
+inner_size: 256                 # (int) 前馈网络的内部维度
+hidden_dropout_prob: 0.5        # (float) 隐藏层dropout概率
+layer_norm_eps: 1e-8            # (float) LayerNorm的epsilon值
+initializer_range: 0.02         # (float) 参数初始化的标准差
+
+# ===== MRFF特有参数 =====
+num_experts: 4                  # (int) 专家网络的数量
+use_moe: True                   # (bool) 是否使用多专家混合机制
+switch_hidden_dims: []          # (list) 门控网络的隐藏层维度列表，留空则自动计算
+
+# ===== 训练参数 =====
+loss_type: 'BPR'                # (str) 损失函数类型: 'BPR' 或 'CE' (通用推荐建议用BPR)
+

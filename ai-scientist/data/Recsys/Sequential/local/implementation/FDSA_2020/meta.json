@@ -1,0 +1,6 @@
+{
+  "id": "FDSA_2020",
+  "model_name": "FDSA",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

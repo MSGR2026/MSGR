@@ -1,0 +1,6 @@
+{
+  "id": "NNCF_2020",
+  "model_name": "NNCF",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

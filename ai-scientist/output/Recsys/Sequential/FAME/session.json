@@ -1,0 +1,37 @@
+{
+  "session_id": "FAME_20260112_160523_3778fd64",
+  "paper_id": "FAME_2025",
+  "model_name": "FAME",
+  "domain": "Recsys",
+  "task": "Sequential",
+  "max_rounds": 3,
+  "current_round": 1,
+  "status": "running",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/Sequential/FAME/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/Sequential/FAME/round_0/hyperparameter.yaml",
+      "acc": 0.071,
+      "metrics": {
+        "recall@10": 0.071,
+        "recall@20": 0.1004,
+        "ndcg@10": 0.0399,
+        "ndcg@20": 0.0473,
+        "hit@10": 0.071,
+        "hit@20": 0.1004
+      },
+      "error": null,
+      "feedback": "成功: 1/1, recall@10=0.0710",
+      "duration": 2718.442924976349,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.071,
+  "best_round": 0,
+  "started_at": "2026-01-12T16:05:23.266385",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/Sequential/FAME"
+}

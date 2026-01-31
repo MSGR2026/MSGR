@@ -1,0 +1,6 @@
+{
+  "id": "DSSM_2013",
+  "model_name": "DSSM",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

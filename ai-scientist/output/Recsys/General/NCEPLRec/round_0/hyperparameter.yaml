@@ -1,0 +1,15 @@
+# NCEPLRec hyperparameters
+# Reference: Ga Wu et al. "Noise Contrastive Estimation for Scalable Learning of Discrete MRFs." RecSys 2021
+
+# NCE popularity penalty hyperparameter
+# Controls the strength of popularity debiasing in the NCE-reweighted matrix
+# Paper range: {0.7, 0.8, ..., 1.3}, best values: 1.0 (ML-20m), 1.1 (Netflix), 1.2 (Yahoo)
+beta: 1.0
+
+# Truncated SVD rank (embedding dimension)
+# Paper range: {50, 100, 200, 500}, best values: 50 (ML-20m, Yahoo), 100 (Netflix)
+rank: 100
+
+# Ridge regression regularization weight (lambda)
+# Paper range: {1e-4, 1e-3, ..., 1e4}, best values: 1 (ML-20m, Netflix), 1000 (Yahoo)
+reg_weight: 1.0

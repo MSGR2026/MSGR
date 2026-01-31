@@ -1,0 +1,12 @@
+# EulerNet: Adaptive Feature Interaction Learning via Euler's Formula for CTR Prediction
+# Reference: Zhen Tian et al. SIGIR 2023
+
+# Embedding configuration
+embedding_size: 10                # (int) The embedding size of features, aligned with baseline methods
+
+# EulerNet specific parameters
+order_list: [1, 2]                # (list of int) Interaction orders to model in complex space, reduced to avoid numerical instability
+num_layers: 2                     # (int) Number of Euler interaction layers
+drop_ex: 0.1                      # (float) Dropout rate for explicit (real) part, lowered for stability
+drop_im: 0.1                      # (float) Dropout rate for implicit (imaginary) part, lowered for stability
+reg_weight: 1e-4                  # (float) L2 regularization weight for model parameters, increased for stability

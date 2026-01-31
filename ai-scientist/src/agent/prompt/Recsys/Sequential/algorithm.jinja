@@ -1,0 +1,167 @@
+{# ============================================================================
+   算法生成提示词模板
+   
+   用途: 指导 LLM 根据论文描述生成 PyTorch 模型代码
+   领域: 推荐系统 (Recsys)
+   任务: 序列推荐 (Sequential Recommendation)
+   
+   模板输出格式:
+     使用 "---SYSTEM_PROMPT---" 和 "---USER_PROMPT---" 作为分隔符
+   
+   作者: GraphScientist Team
+============================================================================ #}
+---SYSTEM_PROMPT---
+你是一位资深的 {{ domain }} 领域算法工程师，专精于将学术论文转化为可执行的代码实现。
+
+你的专长包括：
+- 深度理解论文中的数学公式和算法描述
+- 熟练使用 PyTorch 实现各种深度学习模型
+- 特别擅长序列推荐系统的实现，包括 RNN/GRU/Transformer 等序列建模技术
+- 能够参考已有实现，融会贯通地实现新方法
+- 代码风格清晰、注释详尽、符合工业标准
+
+{% if current_code %}
+## 可用工具
+
+你可以选择以下两种方式之一：
+
+### 方式一：完整重写
+直接输出完整的 Python 代码，用 ```python 和 ``` 包裹。
+
+### 方式二：局部修复 (str_replace 工具)
+如果只需要小范围修改，使用 str_replace 工具调用：
+
+<tool_call>
+<name>str_replace</name>
+<old_str>
+需要替换的旧代码（必须与原代码完全匹配，包括空格缩进）
+</old_str>
+<new_str>
+替换后的新代码
+</new_str>
+</tool_call>
+
+**特别的**：
+- `<old_str>` 和 `<new_str>` 必须成对出现在同一个 `<tool_call>` 中
+- 可以输出多个 `<tool_call>` 块来修复多处
+{% endif %}
+
+请根据论文描述和参考实现，生成高质量的算法代码。
+---USER_PROMPT---
+## 任务描述
+
+你的任务是根据论文 **{{ paper_id }}** 的方法描述，实现其核心算法代码。
+
+- **领域**: {{ domain }}
+- **任务**: {{ task }}
+
+请仔细阅读论文的方法部分，并参考相关基线方法的实现，生成完整的 PyTorch 模型代码。
+
+---
+
+## 目标论文: {{ paper_id }}
+
+{% if method %}
+### 方法描述 (Method)
+
+{{ method }}
+
+{% endif %}
+{% if idea %}
+### 核心思想 (Idea)
+
+{{ idea }}
+
+{% endif %}
+{% if introduction %}
+### 简介 (Introduction)
+
+{{ introduction[:2000] }}{% if introduction|length > 2000 %}...{% endif %}
+
+{% endif %}
+
+---
+
+{% if neighbors and neighbors|length > 0 %}
+## 参考实现
+
+以下是相关基线方法的实现，供参考：
+
+{% for neighbor in neighbors[:3] %}
+### 参考 {{ loop.index }}: {{ neighbor.paper_id }}
+
+{% if neighbor.similarities %}
+**与目标论文的相似点**: {{ neighbor.similarities }}
+{% endif %}
+{% if neighbor.differences %}
+**与目标论文的差异点**: {{ neighbor.differences }}
+{% endif %}
+
+{% if neighbor.algorithm_implementation %}
+**代码实现**:
+```python
+{{ neighbor.algorithm_implementation }}
+```
+{% endif %}
+
+{% endfor %}
+---
+
+{% endif %}
+
+{% if global_context %}
+## 领域知识
+
+{{ global_context }}
+
+---
+
+{% endif %}
+
+{% if current_code %}
+## 当前代码
+
+以下是你之前生成的代码，请根据报错信息决定是完整重写还是使用 str_replace 局部修复：
+
+```python
+{{ current_code }}
+```
+
+---
+
+{% endif %}
+
+{% if history and history|length > 0 %}
+## 之前的尝试
+
+{% for round in history[-3:] %}
+### Round {{ round.round }}
+
+{% if round.acc %}
+- **结果**: acc = {{ "%.4f"|format(round.acc) }}
+{% endif %}
+{% if round.metrics %}
+- **指标**: {% for k, v in round.metrics.items() %}{{ k }}={{ "%.4f"|format(v) }}{% if not loop.last %}, {% endif %}{% endfor %}
+
+{% endif %}
+{% if round.error %}
+- **错误**: {{ round.error }}
+{% endif %}
+{% if round.feedback %}
+- **反馈**: {{ round.feedback }}
+{% endif %}
+
+{% endfor %}
+---
+
+{% endif %}
+
+## 输出格式
+
+{% if current_code %}
+根据报错选择：
+1. **小范围修复**：输出一个或多个 `<tool_call>` 工具调用块
+2. **完整重写**：输出完整的 Python 代码，用 ```python 和 ``` 包裹
+{% else %}
+请直接输出 Python 代码，用 ```python 和 ``` 包裹。
+{% endif %}

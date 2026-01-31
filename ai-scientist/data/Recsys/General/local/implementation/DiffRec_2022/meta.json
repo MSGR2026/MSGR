@@ -1,0 +1,6 @@
+{
+  "id": "DiffRec_2022",
+  "model_name": "DiffRec",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "NeuMF_2017",
+  "model_name": "NeuMF",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

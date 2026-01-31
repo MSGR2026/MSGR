@@ -1,0 +1,32 @@
+# PGL_2025 (Principal Graph Learning for Multimedia Recommendation)
+# Only model-specific hyperparameters required by the provided code.
+
+embedding_size: 64              # also SVD rank d in global-aware mode
+feat_embed_dim: 64              # per-modality projected dim before concat
+
+# graph propagation depth
+n_ui_layers: 2                  # UI graph usually deeper than MM graph
+n_mm_layers: 1                  # item-item graph shallow to reduce noise amplification
+
+# item-item kNN graph
+knn_k: 10                       # paper typical (also common in LATTICE/FREEDOM)
+
+# principal subgraph extraction mode
+principal_mode: "local"         # default to local to avoid dense SVD cost; switch to "global" for small datasets
+
+# local-aware extraction (active when principal_mode == "local")
+local_p: 0.3                    # paper typical
+
+# global-aware extraction (active when principal_mode == "global")
+global_gamma: 0.25              # paper typical, in (0,1)
+global_epsilon: 1.0e-3          # paper typical sparsification threshold
+
+# modality fusion weight for item-item graph (used when both v_feat and t_feat exist)
+mm_image_weight: 0.1            # common setting from FREEDOM; text dominates when weight is small
+
+# SSL (feature masking + in-batch InfoNCE)
+lambda_ssl: [0.01, 0.05, 0.1]   # searched within paper range
+ssl_rho: [0.1, 0.2, 0.3]        # searched within paper range
+ssl_tau: 0.2                    # paper typical
+
+hyper_parameters: ["lambda_ssl", "ssl_rho"]

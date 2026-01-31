@@ -1,0 +1,6 @@
+{
+  "id": "KD_DAGFM_2021",
+  "model_name": "KD_DAGFM",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

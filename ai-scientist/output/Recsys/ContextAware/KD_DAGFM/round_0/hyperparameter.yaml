@@ -1,0 +1,7 @@
+# FFM (Field-aware Factorization Machines) Hyperparameter Configuration
+# Reference: Yuchin Juan et al. "Field-aware Factorization Machines for CTR Prediction" in RecSys 2016
+
+# Embedding size (number of latent factors k)
+# Paper recommends k=4 for FFM on Criteo and Avazu datasets
+# This is smaller than standard FM (40-100) due to field-aware design
+embedding_size: 4

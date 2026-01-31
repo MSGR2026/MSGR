@@ -1,0 +1,6 @@
+{
+  "id": "Random_1990",
+  "model_name": "Random",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

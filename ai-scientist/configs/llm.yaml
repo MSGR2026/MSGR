@@ -1,0 +1,36 @@
+# LLM 服务配置
+# OpenAI 兼容 API
+
+llm:
+  # 服务提供商: "claude" (Anthropic原生) 或 "openai" (OpenAI兼容格式)
+  provider: "openai"
+  
+  # 模型名称
+  # 可选: gpt-4o, gpt-3.5-turbo, claude-opus-4-5-20251101 等（取决于供应商支持和余额）
+  # 注意：gpt-4o 较贵，如果余额不足可用 gpt-3.5-turbo
+  model_name: "claude-opus-4-5-20251101"
+  # model_name: "local-model"
+  # base_url: "http://gpu1:18080/v1"
+  # api_key: "EMPTY"
+  
+  # API 端点（注意：不要包含 /chat，代码会自动添加 /chat/completions）
+  base_url: "https://api2.aigcbest.top/v1"
+  
+  # API 密钥
+  # api_key: "sk-YkZ1z72iPy2wIh7p7Dd2gcWPTGNe0U9SjLdkV28sCQyqPTlb"
+  api_key: "sk-w607e3f2NckG5AkrFYldPpTWwCIti2KNfBcYw0Bu3fdhSWBE"
+  
+  # 生成参数
+  max_tokens: 20000    # 增加 token 数量（thinking 模型需要更多）
+  temperature: 0.7
+  
+  # 请求超时（秒）
+  timeout: 600         # 增加到 5 分钟（thinking 模型响应较慢）
+  
+  # 重试配置
+  retry_count: 3
+  retry_base_delay: 1.0
+  retry_max_delay: 60
+  
+  # 并发配置
+  max_concurrency: 5

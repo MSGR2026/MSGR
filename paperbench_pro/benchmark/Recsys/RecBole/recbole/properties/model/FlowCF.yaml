@@ -1,0 +1,5 @@
+n_steps: 9                      # (int) 离散化步数
+s_steps: 2                      # (int) 采样步数
+dims_mlp: [300, 300]            # (list of int) MLP 层维度
+time_embedding_size: 10         # (int) 时间步嵌入维度
+

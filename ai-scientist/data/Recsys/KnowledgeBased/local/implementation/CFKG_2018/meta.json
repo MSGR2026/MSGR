@@ -1,0 +1,6 @@
+{
+  "id": "CFKG_2018",
+  "model_name": "CFKG",
+  "task": "KnowledgeAwareRecommendation",
+  "domain": "Recsys"
+}

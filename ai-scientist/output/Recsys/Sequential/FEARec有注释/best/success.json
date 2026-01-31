@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "paper_id": "FEARec_2021",
+  "model_name": "FEARec",
+  "domain": "Recsys",
+  "task": "Sequential",
+  "best_round": 2,
+  "best_acc": 0.4154,
+  "best_combo": null,
+  "best_combo_info": {
+    "combo_name": null,
+    "by_dataset": {
+      "Amazon_All_Beauty": "-",
+      "Amazon_Gift_Cards": "-"
+    },
+    "best_metrics": {}
+  },
+  "all_metrics": {},
+  "timestamp": "2026-01-05T19:34:22.053952",
+  "total_rounds": 3,
+  "duration": 4170.2906935215
+}

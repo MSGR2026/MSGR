@@ -1,0 +1,6 @@
+{
+  "id": "AutoInt_2019",
+  "model_name": "AutoInt",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

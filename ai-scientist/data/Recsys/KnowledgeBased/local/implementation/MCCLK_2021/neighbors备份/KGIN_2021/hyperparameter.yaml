@@ -1,0 +1,18 @@
+embedding_size: 64              # (int) The embedding size of users, items, entities and relations.
+# REUSE: Same embedding_size as MCCLK
+reg_weight: 1e-5                # (float) The L2 regularization weight.
+# REUSE: Same reg_weight as MCCLK
+node_dropout_rate: 0.5          # (float) The node dropout rate in GCN layer.
+# REUSE: Same node_dropout_rate as MCCLK
+mess_dropout_rate: 0.0          # (float) The message dropout rate in GCN layer.
+# DIFFERENT: MCCLK uses 0.1; KGIN uses 0.0
+sim_regularity: 1e-4            # (float) The intents independence loss weight.
+# DIFFERENT: KGIN-specific parameter for intent disentanglement; MCCLK uses alpha/beta for contrastive weights
+context_hops: 2                 # (int) The number of context hops in GCN layer.
+# SIMILAR: Corresponds to n_hops=2 in MCCLK
+n_factors: 4                    # (int) The number of user intents.
+# DIFFERENT: KGIN-specific; MCCLK has no intent factors
+ind: 'cosine'                   # (float) The intents independence loss type.
+# DIFFERENT: KGIN-specific independence loss type
+temperature: 0.2                # (float) The temperature parameter used in loss calculation.
+# DIFFERENT: MCCLK uses 0.8; KGIN uses 0.2

@@ -1,0 +1,6 @@
+# SIMILAR: Both use embedding_size for feature embeddings
+embedding_size: 10              # (int) The embedding size of features.
+# DIFFERENT: KD_DAGFM uses depth parameter for DAG layers instead of MLP hidden sizes
+mlp_hidden_size: [64, 64, 64]   # (list of int) The hidden size of MLP layers.
+dropout_prob: 0.0               # (float) The dropout rate.
+# DIFFERENT: KD_DAGFM requires teacher, phase, type, alpha, beta, warm_up for knowledge distillation

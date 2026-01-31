@@ -1,0 +1,6 @@
+{
+  "id": "STAMP_2018",
+  "model_name": "STAMP",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

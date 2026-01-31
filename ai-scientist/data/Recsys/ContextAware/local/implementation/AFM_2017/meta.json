@@ -1,0 +1,6 @@
+{
+  "id": "AFM_2017",
+  "model_name": "AFM",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

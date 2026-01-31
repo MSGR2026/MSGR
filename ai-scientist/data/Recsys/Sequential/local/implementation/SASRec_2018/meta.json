@@ -1,0 +1,6 @@
+{
+  "id": "SASRec_2018",
+  "model_name": "SASRec",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

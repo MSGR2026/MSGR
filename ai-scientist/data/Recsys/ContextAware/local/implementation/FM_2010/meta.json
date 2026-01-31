@@ -1,0 +1,6 @@
+{
+  "id": "FM_2010",
+  "model_name": "FM",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

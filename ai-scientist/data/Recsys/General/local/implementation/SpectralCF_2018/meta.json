@@ -1,0 +1,6 @@
+{
+  "id": "SpectralCF_2018",
+  "model_name": "SpectralCF",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "DCNV2_2020",
+  "model_name": "DCNV2",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

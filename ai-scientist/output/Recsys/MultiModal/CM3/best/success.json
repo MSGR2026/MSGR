@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "paper_id": "CM3_2025",
+  "model_name": "CM3",
+  "domain": "Recsys",
+  "task": "MultiModal",
+  "best_round": 1,
+  "best_acc": 0.0769,
+  "best_combo": null,
+  "best_combo_info": {
+    "combo_name": null,
+    "by_dataset": {
+      "baby": "-"
+    },
+    "best_metrics": {}
+  },
+  "all_metrics": {},
+  "timestamp": "2026-01-12T13:46:26.906804",
+  "total_rounds": 2,
+  "duration": 1197.8290214538574
+}

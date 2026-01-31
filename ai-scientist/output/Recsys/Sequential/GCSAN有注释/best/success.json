@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "paper_id": "GCSAN_2021",
+  "model_name": "GCSAN",
+  "domain": "Recsys",
+  "task": "Sequential",
+  "best_round": 4,
+  "best_acc": 0.3915,
+  "best_combo": null,
+  "best_combo_info": {
+    "combo_name": null,
+    "by_dataset": {
+      "Amazon_All_Beauty": "-",
+      "Amazon_Gift_Cards": "-"
+    },
+    "best_metrics": {}
+  },
+  "all_metrics": {},
+  "timestamp": "2026-01-05T18:13:46.425726",
+  "total_rounds": 5,
+  "duration": 904.2227222919464
+}

@@ -1,0 +1,6 @@
+{
+  "id": "GRU4RecF_2019",
+  "model_name": "GRU4RecF",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

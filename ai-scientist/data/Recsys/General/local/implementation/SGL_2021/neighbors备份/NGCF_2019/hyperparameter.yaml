@@ -1,0 +1,10 @@
+# REUSE: Same embedding size as SGL
+embedding_size: 64              # (int) The embedding size of users and items.
+# DIFFERENT: NGCF uses hidden_size_list for layer dimensions; SGL uses n_layers with fixed embedding size
+hidden_size_list: [64,64,64]    # (list of int) The hidden size of each layer in GCN layers.
+# DIFFERENT: NGCF node_dropout applied during forward pass; SGL uses ssl_ratio for graph augmentation
+node_dropout: 0.0               # (float) The dropout rate of node in each GNN layer.
+# DIFFERENT: NGCF has message_dropout on embeddings; SGL has no such dropout
+message_dropout: 0.1            # (float) The dropout rate of edge in each GNN layer.
+# SIMILAR: Both use L2 regularization weight, SGL uses 1e-4
+reg_weight: 1e-5                # (float) The L2 regularization weight.

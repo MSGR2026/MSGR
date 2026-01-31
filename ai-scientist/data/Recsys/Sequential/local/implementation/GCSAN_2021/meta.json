@@ -1,0 +1,6 @@
+{
+  "id": "GCSAN_2021",
+  "model_name": "GCSAN",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "paper_id": "SINE_2021",
+  "model_name": "SINE",
+  "domain": "Recsys",
+  "task": "Sequential",
+  "best_round": 1,
+  "best_acc": 0.4086,
+  "best_combo": null,
+  "best_combo_info": {
+    "combo_name": null,
+    "by_dataset": {
+      "Amazon_All_Beauty": "-",
+      "Amazon_Gift_Cards": "-"
+    },
+    "best_metrics": {}
+  },
+  "all_metrics": {},
+  "timestamp": "2026-01-05T20:33:37.043634",
+  "total_rounds": 2,
+  "duration": 222.48698806762695
+}

@@ -1,0 +1,26 @@
+# SGL Hyperparameters
+
+# Model Architecture
+embedding_size: 64              # (int) The embedding size of users and items.
+n_layers: 3                     # (int) The number of LightGCN layers for neighborhood aggregation.
+
+# Regularization
+reg_weight: 1e-4                # (float) The L2 regularization weight for embeddings.
+
+# Self-Supervised Learning
+ssl_tau: 0.2                    # (float) Temperature for InfoNCE contrastive loss.
+ssl_weight: 0.1                 # (float) The weight of SSL contrastive loss.
+
+# Graph Augmentation
+drop_ratio: 0.1                 # (float) Dropout ratio for graph augmentation (node/edge dropout).
+aug_type: ED                    # (str) Augmentation type: 'ND' (Node Dropout), 'ED' (Edge Dropout), 'RW' (Random Walk).
+
+# Training
+learning_rate: 0.001            # (float) Learning rate for Adam optimizer.
+train_batch_size: 2048          # (int) Training batch size.
+
+# Early Stopping
+stopping_step: 10               # (int) Number of epochs with no improvement after which training will be stopped.
+
+# Evaluation
+eval_batch_size: 4096           # (int) Evaluation batch size for full sort prediction.

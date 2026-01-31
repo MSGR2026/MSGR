@@ -1,0 +1,37 @@
+{
+  "session_id": "FEARec_20260105_231126_bd9463cc",
+  "paper_id": "FEARec_2021",
+  "model_name": "FEARec",
+  "domain": "Recsys",
+  "task": "Sequential",
+  "max_rounds": 10,
+  "current_round": 1,
+  "status": "running",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/Sequential/FEARec/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/Sequential/FEARec/round_0/hyperparameter.yaml",
+      "acc": 0.4088,
+      "metrics": {
+        "23": 35.0,
+        "recall@10": 0.4088,
+        "mrr@10": 0.2988,
+        "ndcg@10": 0.3266,
+        "hit@10": 0.4088,
+        "precision@10": 0.0409
+      },
+      "error": null,
+      "feedback": "成功: 2/2, recall@10=0.4088",
+      "duration": 1449.907832145691,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.4088,
+  "best_round": 0,
+  "started_at": "2026-01-05T23:11:26.717606",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/Sequential/FEARec"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "xDeepFM_2018",
+  "model_name": "xDeepFM",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

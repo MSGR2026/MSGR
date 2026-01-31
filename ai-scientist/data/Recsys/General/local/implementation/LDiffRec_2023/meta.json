@@ -1,0 +1,6 @@
+{
+  "id": "LDiffRec_2023",
+  "model_name": "LDiffRec",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

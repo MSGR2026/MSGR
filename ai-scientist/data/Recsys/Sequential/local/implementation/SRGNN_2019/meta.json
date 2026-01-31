@@ -1,0 +1,6 @@
+{
+  "id": "SRGNN_2019",
+  "model_name": "SRGNN",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

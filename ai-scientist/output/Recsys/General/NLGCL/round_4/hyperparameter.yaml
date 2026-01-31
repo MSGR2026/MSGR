@@ -1,0 +1,25 @@
+# NLGCL_2025 Hyperparameters
+
+# Model Architecture
+embedding_size: 64              # (int) The embedding size of users and items.
+n_layers: 1                     # (int) Reduced from 2 to 1 to avoid OOM and index out of bounds
+G: 1                            # (int) Reduced contrastive view groups to 1 for sparse datasets
+scope: 'heterogeneous'          # (str) Scope for contrastive learning ('heterogeneous' or 'entire')
+
+# Regularization and Loss Weights
+reg_weight: 0.0001              # (float) L2 regularization weight (λ₂)
+ssl_weight: 1e-05               # (float) Self-supervised learning weight (λ₁)
+ssl_temp: 0.2                   # (float) Temperature parameter (τ) for contrastive loss
+
+# Training Settings
+learning_rate: 0.001            # (float) Learning rate for Adam optimizer
+train_batch_size: 1024          # (int) Reduced batch size to avoid OOM
+eval_batch_size: 2048           # (int) Evaluation batch size
+stopping_step: 20               # (int) Early stopping patience (epochs)
+
+# Optimization
+optimizer_type: Adam            # (str) Optimizer type
+initializer: xavier_normal      # (str) Weight initialization method
+
+# Hardware
+device: 'cuda'                  # (str) Training device

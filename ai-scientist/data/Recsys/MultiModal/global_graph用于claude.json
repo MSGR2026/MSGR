@@ -1,0 +1,131 @@
+{
+  "domain": "Recsys",
+  "task": "MultiModal",
+  "items": [
+    {
+      "id": "device_consistency",
+      "title": "张量设备与 dtype 一致性",
+      "content": "同一运算中的张量必须 device/dtype 一致。常见陷阱：torch.arange/ones/zeros 默认 CPU；稀疏张量 indices 为 Long、values 为 Float；from_pretrained 的权重随模型迁移但临时张量不迁移。建议：创建张量显式指定 device；稀疏图构建后统一 .coalesce()；可长期复用的张量用 register_buffer 托管，避免遗漏 .to(self.device)。",
+      "tags": ["device", "dtype", "sparse", "critical"],
+      "source": "engineering_standards",
+      "priority": 10,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    },
+    {
+      "id": "framework_interface_contract",
+      "title": "推荐框架接口契约与数据约定",
+      "content": "模型类遵循框架接口：__init__ 首行 super().__init__(config, dataset)；实现 forward/calculate_loss/full_sort_predict。interaction 常用约定为 [user, pos_item, neg_item]。配置读取统一使用 config['key'] 并在初始化阶段集中落盘生效值（含默认值），避免 config 与真实执行不一致。避免使用已废弃 API（如旧式 torch.sparse.FloatTensor 构造、scipy 私有更新接口）。",
+      "tags": ["framework", "interface", "config", "critical"],
+      "source": "framework_analysis",
+      "priority": 10,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    },
+    {
+      "id": "multimodal_feature_handling",
+      "title": "多模态特征接入：可训练性、归一化与维度对齐",
+      "content": "模态特征接入通常需要：Embedding/张量包装 → 线性投影到统一维度 → 必要时做 L2 normalize。关键工程点：特征是否允许训练更新（freeze True/False）会显著影响收敛与上限；拼接/相加/门控前保证维度一致（必要时用线性层映射）；保持不同分支数值尺度相近，避免某一路压制其它信号。",
+      "tags": ["feature", "projection", "normalize", "engineering"],
+      "source": "model_analysis",
+      "priority": 9,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    },
+    {
+      "id": "graph_construction_and_defaults",
+      "title": "物品相似图构建：默认策略与可复现缓存",
+      "content": "kNN 相似图常规流程：特征归一化→相似度→Top-K→稀疏边→对称归一化 D^{-1/2}AD^{-1/2}。复现差异多来自默认策略：是否包含 self-loop、Top-K 后是否对称化（A∪A^T/取 max/mean）、边权是否用相似度或统一置 1、零度节点与 epsilon 处理。建议缓存到磁盘，文件名编码关键超参（K、融合权重、归一化口径、是否对称化等），并记录构图版本以避免“读错缓存”。",
+      "tags": ["graph", "knn", "cache", "reproducibility"],
+      "source": "engineering_standards",
+      "priority": 9,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    },
+    {
+      "id": "simplified_graph_propagation",
+      "title": "简化图传播与层聚合（LightGCN 风格）",
+      "content": "多模态推荐常用简化传播：仅做邻居聚合，不加非线性与特征变换；多层输出常用均值池化（stack+mean）而非只取最后一层。传播层数通常 1–3；为避免过平滑与稳定训练，常见做法是残差相加或在某些分支仅叠加增量表示。",
+      "tags": ["gnn", "lightgcn", "aggregation", "stability"],
+      "source": "model_analysis",
+      "priority": 9,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    },
+    {
+      "id": "fusion_patterns_and_scaling",
+      "title": "融合范式与尺度控制",
+      "content": "融合常见发生在三层：图结构层（加权和/并集+max）、表示层（拼接+投影/门控/注意力/逐元素重标定）、残差层（协同表示 + 内容增量）。工程要点：融合前后保持数值尺度可控（normalize、温度、残差系数、均值化等）；对稀疏图融合优先在边集合上操作避免稠密化；门控/注意力通常需要防止极端饱和（初始化、softmax 维度选择、dropout 等）。",
+      "tags": ["fusion", "architecture", "scale", "engineering"],
+      "source": "model_analysis",
+      "priority": 8,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    },
+    {
+      "id": "stochastic_view_generation",
+      "title": "随机扰动生成两视图：dropout/掩码/剪枝",
+      "content": "当论文描述“掩码/增强得到两视图”但未固定算子时，工程上常用两次独立随机扰动近似（dropout、特征随机失活、边剪枝、加噪等）。关键要求：两次扰动必须独立、强度可控、只在训练启用；评估阶段必须完全关闭随机性（dropout.eval、固定推理图）。",
+      "tags": ["augmentation", "dropout", "masking", "protocol"],
+      "source": "engineering_standards",
+      "priority": 8,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    },
+    {
+      "id": "contrastive_learning_practice",
+      "title": "对比学习实现要点（InfoNCE）",
+      "content": "对比学习常用于行为视图 vs 内容视图或跨模态对齐。通用实现要点：F.normalize 后计算相似度；in-batch negatives 是默认高效做法；温度 τ 通常落在 0.1–0.5；必要时使用 stop-gradient/detach 防坍缩或稳定训练。注意区分“视图构造方式”和“损失写法”，避免把主目标信号稀释掉。",
+      "tags": ["contrastive-learning", "infonce", "temperature", "stability"],
+      "source": "model_analysis",
+      "priority": 8,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    },
+    {
+      "id": "loss_weighting_and_semantics",
+      "title": "损失组合与权重语义对齐",
+      "content": "多模态推荐常见形式：loss = main_loss + w_aux * aux_loss + w_reg * reg_term。复现中的高频错误：把所有损失统一乘同一系数导致主损失被削弱；或把“名字叫 reg_weight 的系数”误当作 L2 正则但实际用于对比/一致性损失。建议：在日志中分别打印各损失项的数值量级与最终加权贡献，保证权重语义与实现一致。",
+      "tags": ["loss", "weight", "optimization", "critical"],
+      "source": "error_analysis",
+      "priority": 9,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    },
+    {
+      "id": "subgraph_and_principal_graph_training",
+      "title": "子图/稀疏化训练策略与复现注意点",
+      "content": "为加速或增强鲁棒性，训练阶段可能采用子图采样、边剪枝、度敏感采样或其它稀疏化策略；全局型方法还可能涉及谱分解/截断重构并配合阈值稀疏化。复现要点：明确采样率/阈值/是否放回、归一化口径、是否每 epoch 重采样；并将训练子图与推理用图严格区分、可缓存复用以便消融对比。",
+      "tags": ["subgraph", "sparsification", "sampling", "engineering"],
+      "source": "reproduction_notes",
+      "priority": 8,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    },
+    {
+      "id": "training_eval_protocol_alignment",
+      "title": "训练/评估协议对齐（full-sort 与随机性控制）",
+      "content": "训练常用采样负例的点对点损失；评估通常 full-sort 计算 Recall/NDCG/MRR。若训练含子图/增强，评估需切回固定的推理图并关闭所有随机性；full_sort_predict 中避免任何训练期随机操作。必要时固定 seed、多次重复取均值，并与论文的 early-stop 指标/耐心值对齐。",
+      "tags": ["evaluation", "full-sort", "protocol", "reproducibility"],
+      "source": "engineering_standards",
+      "priority": 9,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    },
+    {
+      "id": "effective_hparams_and_constants",
+      "title": "生效超参与硬编码常量风险",
+      "content": "复现差异常来自“看起来可调但实际未生效”：温度、采样率、阈值、dropout 等在实现里可能被硬编码，或被多处重复定义导致覆盖。工程建议：统一超参入口、启动时打印最终生效值、对关键常量配置化；对缓存文件也记录生成时的超参快照，避免隐式常量长期污染实验结果。",
+      "tags": ["hyperparameter", "logging", "engineering", "critical"],
+      "source": "reproduction_notes",
+      "priority": 8,
+      "created_at": "2025-12-22T12:00:00.000000",
+      "updated_at": "2026-01-09T00:00:00"
+    }
+  ],
+  "metadata": {
+    "created_at": "2025-12-22T12:00:00.000000",
+    "updated_at": "2026-01-09T00:00:00",
+    "item_count": 12
+  }
+}

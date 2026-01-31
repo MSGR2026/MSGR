@@ -1,0 +1,20 @@
+# RippleNet Hyperparameter Configuration
+# Paper: RippleNet: Propagating User Preferences on the Knowledge Graph for Recommender Systems (CIKM 2018)
+
+# DIFFERENT: embedding_size=16 vs MCCLK's 64; RippleNet uses smaller embeddings
+embedding_size: 16
+
+# RippleNet specific parameters
+# SIMILAR: n_hop=2 comparable to MCCLK's n_hops=2 for multi-hop propagation depth
+n_hop: 2
+# DIFFERENT: n_memory controls ripple set size; MCCLK uses k=10 for k-NN graph instead
+n_memory: 32
+
+# DIFFERENT: reg_weight=1e-7 vs MCCLK's 1e-5; weaker regularization
+reg_weight: 1e-7
+
+# Training strategy
+use_st_gumbel: false
+
+# DIFFERENT: learning_rate=0.02 typically higher than MCCLK defaults; no contrastive loss params (alpha, beta, temperature)
+learning_rate: 0.02

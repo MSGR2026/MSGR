@@ -1,0 +1,13 @@
+{
+  "id": "Pop_1995",
+  "paper_title": "Popularity-based Recommendation Systems: A Baseline Approach",
+  "alias": "Pop",
+  "year": 1995,
+  "domain": "Recsys",
+  "task": "GeneralRecommendation",
+  "idea": "",
+  "introduction": "",
+  "method": "",
+  "experiments": "",
+  "hyperparameter": ""
+}

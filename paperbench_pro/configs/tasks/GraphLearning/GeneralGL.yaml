@@ -1,0 +1,112 @@
+task:
+  domain: GraphLearning
+  task: GeneralGL
+  framework: GeneralGL
+  description: "General Graph Learning"
+
+execution:
+  container: container/GraphLearning/generalgl.sif
+  # 使用容器内的 Python 环境（/opt/zyg/bin/python）
+  # 确保使用容器内安装的包
+  # 注意：所有参数都在 entry 中，不使用 args.template（因为 interface.py 会硬编码 python）
+  # GeneralGL 使用 --model 和 --dataset 参数自动加载配置文件
+  # --gpu {gpu} 会被替换为实际的 GPU ID（0-N），-1 表示自动选择
+  entry: /opt/zyg/bin/python replicate.py --model {model} --dataset {dataset} --gpu {gpu}
+  workdir: /app
+  timeout: 54000
+
+mount:
+  replicate:
+    host: "paperbench_pro/benchmark/GraphLearning/GeneralGL/replicate.py"
+    container: "/app/replicate.py"
+  
+  # encoding_generator.py 挂载（修复 mag-year 的 metapath 问题）
+  encoding_generator:
+    host: "paperbench_pro/benchmark/GraphLearning/GeneralGL/H2GB/loader/encoding_generator.py"
+    container: "/app/H2GB/loader/encoding_generator.py"
+  
+  # metapath2vec.py 挂载（修复 scikit-learn 兼容性问题）
+  metapath2vec:
+    host: "paperbench_pro/benchmark/GraphLearning/GeneralGL/H2GB/loader/embedding/metapath2vec.py"
+    container: "/app/H2GB/loader/embedding/metapath2vec.py"
+  
+  # 算法文件挂载（只挂载当前需要的模型文件）
+  algorithm:
+    host: "{algorithm_path}"
+    container: "/app/models/{model}_model.py"
+  
+  # models 目录的共享依赖文件（必需，因为某些模型会导入这些文件）
+  models_utils:
+    host: "paperbench_pro/benchmark/GraphLearning/GeneralGL/models/utils.py"
+    container: "/app/models/utils.py"
+  
+  models_conv:
+    host: "paperbench_pro/benchmark/GraphLearning/GeneralGL/models/conv.py"
+    container: "/app/models/conv.py"
+  
+  models_model:
+    host: "paperbench_pro/benchmark/GraphLearning/GeneralGL/models/model.py"
+    container: "/app/models/model.py"
+  
+  models_init:
+    host: "paperbench_pro/benchmark/GraphLearning/GeneralGL/models/__init__.py"
+    container: "/app/models/__init__.py"
+
+  # 基础配置文件（base.yaml 和 dataset.yaml）
+  config_base:
+    host: "paperbench_pro/benchmark/GraphLearning/GeneralGL/configs/base.yaml"
+    container: "/app/configs/base.yaml"
+  
+  config_dataset:
+    host: "paperbench_pro/benchmark/GraphLearning/GeneralGL/configs/dataset.yaml"
+    container: "/app/configs/dataset.yaml"
+  
+  config_datasets:
+    host: "paperbench_pro/benchmark/GraphLearning/GeneralGL/configs/datasets"
+    container: "/app/configs/datasets"
+
+  hyperparameter:
+    host: "{hyperparameter_path}"
+    container: "/app/configs/models/{model}.yaml"
+
+  data:
+    host: "paperbench_pro/benchmark/GraphLearning/GeneralGL/data"
+    container: "/app/data"
+
+  results:
+    host: "output/logs/runs/{run_id}/results"
+    container: "/app/results"
+
+  logs:
+    host: "output/logs/runs/{run_id}/tasks"
+    container: "/app/log"
+
+data:
+  datasets:
+    # - mag-year
+    # - Pokec
+    # - RCDD
+    - PDNS
+    # - IEEE-CIS
+    # - oag-chem
+    # - oag-cs
+    # - oag-eng
+    # - ogbn-mag
+
+  root: paperbench_pro/benchmark/GraphLearning/GeneralGL/data
+
+eval:
+  metrics:
+    - accuracy
+    - f1
+    - micro-f1
+    - best_validation_accuracy
+    - best_validation_f1
+    - best_validation_micro-f1
+    - best_test_accuracy
+    - best_test_f1
+    - best_test_micro-f1
+
+  primary_metric: accuracy
+  higher_is_better: true
+

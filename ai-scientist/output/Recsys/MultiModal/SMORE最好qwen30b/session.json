@@ -1,0 +1,47 @@
+{
+  "session_id": "SMORE_20260116_205819_4d046c8d",
+  "paper_id": "SMORE_2025",
+  "model_name": "SMORE",
+  "domain": "Recsys",
+  "task": "MultiModal",
+  "max_rounds": 5,
+  "current_round": 1,
+  "status": "running",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_0/hyperparameter.yaml",
+      "acc": 0.0253,
+      "metrics": {
+        "recall@5": 0.0162,
+        "recall@10": 0.0253,
+        "recall@20": 0.0386,
+        "recall@50": 0.0583,
+        "ndcg@5": 0.0108,
+        "ndcg@10": 0.0138,
+        "ndcg@20": 0.0172,
+        "ndcg@50": 0.0212,
+        "precision@5": 0.0035,
+        "precision@10": 0.0027,
+        "precision@20": 0.0021,
+        "precision@50": 0.0013,
+        "map@5": 0.0088,
+        "map@10": 0.01,
+        "map@20": 0.0109,
+        "map@50": 0.0116
+      },
+      "error": null,
+      "feedback": "成功: 1/1, recall@10=0.0253",
+      "duration": 215.26240229606628,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.0253,
+  "best_round": 0,
+  "started_at": "2026-01-16T20:58:19.389603",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/MultiModal/SMORE"
+}

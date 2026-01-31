@@ -1,0 +1,12 @@
+# REUSE: Same embedding dimension as FEARec's hidden_size
+embedding_size: 64              # (int) The embedding size of users and items.
+# SIMILAR: Dropout probability (FEARec uses 0.5)
+dropout_prob: 0.4               # (float) The dropout rate. 
+# DIFFERENT: Explicit L2 regularization; FEARec uses no explicit reg_weight
+reg_weight: 1e-4                # (float) The L2 regularization weight.
+# DIFFERENT: CNN-specific parameters; FEARec uses n_layers, n_heads for Transformer
+nv: 4                           # (int) The number of vertical Convolutional filters.
+nh: 8                           # (int) The number of horizontal Convolutional filters.
+# REUSE: Same loss type configuration
+loss_type: 'CE'                 # (str) The type of loss function.
+train_neg_sample_args: ~        # CE loss must disable negative sampling or RecBole will error.

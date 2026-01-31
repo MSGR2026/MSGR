@@ -1,0 +1,6 @@
+{
+  "id": "HGN_2019",
+  "model_name": "HGN",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

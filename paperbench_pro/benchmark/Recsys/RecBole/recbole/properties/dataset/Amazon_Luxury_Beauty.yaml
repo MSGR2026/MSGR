@@ -1,0 +1,11 @@
+dataset: Amazon_Luxury_Beauty
+data_path: dataset/
+
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+RATING_FIELD: rating
+TIME_FIELD: timestamp
+
+load_col:
+  inter: [user_id, item_id, rating, timestamp]
+  item: [item_id, title, brand, sales_type, sales_rank]

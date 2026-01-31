@@ -1,0 +1,25 @@
+# SimpleX: A Simple and Strong Baseline for Collaborative Filtering
+# Reference: Kelong Mao et al. "SimpleX: A Simple and Strong Baseline for Collaborative Filtering." in CIKM 2021.
+
+# Embedding settings
+embedding_size: 64              # (int) The embedding size of users and items. Paper uses 64 (matching LightGCN) or 128.
+
+# Cosine Contrastive Loss (CCL) parameters
+margin: 0.4                     # (float) Margin m in CCL loss. Paper tunes among 0~1 at interval of 0.1, 0.4 works for Amazon-Books.
+negative_weight: 300            # (float) Weight w for negative loss in CCL. Paper searches among [1, 150, 300, 1000], 300 performs well.
+
+# User representation fusion
+gamma: 0.5                      # (float) Fusing weight g for combining user embedding and behavior aggregation. Paper reports 0.5 works best.
+
+# Behavior aggregation
+aggregator: mean                # (str) Aggregation strategy for behavior history. Options: 'mean', 'self_attention', 'user_attention'.
+history_len: 50                 # (int) Maximum behavior sequence length K. Dataset-dependent with padding/truncation.
+
+# Regularization
+reg_weight: 1e-4                # (float) L2 regularization weight. Paper searches between 1e-9~1e-2.
+
+# Training settings
+train_neg_sample_args:
+  distribution: uniform
+  sample_num: 500               # (int) Number of negative samples. Paper searches from 1 to 2000, commonly 100, 500, or 1000.
+  dynamic: False

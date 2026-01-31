@@ -1,0 +1,15 @@
+embedding_size: 64
+extraction_type: local
+feat_embed_dim: 64
+knn_k: 10
+mask_ratio: 0.3
+mm_image_weight: 0.1
+n_layers: 2
+n_mm_layers: 1
+reg_weight: 1e-04
+sampling_ratio: 0.3
+sparsification_threshold: 0.01
+ssl_weight: 0.1
+svd_rank: 64
+temperature: 0.2
+truncation_ratio: 0.25

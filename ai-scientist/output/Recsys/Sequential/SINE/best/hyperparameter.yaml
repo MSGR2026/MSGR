@@ -1,0 +1,12 @@
+# SINE model hyperparameters
+# Reference: Tan et al. "Sparse-Interest Network for Sequential Recommendation" in WSDM 2021.
+
+embedding_size: 64              # (int) The embedding size of items.
+hidden_size: 64                 # (int) The hidden size for linear transformations.
+prototype_size: 100             # (int) L: Total number of concepts in the concept pool.
+interest_size: 4                # (int) K: Number of activated concepts per user.
+tau: 0.1                        # (float) Temperature for interest aggregation softmax.
+reg_weight: 1e-4                # (float) Lambda: Weight for covariance regularization loss.
+layer_norm_eps: 1e-12           # (float) A value added to the denominator for numerical stability in LayerNorm.
+loss_type: 'CE'                 # (str) The type of loss function. Range in ['BPR', 'CE'].
+train_neg_sample_args: ~        # Disable negative sampling for CE loss.

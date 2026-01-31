@@ -1,0 +1,6 @@
+{
+  "id": "AsymKNN_2011",
+  "model_name": "AsymKNN",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

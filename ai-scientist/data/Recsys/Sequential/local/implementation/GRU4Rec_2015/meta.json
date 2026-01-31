@@ -1,0 +1,6 @@
+{
+  "id": "GRU4Rec_2015",
+  "model_name": "GRU4Rec",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

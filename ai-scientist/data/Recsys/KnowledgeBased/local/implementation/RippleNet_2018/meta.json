@@ -1,0 +1,6 @@
+{
+  "id": "RippleNet_2018",
+  "model_name": "RippleNet",
+  "task": "KnowledgeAwareRecommendation",
+  "domain": "Recsys"
+}

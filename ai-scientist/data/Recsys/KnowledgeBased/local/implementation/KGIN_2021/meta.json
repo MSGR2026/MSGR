@@ -1,0 +1,6 @@
+{
+  "id": "KGIN_2021",
+  "model_name": "KGIN",
+  "task": "KnowledgeAwareRecommendation",
+  "domain": "Recsys"
+}

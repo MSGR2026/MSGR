@@ -1,0 +1,37 @@
+{
+  "session_id": "FlowCF_20260110_162827_47c3150c",
+  "paper_id": "FlowCF_2025",
+  "model_name": "FlowCF",
+  "domain": "Recsys",
+  "task": "General",
+  "max_rounds": 3,
+  "current_round": 1,
+  "status": "running",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/General/FlowCF/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/General/FlowCF/round_0/hyperparameter.yaml",
+      "acc": 0.2093,
+      "metrics": {
+        "recall@10": 0.2093,
+        "recall@20": 0.286,
+        "ndcg@10": 0.207,
+        "ndcg@20": 0.2399,
+        "hit@10": 0.63,
+        "hit@20": 0.741
+      },
+      "error": null,
+      "feedback": "成功: 1/1, recall@10=0.2093",
+      "duration": 1755.3549227714539,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.2093,
+  "best_round": 0,
+  "started_at": "2026-01-10T16:28:27.429067",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/General/FlowCF"
+}

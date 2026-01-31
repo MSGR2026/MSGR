@@ -1,0 +1,33 @@
+# FEARec: Frequency Enhanced Hybrid Attention Network for Sequential Recommendation
+# Reference: Xinyu Du et al. "Frequency Enhanced Hybrid Attention Network for Sequential Recommendation" SIGIR 2023
+
+# Transformer architecture parameters
+n_layers: 2                     # (int) The number of FEA blocks in the encoder.
+n_heads: 2                      # (int) The number of attention heads for multi-head attention layer.
+hidden_size: 64                 # (int) The number of features in the hidden state.
+inner_size: 256                 # (int) The inner hidden size in feed-forward layer.
+hidden_dropout_prob: 0.5        # (float) The probability of an element to be zeroed.
+attn_dropout_prob: 0.5          # (float) The probability of an attention score to be zeroed.
+hidden_act: 'gelu'              # (str) The activation function in feed-forward layer.
+layer_norm_eps: 1e-12           # (float) A value added to the denominator for numerical stability.
+initializer_range: 0.02         # (float) The standard deviation for normal initialization.
+
+# FEARec specific parameters - Frequency ramp structure
+alpha: 0.5                      # (float) Frequency sampling ratio for ramp structure. When alpha > 1/L, overlapping mode; otherwise average mode.
+gamma: 0.5                      # (float) Weight for combining time domain and frequency domain attention. 0.5 means equal contribution.
+topk_factor: 3                  # (int) Factor for top-k selection in frequency domain auto-correlation. k = topk_factor * log(seq_len).
+
+# Contrastive learning parameters
+lmd: 0.1                        # (float) Lambda weight for unsupervised contrastive loss.
+lmd_sem: 0.1                    # (float) Lambda weight for supervised contrastive loss with same target items.
+tau: 1.0                        # (float) Temperature parameter for contrastive learning softmax.
+
+# Frequency domain regularization
+fredom: 0.1                     # (float) Weight for frequency domain regularization loss. Set to 0 to disable.
+fredom_type: 'L1'               # (str) Type of frequency domain regularization. Options: 'L1'.
+
+# Loss function
+loss_type: 'CE'                 # (str) The type of loss function. Range in ['BPR', 'CE'].
+
+# Disable negative sampling for CE loss
+train_neg_sample_args: ~        # Disable negative sampling when using CE loss.

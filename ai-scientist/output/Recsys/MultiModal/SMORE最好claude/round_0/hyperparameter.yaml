@@ -1,0 +1,25 @@
+# SMORE: Spectrum Modality Fusion for Multimodal Recommendation
+# Hyperparameter Configuration
+
+# Embedding dimension
+embedding_size: 64
+
+# Number of user-item graph propagation layers (LightGCN style)
+n_ui_layers: 2
+
+# Number of top-K neighbors for item-item graph construction
+knn_k: [10, 20]
+
+# Regularization weight for L2 loss
+reg_weight: 1e-04
+
+# Contrastive loss weight (λ1 in paper, typical: 0.01-0.03)
+cl_weight: [0.01, 0.02]
+
+# Temperature for InfoNCE contrastive loss
+temperature: [0.1, 0.2]
+
+# Dropout rate (used in gating modules if needed)
+dropout: 0.0
+
+hyper_parameters: ["knn_k", "cl_weight", "temperature"]

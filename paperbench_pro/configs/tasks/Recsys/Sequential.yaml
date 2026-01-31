@@ -1,0 +1,66 @@
+# Recsys/Sequential 任务配置
+# 用于 RecBole Sequential Recommendation 任务
+# 支持模型：SASRec, BERT4Rec, GRU4Rec, Caser, NARM, SRGNN, ...
+
+task:
+  domain: Recsys
+  task: Sequential
+  framework: RecBole
+  description: "Sequential Recommendation using RecBole framework"
+
+execution:
+  container: container/Recsys/recbole.sif
+  entry: RECBOLE_LOGROOT=/logs/{dataset} PYTHONPATH=/app/recbole python /app/recbole/run_recbole.py -m {model} -d {dataset}
+  workdir: /app
+  timeout: 7200
+
+mount:
+  # RecBole 源码挂载（补齐 recbole 包）
+  recbole:
+    host: "paperbench_pro/benchmark/Recsys/RecBole"
+    container: "/app/recbole"
+
+  # Sequential Recommendation 模型放在 sequential_recommender 目录
+  algorithm:
+    host: "{algorithm_path}"
+    container: "/app/recbole/recbole/model/sequential_recommender/{model_lower}.py"
+  
+  hyperparameter:
+    host: "{hyperparameter_path}"
+    container: "/app/recbole/recbole/properties/model/{model}.yaml"
+  
+  dataset:
+    host: "paperbench_pro/dataset/Recsys/Sequential/{dataset}"
+    container: "/app/dataset/{dataset}"
+  
+  logs:
+    host: "output/logs/runs/{run_id}/tasks"
+    container: "/logs"
+
+  # 模型保存目录挂载（对应 checkpoint_dir = saved）
+  saved_logs:
+    host: "output/logs/runs/{run_id}/tasks/saved"
+    container: "/app/saved"
+  
+  # TensorBoard 日志目录挂载
+  tensorboard:
+    host: "output/logs/runs/{run_id}/tasks/tensorboard"
+    container: "/app/log_tensorboard"
+    
+data:
+  datasets:
+    - Amazon_Beauty
+  
+  root: dataset/Recsys/Sequential
+
+eval:
+  metrics:
+    - recall@10
+    - recall@20
+    - ndcg@10
+    - ndcg@20
+    - hit@10
+    - hit@20
+  
+  primary_metric: recall@10
+  higher_is_better: true

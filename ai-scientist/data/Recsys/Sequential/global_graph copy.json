@@ -1,0 +1,318 @@
+{
+  "domain": "Recsys",
+  "task": "SequentialRecommendation",
+  "items": [
+    {
+      "id": "sequential_recommender_interface",
+      "title": "SequentialRecommender 基类接口规范",
+      "content": "模型类继承 SequentialRecommender，__init__ 首行调用 super().__init__(config, dataset)。父类提供核心属性：self.n_items（物品数）、self.max_seq_length（最大序列长度）、self.device。父类提供字段常量：ITEM_SEQ（历史序列）、ITEM_SEQ_LEN（序列长度）、POS_ITEM_ID（目标物品）、NEG_ITEM_ID（负样本物品）、ITEM_ID（测试物品）、USER_ID。必须实现 forward(item_seq, item_seq_len) 返回 [B, H] 序列表示、calculate_loss(interaction)、predict(interaction)、full_sort_predict(interaction)。父类提供 gather_indexes(output, indices) 按位置提取隐状态、get_attention_mask(item_seq, bidirectional=False) 生成注意力掩码。",
+      "tags": [
+        "framework",
+        "recbole",
+        "interface",
+        "critical"
+      ],
+      "source": "framework_analysis",
+      "priority": 10,
+      "created_at": "2025-12-26T12:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "sequence_encoding_paradigms",
+      "title": "序列建模范式",
+      "content": "序列推荐存在四种主流建模范式：(1) 自注意力 Transformer，支持单向因果掩码（SASRec 风格，仅看历史）或双向注意力（BERT4Rec 风格，需配合掩码预训练）；(2) 循环神经网络 GRU/LSTM，通过隐状态传递时序信息，计算效率高但并行性差；(3) 图神经网络，将序列转为会话图捕捉物品转移关系，适合建模复杂跳转模式；(4) 卷积网络，水平卷积捕捉联合级别模式、垂直卷积捕捉时间点级别模式。序列最终表示通常取最后有效位置的隐状态：output = gather_indexes(encoder_output, item_seq_len - 1)。",
+      "tags": [
+        "architecture",
+        "transformer",
+        "rnn",
+        "gnn",
+        "cnn",
+        "critical"
+      ],
+      "source": "model_analysis",
+      "priority": 10,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "position_encoding",
+      "title": "位置编码",
+      "content": "序列模型需显式建模位置信息。标准做法是可学习位置嵌入 nn.Embedding(max_seq_length, hidden_size)，与物品嵌入相加：input_emb = item_emb + position_embedding。位置索引生成：position_ids = torch.arange(seq_len, device=item_seq.device).unsqueeze(0).expand_as(item_seq)。输入嵌入后需 LayerNorm + Dropout 正则化。部分高级方法解耦位置编码与内容编码分别计算注意力再融合。",
+      "tags": [
+        "embedding",
+        "position",
+        "transformer"
+      ],
+      "source": "model_analysis",
+      "priority": 8,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "attention_mask_generation",
+      "title": "注意力掩码生成",
+      "content": "序列推荐中注意力掩码需处理两类情况：(1) padding 掩码，对 item_seq==0 的位置屏蔽；(2) 因果掩码，确保位置 i 只能注意到 ≤i 的位置，用 torch.tril() 生成下三角矩阵。掩码值设为 -10000.0（乘以 attention_scores 后 softmax 接近零）。双向注意力（BERT 风格）仅使用 padding 掩码，单向注意力（GPT 风格）两者结合。父类 get_attention_mask(item_seq, bidirectional=False) 已封装此逻辑。",
+      "tags": [
+        "attention",
+        "mask",
+        "transformer"
+      ],
+      "source": "engineering_standards",
+      "priority": 8,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "loss_functions",
+      "title": "损失函数选择",
+      "content": "序列推荐主流两种损失：(1) BPR 排序损失，需负采样，loss = -log(sigmoid(pos_score - neg_score))，强调正负样本相对顺序，适合隐式反馈；(2) CrossEntropy 分类损失，logits = matmul(seq_output, item_embedding.weight.T)，将所有物品作为类别，计算 softmax 后的交叉熵。CE 损失无需显式负采样但计算量大（需对所有物品计算 logits）。实现时用 loss_type 配置切换，BPR 需从 interaction[NEG_ITEM_ID] 获取负样本。\n\n常见报错：当 loss_type='CE' 时仍启用负采样，会触发 RecBole 配置校验异常（train_neg_sample_args），典型报错为：ValueError: train_neg_sample_args ... should be None when the loss_type is CE. 解决方式是在模型或全局配置中显式关闭负采样：\ntrain_neg_sample_args: ~  # Disable negative sampling for CE loss\n若使用 BPR，则保留负采样配置并确保 loss_type 与采样策略一致。",
+      "tags": [
+        "loss",
+        "bpr",
+        "crossentropy",
+        "critical"
+      ],
+      "source": "model_analysis",
+      "priority": 10,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-27T11:00:00.000000"
+    },
+    {
+      "id": "scoring_and_prediction",
+      "title": "评分与预测",
+      "content": "三种预测场景：(1) calculate_loss 训练时对正/负样本评分：score = (seq_output * item_emb).sum(dim=-1)；(2) predict 测试单个候选物品：scores = torch.mul(seq_output, test_item_emb).sum(dim=1)；(3) full_sort_predict 对所有物品排序：scores = torch.matmul(seq_output, item_embedding.weight.transpose(0, 1))，返回 [B, n_items]。全排序是性能瓶颈，需一次矩阵乘法完成，禁止逐物品循环。",
+      "tags": [
+        "prediction",
+        "scoring",
+        "performance"
+      ],
+      "source": "engineering_standards",
+      "priority": 9,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "transformer_architecture",
+      "title": "Transformer 编码器结构",
+      "content": "序列推荐 Transformer 标准配置：n_layers=2、n_heads=2、hidden_size=64、inner_size=256（4 倍 hidden_size）。使用 RecBole 的 TransformerEncoder 组件，参数包括 hidden_dropout_prob、attn_dropout_prob（典型 0.2-0.5）、hidden_act='gelu'、layer_norm_eps=1e-12。注意 hidden_size 必须能被 n_heads 整除。输出取最后一层：trm_output = encoder(input_emb, attention_mask, output_all_encoded_layers=True)[-1]。",
+      "tags": [
+        "transformer",
+        "architecture",
+        "hyperparameter"
+      ],
+      "source": "model_analysis",
+      "priority": 9,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "session_graph_construction",
+      "title": "会话图构建",
+      "content": "将序列转为图结构的方法：遍历序列构建物品转移边，连续出现的 (item_i, item_{i+1}) 构成有向边。区分入边和出边邻接矩阵，按行/列归一化（度归一化防止度数大的节点主导）。使用 numpy 高效构建后转 torch.FloatTensor。图中每个节点对应序列中的唯一物品，通过 alias_inputs 建立原始位置到图节点的映射，用 torch.gather 将图节点表示映射回序列位置。",
+      "tags": [
+        "graph",
+        "session",
+        "gnn"
+      ],
+      "source": "model_analysis",
+      "priority": 7,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "config_yaml_format",
+      "title": "超参数 YAML 格式规范",
+      "content": "YAML 采用扁平结构，每行一个参数，格式 key: value # (type) description。值必须为标量或整数列表（仅 MLP 隐层如 mlp_hidden_size: [256,256]）。键名必须与代码中 config['key'] 完全一致。Transformer 类模型典型参数：n_layers: 2、n_heads: 2、hidden_size: 64、inner_size: 256、hidden_dropout_prob: 0.5、attn_dropout_prob: 0.5、hidden_act: 'gelu'、layer_norm_eps: 1e-12、initializer_range: 0.02、loss_type: 'CE'。",
+      "tags": [
+        "hyperparameter",
+        "yaml",
+        "config",
+        "critical"
+      ],
+      "source": "engineering_standards",
+      "priority": 9,
+      "created_at": "2025-12-26T12:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "device_tensor_handling",
+      "title": "设备与张量处理",
+      "content": "关键设备一致性规则：(1) 动态创建的张量需显式指定 device，如 torch.arange(..., device=item_seq.device)；(2) 预计算结构（邻接矩阵、掩码模板）在 __init__ 中移至 self.device；(3) numpy 数组转 tensor 后需 .to(self.device)。序列数据访问通过 interaction 字典，如 item_seq = interaction[self.ITEM_SEQ]。序列长度 item_seq_len 为 LongTensor，用于 gather 操作时无需额外处理。",
+      "tags": [
+        "device",
+        "tensor",
+        "engineering"
+      ],
+      "source": "engineering_standards",
+      "priority": 8,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "sequence_augmentation_strategies",
+      "title": "序列增强策略",
+      "content": "序列推荐中的数据增强通过扩充训练样本提升模型泛化能力。常见策略包括：(1) 序列级增强：随机裁剪、子序列重排、掩码、插入/删除操作；(2) 嵌入级增强：在表示空间进行插值混合（Mixup），可在物品维度、特征维度或批次维度进行。Mixup 通常使用 Beta 分布采样混合系数 λ~Beta(α,α)，combined_emb = λ * emb1 + (1-λ) * emb2。增强样本需配合自适应损失权重避免引入过多噪声。实现时注意：增强操作应在 forward 中通过 augment 标志控制，测试时禁用；对于两阶段训练，通过 epoch 计数器判断是否启用增强。",
+      "tags": [
+        "augmentation",
+        "mixup",
+        "training",
+        "generalization"
+      ],
+      "source": "training_techniques",
+      "priority": 8,
+      "created_at": "2026-01-10T12:00:00.000000",
+      "updated_at": "2026-01-10T12:00:00.000000"
+    },
+    {
+      "id": "frequency_domain_processing",
+      "title": "频域信号处理技术",
+      "content": "频域分析可将序列信号分解为不同频率成分，捕捉长期稳定模式（低频）和短期波动（高频）。PyTorch 实现：使用 torch.fft.rfft(x, dim=1, norm='ortho') 进行实数快速傅里叶变换，输出形状 [B, c//2+1, H]，其中 c 为序列长度。低频分量保留前 k 个系数，高频分量为原始信号减去低频部分。逆变换用 torch.fft.irfft(x, n=seq_len, dim=1, norm='ortho') 恢复时域信号。可引入可学习参数 β 控制高频权重：filtered = low_freq + β² * high_freq，通过 nn.Parameter(torch.randn(1,1,1)) 定义。应用场景：去噪、长短期兴趣解耦、多尺度特征提取。实现时需在滤波层中添加 LayerNorm 和残差连接保证训练稳定性。",
+      "tags": [
+        "frequency",
+        "fft",
+        "signal_processing",
+        "advanced"
+      ],
+      "source": "signal_processing",
+      "priority": 7,
+      "created_at": "2026-01-10T12:00:00.000000",
+      "updated_at": "2026-01-10T12:00:00.000000"
+    },
+    {
+      "id": "multimodal_feature_fusion",
+      "title": "多模态特征融合机制",
+      "content": "当模型需整合物品 ID、类别、品牌等多种信息时，常用三种融合策略：(1) 加法融合 (sum)：直接逐元素相加，要求各模态维度相同，计算高效但表达力受限；(2) 拼接融合 (concat)：沿特征维度拼接后通过线性层投影，fusion_layer = nn.Linear(sum_of_dims, target_dim)，灵活但参数量大；(3) 门控融合 (gate)：使用注意力机制动态加权，VanillaAttention 计算各模态重要性后加权求和，适合模态重要性差异大的场景。实现时通过 fusion_type 配置项切换。对于序列数据，融合可发生在嵌入层后（early fusion）、注意力计算中（intermediate fusion）或编码器输出后（late fusion）。Early fusion 直接融合原始嵌入，intermediate fusion 融合注意力分数矩阵，late fusion 融合最终表示。多路径架构可结合不同阶段的融合策略，通过 α 参数平衡：final_repr = α * path1 + (1-α) * path2。",
+      "tags": [
+        "fusion",
+        "multimodal",
+        "attention",
+        "architecture"
+      ],
+      "source": "multimodal_learning",
+      "priority": 8,
+      "created_at": "2026-01-10T12:00:00.000000",
+      "updated_at": "2026-01-10T12:00:00.000000"
+    },
+    {
+      "id": "attention_mechanism_variants",
+      "title": "注意力机制变体与扩展",
+      "content": "标准 Transformer 注意力可通过多种方式扩展：(1) 解耦位置与内容注意力：分别计算 pos_attn = Q_pos @ K_pos^T 和 item_attn = Q_item @ K_item^T，融合后再 softmax，捕捉位置依赖和内容依赖；(2) 多来源注意力融合：对不同信息源（如 ID、属性）分别计算注意力矩阵，通过加法/拼接/门控融合，attention_fused = Fusion([attn_id, attn_attr1, ...])，然后与 value 聚合；(3) 分层注意力：不同 Transformer 层专注不同模式，早期层捕捉局部模式，后期层捕捉全局依赖。实现时 Q/K/V 投影矩阵需分别定义，self.query_id = nn.Linear(hidden_size, all_head_size)，对于多属性需用 nn.ModuleList 存储多组投影层。注意缩放因子 1/sqrt(d_k) 防止内积过大导致梯度消失。",
+      "tags": [
+        "attention",
+        "transformer",
+        "architecture",
+        "advanced"
+      ],
+      "source": "attention_mechanisms",
+      "priority": 7,
+      "created_at": "2026-01-10T12:00:00.000000",
+      "updated_at": "2026-01-10T12:00:00.000000"
+    },
+    {
+      "id": "training_strategies_regularization",
+      "title": "训练策略与正则化技术",
+      "content": "深度序列模型常用训练技巧：(1) 两阶段训练：先在原始数据上预训练稳定基础模型，再引入增强/辅助任务微调，通过 epoch 计数器判断阶段（如 if epoch < stage1_epochs）；(2) 多任务学习：主任务 loss_main + λ * loss_auxiliary，λ 控制辅助任务权重，典型取值 0.1-0.5；(3) 自适应损失加权：根据样本难度或增强强度动态调整损失权重，weight = f(difficulty)，避免简单样本主导训练；(4) 对比学习：通过正负样本对齐表示空间，常用 InfoNCE 损失或余弦相似度约束；(5) Dropout 策略：浅层使用较低 dropout（0.2），深层或过拟合风险高时提高至 0.5。实现时在 calculate_loss 中组合多个损失项，total_loss = loss_rec + λ1 * loss_aux1 + λ2 * loss_aux2，确保各损失项量级相近（通过系数调节）。",
+      "tags": [
+        "training",
+        "regularization",
+        "multi_task",
+        "optimization"
+      ],
+      "source": "training_techniques",
+      "priority": 9,
+      "created_at": "2026-01-10T12:00:00.000000",
+      "updated_at": "2026-01-10T12:00:00.000000"
+    },
+    {
+      "id": "recbole_feature_embedding",
+      "title": "RecBole 特征嵌入层使用",
+      "content": "RecBole 提供 FeatureSeqEmbLayer 统一处理序列特征嵌入。使用方式：feature_embed_layer = FeatureSeqEmbLayer(dataset, embedding_size, selected_features, pooling_mode, device)，其中 selected_features=['categories', 'brand'] 指定要使用的特征字段。调用时 sparse_embedding, dense_embedding = feature_embed_layer(None, item_seq)，返回字典结构 {'item': tensor}。稀疏特征（类别型）返回 [B, L, 1, d_f] 形状张量，dense 特征为 None（如无连续特征）。多个特征需用 nn.ModuleList 分别创建嵌入层：[FeatureSeqEmbLayer(..., [feat], ...) for feat in selected_features]，然后拼接 torch.cat(feature_table, dim=2)。pooling_mode 可选 'sum'/'mean'/'max'，控制同一物品多个特征值的聚合方式。特征嵌入维度 attribute_hidden_size 可与主嵌入 hidden_size 不同，融合时需投影对齐。",
+      "tags": [
+        "recbole",
+        "feature",
+        "embedding",
+        "framework",
+        "critical"
+      ],
+      "source": "framework_analysis",
+      "priority": 9,
+      "created_at": "2026-01-10T12:00:00.000000",
+      "updated_at": "2026-01-10T12:00:00.000000"
+    },
+    {
+      "id": "hybrid_architecture_design_principles",
+      "title": "混合架构的设计原则与专家融合",
+      "content": "序列推荐可采用混合架构结合不同建模范式的优势：(1) RNN类模型（GRU/LSTM）擅长捕捉时序依赖和长期记忆，但并行性较差；(2) 注意力机制擅长捕捉全局语义关联和位置无关的相似性，但计算复杂度较高。混合架构通过并行运行多个专家（如 RNN 分支 + 注意力分支）实现优势互补。专家融合策略包括：加权求和（通过可学习参数动态平衡各专家贡献）、拼接后投影、或门控机制。设计要点：(1) 确保各专家输出维度一致或通过投影对齐；(2) 融合权重应通过 softmax 归一化保证总和为1；(3) 初始化时可设置等权（如0.5）让模型自适应学习；(4) 并行结构要求各专家间无数据依赖以实现真正的并行计算。混合架构在保持计算效率的同时提升了模型的表达能力和泛化性能。",
+      "tags": ["hybrid", "architecture", "expert_mixing", "efficiency", "design_principles"],
+      "source": "model_analysis",
+      "priority": 9,
+      "created_at": "2026-01-12T00:00:00.000000",
+      "updated_at": "2026-01-12T01:00:00.000000"
+    },
+    {
+      "id": "linear_attention_numerical_stability",
+      "title": "线性注意力机制的数值稳定性与激活函数选择",
+      "content": "线性注意力将标准注意力中的 softmax(Q·K^T) 替换为核函数特征映射 φ(Q)·(φ(K)^T·V)。常见的核函数包括 ELU、ReLU、exp 等。ELU 激活函数 elu(x)=x (x>0), α(e^x-1) (x≤0) 的关键特性：(1) 输出值可为负（不同于 ReLU），提供更丰富的表达空间；(2) ELU 后的值需结合 L2 归一化（行归一化和列归一化）以保持数值稳定性；(3) 激活后的值范围取决于输入分布，需在不同数据集上可能表现不同。L2 归一化的两种形式：χ₁ 为行方向（在特征维）、χ₂ 为列方向（在序列维），确保不同位置和特征的权重均匀分布，避免某些位置主导整体注意力。实现细节：应在 ELU 后立即应用 L2 归一化，归一化后需加入小的 epsilon（如 1e-8）避免除零。线性注意力还需一个关键的缩放因子 1/√(d_k) 来防止内积过大导致梯度消失，这个缩放在标准注意力中是隐式的 softmax 性质，但在线性注意力中需显式处理。",
+      "tags": ["attention", "activation", "elu", "normalization", "gradient", "numerical_stability", "linear_attention"],
+      "source": "model_analysis",
+      "priority": 10,
+      "created_at": "2026-01-12T00:00:00.000000",
+      "updated_at": "2026-01-12T00:00:00.000000"
+    },
+    {
+      "id": "temporal_convolution_causal_padding",
+      "title": "时间卷积的因果性与填充策略",
+      "content": "1D 卷积在序列推荐中有两种应用模式：(1) 非因果卷积，允许每个时刻同时看到过去和未来的信息（双向），padding 通常为 kernel_size//2，适合特征提取；(2) 因果卷积，每个时刻仅看到过去和当前的信息（单向），padding 为 kernel_size-1 后截断前 kernel_size-1 个输出，防止未来信息泄露。在序列推荐中，因果性取决于应用场景：预处理阶段（在 GRU 前）可使用非因果卷积因为输入是完整的嵌入序列；而在时间序列预测时应用因果卷积防止模型看到真实标签。常见的实现细节：(1) padding=(kernel_size-1, 0) 实现左填充实现因果卷积；(2) 非因果则 padding=kernel_size//2；(3) Conv1d 的输入格式为 [batch, channels, sequence_length]，需要对 [batch, sequence_length, hidden] 进行转置。选择哪种填充策略取决于信息流设计：稀疏数据集中，非因果卷积在预处理阶段可帮助补充相邻物品的上下文；稠密数据集可两者结合。",
+      "tags": ["convolution", "causal", "padding", "temporal", "information_flow"],
+      "source": "engineering_standards",
+      "priority": 8,
+      "created_at": "2026-01-12T00:00:00.000000",
+      "updated_at": "2026-01-12T00:00:00.000000"
+    },
+    {
+      "id": "gating_mechanisms_in_sequence_models",
+      "title": "门控机制在序列模型中的设计与应用",
+      "content": "门控机制（gating）通过学习的权重动态控制信息流，常见形式为逐元素乘法 g(x) ⊗ f(x)。在序列推荐中，门控可应用于多个层次：(1) 输入门：控制哪些特征进入编码器，常用 Sigmoid 或 Tanh 激活将权重映射到 [0,1] 或 [-1,1] 范围；(2) 选择性门：基于上下文信息动态过滤隐状态，可使用 SiLU (x·sigmoid(x)) 提供平滑非线性；(3) 输出门：在预测前过滤最终表示，常用 GeLU 激活在深层网络中提供更好的梯度特性。多个门级联使用时的关键原则：(1) 每个门前应用 LayerNorm 稳定输入分布；(2) 门的输出维度应与主信息流匹配，必要时通过线性投影对齐；(3) 初始化策略：bias 设为 0 使门初始接近恒等映射，避免训练初期信息丢失；(4) 梯度流管理：过多门会导致梯度衰减，建议配合残差连接使用。不同激活函数适用场景：Sigmoid 用于二值选择，Tanh 用于双向调制，SiLU 用于需要平滑梯度的中间层，GeLU 用于深层变换。实践中应根据数据特性和模型深度选择合适的门控策略，避免过度复杂化导致训练困难。",
+      "tags": ["gating", "activation", "information_flow", "architecture", "design_principles"],
+      "source": "engineering_standards",
+      "priority": 9,
+      "created_at": "2026-01-12T00:00:00.000000",
+      "updated_at": "2026-01-12T01:00:00.000000"
+    },
+    {
+      "id": "gru_variants_and_enhancements",
+      "title": "GRU 变体与增强策略",
+      "content": "标准 GRU 通过更新门和重置门实现选择性记忆，但存在局限性：(1) 单向信息流仅依赖前序隐状态，缺乏对相邻上下文的直接感知；(2) 门控机制固定，无法根据输入特性动态调整。改进方向包括：(1) 上下文增强：在 GRU 输入或输出端引入卷积层聚合局部时间窗口信息，扩大有效感受野；(2) 动态门控：设计基于输入的自适应门，根据序列特性动态调整信息保留策略；(3) 多尺度处理：结合不同时间尺度的特征（如通过多分辨率卷积或频域分解）捕捉长短期模式；(4) 混合架构：将 GRU 与其他机制（注意力、卷积）并行或串联，发挥各自优势。实现要点：(1) 卷积与 GRU 结合时需注意因果性，避免未来信息泄露；(2) 额外门控应设计为轻量级，防止参数爆炸；(3) 多模块融合时通过可学习权重实现自适应平衡；(4) 保持 GRU 的参数效率优势，避免过度复杂化。位置编码策略：GRU 的递归结构天然编码时序位置信息，在某些场景下可省略显式位置嵌入以简化模型。选择改进策略时应权衡模型复杂度与性能提升，优先考虑参数效率和训练稳定性。",
+      "tags": ["gru", "rnn", "enhancement", "context", "architecture", "design_principles"],
+      "source": "model_analysis",
+      "priority": 8,
+      "created_at": "2026-01-12T01:00:00.000000",
+      "updated_at": "2026-01-12T01:00:00.000000"
+    },
+    {
+      "id": "layer_norm_placement_in_hybrid_models",
+      "title": "混合模型中 LayerNorm 的放置策略",
+      "content": "LayerNorm 的放置位置显著影响模型训练稳定性和收敛速度。在包含多个门机制和并行结构的混合模型中，LayerNorm 的最佳实践：(1) 输入嵌入后应立即应用 LayerNorm 以稳定初始输入（特别是移除位置编码时）；(2) 每个主要模块（GRU、线性注意力）的输出在进入门机制前应应用 LayerNorm；(3) 在多个并行分支汇聚前应分别对各分支应用 LayerNorm；(4) Post-norm 模式（层内部操作后应用 norm）vs Pre-norm 模式（层之前应用 norm）的选择：Pre-norm 通常更稳定特别是在深层模型中。避免常见错误：不要在激活函数（如 SiLU、GeLU）前应用 norm，应在激活函数之前（即在线性层之后、激活前）；不要过度应用 norm 导致表达力下降，norm 应用每层 0-2 次为适度。在序列推荐中，每个序列位置应独立进行 norm（而非跨序列 norm），确保 LayerNorm 配置中 normalized_shape 包含特征维但不包含批次或序列维。",
+      "tags": ["layer_norm", "normalization", "training_stability", "gradient_flow"],
+      "source": "engineering_standards",
+      "priority": 9,
+      "created_at": "2026-01-12T00:00:00.000000",
+      "updated_at": "2026-01-12T00:00:00.000000"
+    },
+    {
+      "id": "attention_scaling_factor_importance",
+      "title": "注意力机制中缩放因子的关键作用",
+      "content": "标准缩放点积注意力中的缩放因子 1/√(d_k)（其中 d_k 为每个头的维度）看似简单但至关重要。缩放因子的作用：(1) 防止内积过大导致 softmax 陷入饱和区（梯度消失）；(2) 保持注意力权重分布的方差恒定，随维度 d_k 增加、内积可能增长，缩放确保权重分布稳定；(3) 特别是在深层模型中，累积的内积值可能达到数十甚至数百，未缩放会导致严重的数值问题。在线性注意力中，缩放因子的应用更为微妙。虽然线性注意力避免了 softmax 的饱和问题，但仍需某种形式的缩放来保持特征空间的稳定性。常见做法：(1) 在 ELU 激活后应用 1/√(d) 缩放；(2) 在 L2 归一化后可不需要额外缩放因子（因为 norm 已经将值压制在单位球面内）；(3) 组合使用时应确保缩放的一致性：如果在 Q 和 K 处都应用了缩放，则矩阵乘法后应除以该缩放的平方。实现时的常见错误：缩放因子遗漏、缩放位置不对（如在激活前而非激活后）、与其他缩放操作（如梯度裁剪）冲突。",
+      "tags": ["attention", "scaling", "gradient", "numerical_stability", "linear_attention"],
+      "source": "model_analysis",
+      "priority": 10,
+      "created_at": "2026-01-12T00:00:00.000000",
+      "updated_at": "2026-01-12T00:00:00.000000"
+    }
+  ],
+  "metadata": {
+    "created_at": "2025-12-26T12:00:00.000000",
+    "updated_at": "2026-01-12T01:00:00.000000",
+    "item_count": 23
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "id": "SINE_2021",
+  "model_name": "SINE",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

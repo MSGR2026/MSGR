@@ -1,0 +1,6 @@
+{
+  "id": "WideDeep_2016",
+  "model_name": "WideDeep",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

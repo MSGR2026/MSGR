@@ -1,0 +1,6 @@
+{
+  "id": "CDAE_2015",
+  "model_name": "CDAE",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

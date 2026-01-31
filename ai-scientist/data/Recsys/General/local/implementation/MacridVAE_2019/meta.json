@@ -1,0 +1,6 @@
+{
+  "id": "MacridVAE_2019",
+  "model_name": "MacridVAE",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

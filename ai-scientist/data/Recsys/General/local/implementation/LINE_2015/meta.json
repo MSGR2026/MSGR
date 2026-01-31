@@ -1,0 +1,6 @@
+{
+  "id": "LINE_2015",
+  "model_name": "LINE",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,8 @@
+embedding_size: 64          # (int) 嵌入维度
+n_layers: 2                 # (int) GCN 层数 (原版默认值)
+reg_weight: 0.0001          # (float) L2 正则化权重 (原版默认值: 1e-4)
+require_pow: False          # (bool) 是否使用幂次正则化
+cl_temp: 0.2                # (float) 对比学习温度
+cl_reg: 0.00001             # (float) 对比学习损失权重 (修复: 从0.5改为1e-5)
+alpha: 0.4                  # (float) 用户/物品对比损失平衡系数 (原版默认值)
+

@@ -1,0 +1,22 @@
+# TALE Model Configuration
+
+# Data augmentation settings (CRITICAL!)
+aug: False  # Disable RecBole's data augmentation - TALE does its own augmentation
+
+# Model hyperparameters
+c: 0.4
+gamma: 1
+beta: -0.01
+tau_train: 0.5
+tau_inf: 2
+reg_weight: 200
+
+# Training settings (TALE is non-iterative, like ItemKNN)
+epochs: 0
+stopping_step: 0
+eval_step: 0
+
+# Evaluation settings (to match original paper)
+metrics: ['Recall', 'NDCG']
+topk: [1, 5, 10]
+valid_metric: NDCG@5

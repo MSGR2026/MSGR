@@ -1,0 +1,18 @@
+# RippleNet Hyperparameter Configuration
+# Paper: RippleNet: Propagating User Preferences on the Knowledge Graph for Recommender Systems (CIKM 2018)
+
+# Embedding dimensions
+embedding_size: 16  # Dimension of entity and relation embeddings (paper uses 16 for most datasets)
+
+# RippleNet specific parameters
+n_hop: 2  # Number of hops for ripple set propagation (K in paper, typically 2 works best)
+n_memory: 32  # Maximum size of ripple set per hop (paper uses 32)
+
+# Regularization
+reg_weight: 1e-7  # L2 regularization weight for embeddings (paper uses 1e-7)
+
+# Training strategy
+use_st_gumbel: false  # Whether to use Straight-Through Gumbel-Softmax for attention (default false, can enable for better gradients)
+
+# Optimizer settings (typical for RippleNet)
+learning_rate: 0.02  # Learning rate (paper uses 0.02 with SGD)

@@ -1,0 +1,6 @@
+{
+  "id": "KTUP_2020",
+  "model_name": "KTUP",
+  "task": "KnowledgeAwareRecommendation",
+  "domain": "Recsys"
+}

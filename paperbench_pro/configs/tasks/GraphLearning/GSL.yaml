@@ -1,0 +1,80 @@
+# GraphLearning/GSL 任务配置
+# Graph Structure Learning 图结构学习任务
+
+task:
+  domain: GraphLearning
+  task: GSL
+  framework: GSL
+  description: "Graph Structure Learning"
+
+execution:
+  container: container/GraphLearning/gsl-benchmark.sif
+  entry: python main_model.py --model {model} --dataset {dataset} --gpu {gpu} --config configs/config_{model}.yaml --save_path /app/records
+  workdir: /app
+  timeout: 7200
+
+mount:
+  # 关键：挂载整个 GSL 基准目录到 /app，确保 /app 目录可写
+  # main_model.py 需要在 /app 下创建临时配置文件，如果只挂载单个文件会导致 /app 只读
+  # 挂载整个目录后，/app 可写，同时 /app/configs 目录也存在
+  gsl_base:
+    host: "paperbench_pro/benchmark/GraphLearning/GSL"
+    container: "/app"
+  
+  # 超参数文件挂载（覆盖镜像中的默认配置）
+  # 注意：必须在 gsl_base 挂载之后，这样 /app/configs 目录已存在
+  hyperparameter:
+    host: "{hyperparameter_path}"
+    container: "/app/configs/config_{model}.yaml"
+  
+  # 数据集目录挂载（覆盖 gsl_base 中的 data 目录）
+  data:
+    host: "paperbench_pro/benchmark/GraphLearning/GSL/data"
+    container: "/app/data"
+  
+  # opengsl 模块挂载（覆盖 gsl_base 中的 opengsl 目录）
+  opengsl:
+    host: "paperbench_pro/benchmark/GraphLearning/GSL/opengsl"
+    container: "/app/opengsl"
+  
+  # results 目录挂载（main_model.py 会在这里创建 save_models 子目录）
+  results:
+    host: "output/logs/runs/{run_id}/results"
+    container: "/app/results"
+  
+  # 结果保存目录挂载（使用包含 result 的名称，让 mount.py 自动创建目录）
+  result_records:
+    host: "output/logs/runs/{run_id}/records"
+    container: "/app/records"
+  
+  # 日志挂载
+  logs:
+    host: "output/logs/runs/{run_id}/tasks"
+    container: "/logs"
+
+data:
+  # 可用数据集
+  datasets:
+    - cora
+    - citeseer
+    - pubmed
+    # - amazoncom
+    # - amazonpho
+    # - coauthorcs
+    # - coauthorph
+  
+  # 数据集根目录
+  root: paperbench_pro/benchmark/GraphLearning/GSL/data
+
+eval:
+  # 评估指标
+  metrics:
+    - accuracy
+    - test_accuracy
+    - final_test
+  
+  primary_metric: test_accuracy
+  higher_is_better: true
+
+# args 部分已移除，使用 execution.entry 直接运行脚本
+# GSL 脚本不需要命令行参数，所有配置从 YAML 文件读取

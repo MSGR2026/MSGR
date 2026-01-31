@@ -1,0 +1,82 @@
+{
+  "session_id": "SMORE_20260116_212339_26e4378c",
+  "paper_id": "SMORE_2025",
+  "model_name": "SMORE",
+  "domain": "Recsys",
+  "task": "MultiModal",
+  "max_rounds": 5,
+  "current_round": 5,
+  "status": "running",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_0/hyperparameter.yaml",
+      "acc": null,
+      "metrics": {},
+      "error": "算法生成失败 (3次尝试): LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known",
+      "feedback": "代码生成失败: 算法生成失败 (3次尝试): LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known",
+      "duration": 0.0806577205657959,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    {
+      "round": 1,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_1/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_1/hyperparameter.yaml",
+      "acc": null,
+      "metrics": {},
+      "error": "算法生成失败 (3次尝试): LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known",
+      "feedback": "代码生成失败: 算法生成失败 (3次尝试): LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known",
+      "duration": 0.0044918060302734375,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    {
+      "round": 2,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_2/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_2/hyperparameter.yaml",
+      "acc": null,
+      "metrics": {},
+      "error": "算法生成失败 (3次尝试): LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known",
+      "feedback": "代码生成失败: 算法生成失败 (3次尝试): LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known",
+      "duration": 0.004601240158081055,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    {
+      "round": 3,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_3/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_3/hyperparameter.yaml",
+      "acc": null,
+      "metrics": {},
+      "error": "算法生成失败 (3次尝试): LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known",
+      "feedback": "代码生成失败: 算法生成失败 (3次尝试): LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known",
+      "duration": 0.004796504974365234,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    {
+      "round": 4,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_4/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_4/hyperparameter.yaml",
+      "acc": null,
+      "metrics": {},
+      "error": "算法生成失败 (3次尝试): LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known",
+      "feedback": "代码生成失败: 算法生成失败 (3次尝试): LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known; LLM调用失败: [Errno -2] Name or service not known",
+      "duration": 0.004472494125366211,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.0,
+  "best_round": 0,
+  "started_at": "2026-01-16T21:23:39.286787",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/MultiModal/SMORE"
+}

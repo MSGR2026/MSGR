@@ -1,0 +1,23 @@
+# MKR Hyperparameter Configuration
+# Paper: Multi-Task Feature Learning for Knowledge Graph Enhanced Recommendation (WWW 2019)
+
+# Embedding dimensions
+embedding_size: 8  # d in paper, range: 4-16, MovieLens/Book-Crossing use 8
+
+# Network architecture
+low_layers_num: 1  # L: number of cross&compress layers, range: 1-3, MovieLens/Book-Crossing use 1
+high_layers_num: 1  # H/K: number of high-level layers in RS and KGE, paper uses 1 for all datasets
+
+# Prediction function
+use_inner_product: True  # fRS: paper uses inner product for prediction
+
+# Loss weights
+kg_weight: 0.5  # λ1: balancing parameter for KG loss, range: 0.1-0.5, MovieLens uses 0.5
+reg_weight: 1e-6  # λ2: L2 regularization parameter, 10^-6 for all datasets
+
+# Training parameters
+learning_rate: 0.001
+train_batch_size: 1024
+eval_batch_size: 4096
+epochs: 500
+stopping_step: 10

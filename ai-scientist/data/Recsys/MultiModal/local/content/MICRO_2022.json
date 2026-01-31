@@ -1,0 +1,12 @@
+{
+  "id": "MICRO_2022",
+  "paper_title": "Latent Structure Mining with Contrastive Modality Fusion for Multimedia Recommendation",
+  "alias": "MICRO",
+  "year": 2022,
+  "domain": "Recsys",
+  "task": "MultiModalRecommendation",
+  "introduction": "",
+  "method": "",
+  "experiments": "",
+  "hyperparameter": "- **embedding_dim (d)**: Dimensionality of user/item ID and modality-aware embeddings; typically set to 64 to balance capacity and efficiency.\n- **k (kNN neighbors)**: Number of nearest neighbors kept when building modality-specific item graphs from cosine similarities; the paper commonly uses k = 10, with performance peaking at small to medium values.\n- **lambda (λ, skip-connection weight)**: Balances initial kNN graph and learned latent graph in A_m = λ S_m + (1−λ) A'_m; typically around 0.7 so that both raw and learned structures contribute while controlling noise.\n- **num_layers (L)**: Number of GCN propagation layers on the modality-aware item graphs; searched in {0,1,2,3,4,5}, with best results often at L = 1 for Clothing and L = 2 for Sports/Baby before deeper layers introduce noise/over-smoothing.\n- **tau (τ, temperature)**: Temperature parameter in the InfoNCE contrastive loss controlling sharpness of similarity distributions; set to about 0.5 in experiments.\n- **beta (β, contrastive loss weight)**: Coefficient for the contrastive auxiliary loss in the total objective L = L_BPR + β L_C; tuned in a small range (e.g., 0.01–0.05) with a typical value β ≈ 0.03 to help the main recommendation task without dominating it.\n- **learning_rate**: Step size for Adam optimizer over all parameters (graph-structure layers, GCN, fusion, and CF backbone); usually 5e-4.\n- **weight_decay (L2 reg)**: ℓ2 regularization strength on model parameters; set around 1e-4 to prevent overfitting while preserving expressiveness."
+}

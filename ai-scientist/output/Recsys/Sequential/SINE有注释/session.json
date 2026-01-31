@@ -1,0 +1,50 @@
+{
+  "session_id": "SINE_20260105_174626_d98dc1ca",
+  "paper_id": "SINE_2021",
+  "model_name": "SINE",
+  "domain": "Recsys",
+  "task": "Sequential",
+  "max_rounds": 10,
+  "current_round": 2,
+  "status": "running",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/Sequential/SINE/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/Sequential/SINE/round_0/hyperparameter.yaml",
+      "acc": null,
+      "metrics": {},
+      "error": "[stderr]\n/app/recbole/recbole/config/configurator.py:654: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.\n  np.bool  # noqa: B018\ncommand line args [-m SINE -d Amazon_All_Beauty] will not be used in RecBole\nTraceback (most recent call last):\n  File \"/app/recbole/run_recbole.py\", line 46, in <module>\n    run(\n  File \"/app/recbole/recbole/quick_start/quick_start.py\", line 51, in run\n    res = run_recbole(\n          ^^^^^^^^^^^^\n  File \"/app/recbole/recbole/quick_start/quick_start.py\", line 114, in run_recbole\n    config = Config(\n             ^^^^^^^\n  File \"/app/recbole/recbole/config/configurator.py\", line 93, in __init__\n    self._set_default_parameters()\n  File \"/app/recbole/recbole/config/configurator.py\", line 362, in _set_default_parameters\n    raise ValueError(\nValueError: train_neg_sample_args [{'distribution': 'uniform', 'sample_num': 1, 'alpha': 1.0, 'dynamic': False, 'candidate_num': 0}] should be None when the loss_type is CE.",
+      "feedback": "执行失败:\n[stderr]\n/app/recbole/recbole/config/configurator.py:654: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.\n  np.bool  # noqa: B018\ncommand line args [-m SINE -d Amazon_All_Beauty] will not be used in RecBole\nTraceback (most recent call last):\n  File \"/app/recbole/run_recbole.py\", line 46, in <module>\n    run(\n  File \"/app/recbole/recbole/quick_start/quick_start.py\", line 51, in run\n    res = run_recbole(\n          ^^^^^^^^^^^^\n  File \"/app/recbole/recbole/quick_start/quick_start.py\", line 114, in run_recbole\n    config = Config(\n             ^^^^^^^\n  File \"/app/recbole/recbole/config/configurator.py\", line 93, in __init__\n    self._set_default_parameters()\n  File \"/app/recbole/recbole/config/configurator.py\", line 362, in _set_default_parameters\n    raise ValueError(\nValueError: train_neg_sample_args [{'distribution': 'uniform', 'sample_num': 1, 'alpha': 1.0, 'dynamic': False, 'candidate_num': 0}] should be None when the loss_type is CE.",
+      "duration": 92.60787105560303,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    {
+      "round": 1,
+      "algorithm_path": "ai-scientist/output/Recsys/Sequential/SINE/round_1/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/Sequential/SINE/round_1/hyperparameter.yaml",
+      "acc": 0.4088,
+      "metrics": {
+        "17": 49.0,
+        "recall@10": 0.4088,
+        "mrr@10": 0.2749,
+        "ndcg@10": 0.3082,
+        "hit@10": 0.4088,
+        "precision@10": 0.0409
+      },
+      "error": null,
+      "feedback": "成功: 2/2, recall@10=0.4088",
+      "duration": 146.8665497303009,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.4088,
+  "best_round": 1,
+  "started_at": "2026-01-05T17:46:26.595167",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/Sequential/SINE"
+}

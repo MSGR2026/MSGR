@@ -1,0 +1,37 @@
+{
+  "session_id": "NCEPLRec_20260105_215729_b88165e1",
+  "paper_id": "NCEPLRec_2021",
+  "model_name": "NCEPLRec",
+  "domain": "Recsys",
+  "task": "General",
+  "max_rounds": 10,
+  "current_round": 1,
+  "status": "running",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/General/NCEPLRec/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/General/NCEPLRec/round_0/hyperparameter.yaml",
+      "acc": 0.1742,
+      "metrics": {
+        "21": 58.0,
+        "recall@10": 0.1742,
+        "mrr@10": 0.304,
+        "ndcg@10": 0.1649,
+        "hit@10": 0.5674,
+        "precision@10": 0.0859
+      },
+      "error": null,
+      "feedback": "成功: 1/1, recall@10=0.1742",
+      "duration": 80.48810982704163,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.1742,
+  "best_round": 0,
+  "started_at": "2026-01-05T21:57:29.782297",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/General/NCEPLRec"
+}

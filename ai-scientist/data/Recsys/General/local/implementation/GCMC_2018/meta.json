@@ -1,0 +1,6 @@
+{
+  "id": "GCMC_2018",
+  "model_name": "GCMC",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

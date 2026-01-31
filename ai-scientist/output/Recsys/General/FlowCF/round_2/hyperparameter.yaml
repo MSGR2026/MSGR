@@ -1,0 +1,14 @@
+# FlowCF Hyperparameters
+
+# Flow parameters
+num_steps: 9                          # Discretization steps N for ML-1M
+time_emb_dim: 10                      # Time embedding dimension
+max_period: 1000                      # Maximum period for sinusoidal time embeddings
+hidden_dims: [300, 300]               # Hidden layer dimensions for the MLP
+dropout: 0.1                          # Dropout rate for the MLP
+activation: 'tanh'                    # Activation function for the MLP (tanh as in DiffRec reference)
+
+# Training parameters
+learning_rate: 0.001                  # Adam optimizer learning rate
+batch_size: 4096                      # Training batch size
+weight_decay: 0                       # No weight decay as specified in the paper

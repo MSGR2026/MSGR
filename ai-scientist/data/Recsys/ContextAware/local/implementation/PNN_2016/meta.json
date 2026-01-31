@@ -1,0 +1,6 @@
+{
+  "id": "PNN_2016",
+  "model_name": "PNN",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,25 @@
+# NLGCL_2025 Hyperparameters
+
+# Model Architecture
+embedding_size: 64              # (int) The embedding size of users and items.
+n_layers: 3                     # (int) Number of graph convolution layers. Increased to 3 for better performance on sparse datasets like LastFM.
+G: 3                            # (int) Number of contrastive view groups. Increased to 3 for enhanced representation learning.
+scope: 'heterogeneous'          # (str) Scope for contrastive learning ('heterogeneous' or 'entire').
+
+# Regularization and Loss Weights
+reg_weight: 0.0001              # (float) L2 regularization weight (λ₂).
+ssl_weight: 0.00001             # (float) Self-supervised learning weight (λ₁).
+ssl_temp: 0.2                   # (float) Temperature parameter (τ) for contrastive loss.
+
+# Training Settings
+learning_rate: 0.0005           # (float) Lowered learning rate for stability on sparse datasets.
+train_batch_size: 4096          # (int) Training batch size.
+eval_batch_size: 4096           # (int) Evaluation batch size for full sort prediction.
+
+# Early Stopping
+stopping_step: 20               # (int) Early stopping patience (epochs with no improvement).
+
+# Initialization and Other Parameters
+require_pow: False              # (bool) Whether to use power operation in regularization loss.
+optimizer_type: Adam            # (str) Optimizer type.
+initializer: xavier_normal      # (str) Weight initialization method.

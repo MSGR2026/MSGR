@@ -1,0 +1,6 @@
+{
+  "id": "ADMMSLIM_2012",
+  "model_name": "ADMMSLIM",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

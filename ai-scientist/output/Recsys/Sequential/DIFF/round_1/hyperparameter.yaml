@@ -1,0 +1,38 @@
+# DIFF (DIFF_2025)
+n_layers: 2
+n_heads: 2
+hidden_size: 256
+inner_size: 1024
+hidden_dropout_prob: 0.2
+attn_dropout_prob: 0.2
+hidden_act: 'gelu'
+layer_norm_eps: 1e-12
+initializer_range: 0.02
+
+# loss
+loss_type: 'CE'
+train_neg_sample_args: ~
+
+# side information (set to your item feature fields; keep minimal)
+# Amazon_Beauty available item fields include: ['title','sales_type','sales_rank','categories','price','brand']
+# Use 'brand' as a safe TOKEN-like feature; if your dataset doesn't contain it, set [] to fallback to ID-only.
+selected_features: ['brand']
+pooling_mode: 'mean'
+
+# DIFF-specific
+fusion_type: 'gate'              # paper: gating on Yelp; use as default
+attn_fusion_type: 'sum'          # stable default for logits fusion (avoid extra params)
+alpha: 0.5                       # fusion alpha, paper optimal around 0.5
+lambda_align: 20                 # paper: ~20 on Yelp
+
+# frequency filter
+cutoff: 3                        # c (rFFT bins); use 5 for Toys-like setting
+cutoff_mode: 'rfft'
+init_beta: 0.0                   # initialized small
+learnable_beta: true
+
+# alignment loss details
+init_tau: 0.07                   # learnable temperature (init)
+align_attr_fusion_type: 'sum'    # paper uses summation for Ea
+align_label_mode: 'attr_id_equal'
+align_loss_on_valid: true

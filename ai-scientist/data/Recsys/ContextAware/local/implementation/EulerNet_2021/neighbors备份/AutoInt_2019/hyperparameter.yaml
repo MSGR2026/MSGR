@@ -1,0 +1,9 @@
+# SIMILAR: Both use embedding_size; EulerNet uses 16
+embedding_size: 10              # (int) The embedding size of features.
+attention_size: 16              # (int) The vector size in attention mechanism. 
+# DIFFERENT: Stacked attention layers; EulerNet uses order_list to define interaction layer structure
+n_layers: 3                     # (int) The number of attention layers.
+num_heads: 2                    # (int) The number of attention heads.
+# SIMILAR: Dropout regularization; EulerNet uses separate drop_ex and drop_im (both 0.3)
+dropout_probs: [0.2,0.2,0.2]    # (list of float) The dropout rate of dropout layer.
+mlp_hidden_size: [128,128]      # (list of int) The hidden size of MLP layers.

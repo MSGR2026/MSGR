@@ -1,0 +1,21 @@
+# WeightedGCL Configuration
+# Reference: Chen et al. "Squeeze and Excitation: A Weighted Graph Contrastive Learning 
+#            for Collaborative Filtering" SIGIR 2025
+
+# Basic embedding and network structure
+embedding_size: 64              # (int) The embedding size of users and items
+n_layers: 2                     # (int) The number of GCN layers
+reg_weight: 1e-4                # (float) The L2 regularization weight
+require_pow: False              # (bool) Whether to require pow when calculating regularization loss
+
+# Contrastive learning parameters
+cl_rate: 0.001                  # (float) The weight of contrastive learning loss (lambda in paper)
+                                # Recommended range: [0.0001, 0.001, 0.01, 0.1]
+eps: 0.1                        # (float) The magnitude of perturbation added to embeddings
+                                # Recommended range: [0.05, 0.1, 0.2]
+temperature: 0.2                # (float) Temperature parameter for InfoNCE loss
+                                # Recommended range: [0.2, 0.4, 0.6, 0.8]
+k: 64                           # (int) Dimension parameter (reserved for future use)
+
+# Training parameters
+warm_up_step: 30                # (int) Number of warm-up steps before contrastive learning

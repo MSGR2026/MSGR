@@ -1,0 +1,6 @@
+{
+  "id": "DCN_2017",
+  "model_name": "DCN",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

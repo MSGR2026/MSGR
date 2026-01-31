@@ -1,0 +1,6 @@
+# REUSE: Both use embedding_size parameter for feature embeddings
+embedding_size: 10                # (int) The embedding size of features.
+# DIFFERENT: KD_DAGFM uses depth parameter for DAG layers; DeepFM uses mlp_hidden_size for MLP layers
+mlp_hidden_size: [128, 128, 128]  # (list of int) The hidden size of MLP layers.  
+# DIFFERENT: KD_DAGFM has no dropout; uses alpha/beta for KD loss weighting instead
+dropout_prob: 0.2                 # (float) The dropout rate.

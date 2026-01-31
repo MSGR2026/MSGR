@@ -1,0 +1,11 @@
+dataset: lastfm
+data_path: dataset/
+
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: artist_id
+RATING_FIELD: weight
+seq_separator: ","
+
+load_col:
+  inter: [user_id, artist_id, weight, tag_value, timestamp]
+  item: [artist_id, name, url, picture_url]

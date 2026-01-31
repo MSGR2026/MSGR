@@ -1,0 +1,73 @@
+{
+  "session_id": "SMORE_20260123_153247_b749abcb",
+  "paper_id": "SMORE_2025",
+  "model_name": "SMORE",
+  "domain": "Recsys",
+  "task": "MultiModal",
+  "max_rounds": 5,
+  "current_round": 3,
+  "status": "running",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_0/hyperparameter.yaml",
+      "acc": null,
+      "metrics": {},
+      "error": "[stdout]\nt_embed_dim=64\nknn_k=20\nn_mm_layers=1\nn_ui_layers=2\nreg_weight=0.0001\ntemperature=0.2\nmodel=SMORE\ndataset=baby\nvalid_metric_bigger=True\ndevice=cuda\n\n\n23 Jan 15:34    INFO baby\nThe number of users: 19445\nAverage actions of users: 8.269066598097197\nThe number of items: 7050\nAverage actions of items: 22.807375886524824\nThe number of inters: 160792\nThe sparsity of the dataset: 99.8827082752043%\n23 Jan 15:34    INFO \n====Training====\nbaby\nThe number of users: 19445\nAverage actions of users: 6.096734379017742\nThe number of items: 7047\nAverage actions of items: 16.82290336313325\nThe number of inters: 118551\nThe sparsity of the dataset: 99.9134846831415%\n23 Jan 15:34    INFO \n====Validation====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.0572897917202366\nThe number of items: 5483\nAverage actions of items: 3.749589640707642\nThe number of inters: 20559\nThe sparsity of the dataset: 99.98071694707788%\n23 Jan 15:34    INFO \n====Testing====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.1150424273592183\nThe number of items: 5549\nAverage actions of items: 3.907370697422959\nThe number of inters: 21682\nThe sparsity of the dataset: 99.97990552482683%\n23 Jan 15:34    INFO \n\n=================================\n\n\n23 Jan 15:34    INFO =========1/1: Parameters:['seed']=(999,)=======\nTraceback (most recent call last):\n  File \"/app/src/main.py\", line 43, in <module>\n    quick_start(model=args.model, dataset=args.dataset, config_dict=config_dict, save_model=True)\n  File \"/app/src/utils/quick_start.py\", line 74, in quick_start\n    model = get_model(config['model'])(config, train_data).to(config['device'])\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/src/models/smore.py\", line 22, in __init__\n    self.feat_embed_dim = config.get('feat_embed_dim', self.embedding_dim)\n                          ^^^^^^^^^^\nAttributeError: 'Config' object has no attribute 'get'\n============================================================\n[replicate] Exit code: 1",
+      "feedback": "执行失败:\n[stdout]\nt_embed_dim=64\nknn_k=20\nn_mm_layers=1\nn_ui_layers=2\nreg_weight=0.0001\ntemperature=0.2\nmodel=SMORE\ndataset=baby\nvalid_metric_bigger=True\ndevice=cuda\n\n\n23 Jan 15:34    INFO baby\nThe number of users: 19445\nAverage actions of users: 8.269066598097197\nThe number of items: 7050\nAverage actions of items: 22.807375886524824\nThe number of inters: 160792\nThe sparsity of the dataset: 99.8827082752043%\n23 Jan 15:34    INFO \n====Training====\nbaby\nThe number of users: 19445\nAverage actions of users: 6.096734379017742\nThe number of items: 7047\nAverage actions of items: 16.82290336313325\nThe number of inters: 118551\nThe sparsity of the dataset: 99.9134846831415%\n23 Jan 15:34    INFO \n====Validation====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.0572897917202366\nThe number of items: 5483\nAverage actions of items: 3.749589640707642\nThe number of inters: 20559\nThe sparsity of the dataset: 99.98071694707788%\n23 Jan 15:34    INFO \n====Testing====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.1150424273592183\nThe number of items: 5549\nAverage actions of items: 3.907370697422959\nThe number of inters: 21682\nThe sparsity of the dataset: 99.97990552482683%\n23 Jan 15:34    INFO \n\n=================================\n\n\n23 Jan 15:34    INFO =========1/1: Parameters:['seed']=(999,)=======\nTraceback (most recent call last):\n  File \"/app/src/main.py\", line 43, in <module>\n    quick_start(model=args.model, dataset=args.dataset, config_dict=config_dict, save_model=True)\n  File \"/app/src/utils/quick_start.py\", line 74, in quick_start\n    model = get_model(config['model'])(config, train_data).to(config['device'])\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/src/models/smore.py\", line 22, in __init__\n    self.feat_embed_dim = config.get('feat_embed_dim', self.embedding_dim)\n                          ^^^^^^^^^^\nAttributeError: 'Config' object has no attribute 'get'\n============================================================\n[replicate] Exit code: 1",
+      "duration": 112.13371539115906,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    {
+      "round": 1,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_1/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_1/hyperparameter.yaml",
+      "acc": null,
+      "metrics": {},
+      "error": "[stdout]\nset: 99.8827082752043%\n23 Jan 15:35    INFO \n====Training====\nbaby\nThe number of users: 19445\nAverage actions of users: 6.096734379017742\nThe number of items: 7047\nAverage actions of items: 16.82290336313325\nThe number of inters: 118551\nThe sparsity of the dataset: 99.9134846831415%\n23 Jan 15:35    INFO \n====Validation====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.0572897917202366\nThe number of items: 5483\nAverage actions of items: 3.749589640707642\nThe number of inters: 20559\nThe sparsity of the dataset: 99.98071694707788%\n23 Jan 15:35    INFO \n====Testing====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.1150424273592183\nThe number of items: 5549\nAverage actions of items: 3.907370697422959\nThe number of inters: 21682\nThe sparsity of the dataset: 99.97990552482683%\n23 Jan 15:35    INFO \n\n=================================\n\n\n23 Jan 15:35    INFO =========1/1: Parameters:['seed']=(999,)=======\nTraceback (most recent call last):\n  File \"/app/src/main.py\", line 43, in <module>\n    quick_start(model=args.model, dataset=args.dataset, config_dict=config_dict, save_model=True)\n  File \"/app/src/utils/quick_start.py\", line 74, in quick_start\n    model = get_model(config['model'])(config, train_data).to(config['device'])\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/src/models/smore.py\", line 59, in __init__\n    self.spectrum_filters[m] = nn.Parameter(torch.randn(self.n_items, self.embedding_dim) * 0.01)\n    ~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/container.py\", line 505, in __setitem__\n    self.add_module(key, module)\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 645, in add_module\n    raise TypeError(f\"{torch.typename(module)} is not a Module subclass\")\nTypeError: torch.FloatTensor is not a Module subclass\n============================================================\n[replicate] Exit code: 1",
+      "feedback": "执行失败:\n[stdout]\nset: 99.8827082752043%\n23 Jan 15:35    INFO \n====Training====\nbaby\nThe number of users: 19445\nAverage actions of users: 6.096734379017742\nThe number of items: 7047\nAverage actions of items: 16.82290336313325\nThe number of inters: 118551\nThe sparsity of the dataset: 99.9134846831415%\n23 Jan 15:35    INFO \n====Validation====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.0572897917202366\nThe number of items: 5483\nAverage actions of items: 3.749589640707642\nThe number of inters: 20559\nThe sparsity of the dataset: 99.98071694707788%\n23 Jan 15:35    INFO \n====Testing====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.1150424273592183\nThe number of items: 5549\nAverage actions of items: 3.907370697422959\nThe number of inters: 21682\nThe sparsity of the dataset: 99.97990552482683%\n23 Jan 15:35    INFO \n\n=================================\n\n\n23 Jan 15:35    INFO =========1/1: Parameters:['seed']=(999,)=======\nTraceback (most recent call last):\n  File \"/app/src/main.py\", line 43, in <module>\n    quick_start(model=args.model, dataset=args.dataset, config_dict=config_dict, save_model=True)\n  File \"/app/src/utils/quick_start.py\", line 74, in quick_start\n    model = get_model(config['model'])(config, train_data).to(config['device'])\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/src/models/smore.py\", line 59, in __init__\n    self.spectrum_filters[m] = nn.Parameter(torch.randn(self.n_items, self.embedding_dim) * 0.01)\n    ~~~~~~~~~~~~~~~~~~~~~^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/container.py\", line 505, in __setitem__\n    self.add_module(key, module)\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 645, in add_module\n    raise TypeError(f\"{torch.typename(module)} is not a Module subclass\")\nTypeError: torch.FloatTensor is not a Module subclass\n============================================================\n[replicate] Exit code: 1",
+      "duration": 45.3051872253418,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    {
+      "round": 2,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_2/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/SMORE/round_2/hyperparameter.yaml",
+      "acc": 0.0902,
+      "metrics": {
+        "recall@5": 0.0373,
+        "recall@10": 0.0587,
+        "recall@20": 0.0902,
+        "recall@50": 0.1482,
+        "ndcg@5": 0.025,
+        "ndcg@10": 0.032,
+        "ndcg@20": 0.0401,
+        "ndcg@50": 0.0519,
+        "precision@5": 0.0082,
+        "precision@10": 0.0065,
+        "precision@20": 0.005,
+        "precision@50": 0.0033,
+        "map@5": 0.0203,
+        "map@10": 0.0231,
+        "map@20": 0.0253,
+        "map@50": 0.0272
+      },
+      "error": null,
+      "feedback": "成功: 6/6, recall@20=0.0902",
+      "duration": 459.0017387866974,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.0902,
+  "best_round": 2,
+  "started_at": "2026-01-23T15:32:47.963813",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/MultiModal/SMORE"
+}

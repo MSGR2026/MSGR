@@ -1,0 +1,6 @@
+{
+  "id": "DMF_2015",
+  "model_name": "DMF",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

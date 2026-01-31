@@ -1,0 +1,20 @@
+# SGL (Self-supervised Graph Learning for Recommendation)
+# Reference: Jiancan Wu et al. "Self-supervised Graph Learning for Recommendation." in SIGIR 2021.
+
+# Embedding settings
+embedding_size: 64              # (int) The embedding size of users and items. Typical range: 64-256, paper experiments with tuned values.
+
+# GCN architecture
+n_layers: 3                     # (int) The number of graph convolution layers. Paper reports best performance at 3 layers for most datasets.
+
+# Loss weights
+reg_weight: 1e-4                # (float) The L2 regularization weight (λ₂). Typical range for graph models: 1e-5 to 1e-4.
+ssl_weight: 0.1                 # (float) The self-supervised learning task weight (λ₁). Paper tunes in {0.005, 0.01, 0.05, 0.1, 0.5, 1.0}, 0.1 is a balanced choice.
+
+# Self-supervised learning settings
+ssl_temp: 0.2                   # (float) The temperature parameter (τ) in InfoNCE loss. Paper tunes in {0.1, 0.2, 0.5, 1.0}, recommends 0.1-1.0, 0.2 balances sharpness and stability.
+ssl_mode: 'ED'                  # (str) The graph augmentation mode. Options: 'ED' (Edge Dropout), 'ND' (Node Dropout), 'RW' (Random Walk). ED is most commonly used and stable.
+ssl_ratio: 0.1                  # (float) The dropout ratio (ρ) for graph augmentation. Paper tunes in {0, 0.1, 0.2, ..., 0.5}, 0.1 provides mild augmentation preserving structure.
+
+# Training settings
+require_pow: False              # (bool) Whether to use power operation in regularization loss. Set to False for standard L2 norm.

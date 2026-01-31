@@ -1,0 +1,13 @@
+{
+  "id": "RippleNet_2018",
+  "paper_title": "RippleNet: Propagating User Preferences on the Knowledge Graph for Recommender Systems",
+  "alias": "RippleNet",
+  "year": 2018,
+  "domain": "Recsys",
+  "task": "KnowledgeAwareRecommendation",
+  "idea": "",
+  "introduction": "",
+  "method": "",
+  "experiments": "",
+  "hyperparameter": ""
+}

@@ -1,0 +1,6 @@
+{
+  "id": "FOSSIL_2018",
+  "model_name": "FOSSIL",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "paper_id": "BASRec_2025",
+  "model_name": "BASRec",
+  "domain": "Recsys",
+  "task": "Sequential",
+  "best_round": 1,
+  "best_acc": 0.0855,
+  "best_combo": null,
+  "best_combo_info": {
+    "combo_name": null,
+    "by_dataset": {
+      "Amazon_Beauty": "-"
+    },
+    "best_metrics": {}
+  },
+  "all_metrics": {},
+  "timestamp": "2026-01-10T18:57:25.670486",
+  "total_rounds": 2,
+  "duration": 502.5414614677429
+}

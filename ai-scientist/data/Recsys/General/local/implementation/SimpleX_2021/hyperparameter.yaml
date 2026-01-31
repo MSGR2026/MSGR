@@ -1,0 +1,20 @@
+# Embedding settings
+embedding_size: 64              # (int) The embedding size of users and items.
+
+# Aggregation settings
+aggregator: 'mean'              # (str) The aggregation method for behavior sequences. Range in ['mean', 'self_attn', 'user_attn'].
+history_len: 50                 # (int) The maximum length K of user behavior sequences for aggregation.
+
+# Fusion settings
+gamma: 0.5                      # (float) The gate weight g in Equation 5 to balance user embedding and pooled behavior vector.
+
+# Cosine Contrastive Loss (CCL) settings
+margin: 0.5                     # (float) The margin m in CCL loss (Equation 1). Tuned among 0~1 at interval of 0.1.
+negative_weight: 300.0          # (float) The weight w for negative loss in CCL (Equation 1). Searched among [1, 150, 300, 1000].
+
+# Regularization settings
+reg_weight: 1e-07               # (float) The L2 regularization weight. Searched between 1e-9~1e-2 with increase ratio of 5.
+
+# Training settings
+learning_rate: 0.0005           # (float) Learning rate. Tuned among [1e-3, 5e-4, 1e-4].
+train_batch_size: 1024          # (int) Training batch size.

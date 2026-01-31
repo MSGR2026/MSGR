@@ -1,0 +1,101 @@
+{
+  "domain": "TimeSeries",
+  "task": "long_term_forecast",
+  "items": [
+    {
+      "id": "framework_interface",
+      "title": "框架接口规范",
+      "content": "模型类必须命名为 Model，继承 nn.Module。__init__(self, configs) 从 configs 提取 task_name、seq_len、pred_len、enc_in、d_model 等属性。forward(self, x_enc, x_mark_enc, x_dec, x_mark_dec, mask=None) 返回 dec_out[:, -self.pred_len:, :]。x_enc 形状 [B, seq_len, enc_in]，x_mark_enc 为时间戳 [B, seq_len, time_dim] 或 None，输出 [B, pred_len, c_out]。纯编码器模型可忽略 x_dec/x_mark_dec。",
+      "tags": ["framework", "interface", "critical"],
+      "source": "code_analysis",
+      "priority": 10,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "config_params",
+      "title": "支持的超参数完整列表",
+      "content": "run.py 支持的全部参数（只能使用这些参数，其他参数会报错）：【基础】task_name, is_training, model_id, model, data, root_path, data_path, features, target, freq, checkpoints；【序列长度】seq_len, label_len, pred_len, seasonal_patterns；【任务特定】mask_rate, anomaly_ratio；【模型结构】expand, d_conv, top_k, num_kernels, enc_in, dec_in, c_out, d_model, n_heads, e_layers, d_layers, d_ff, moving_avg, factor, dropout, embed, activation；【高级特性】channel_independence, decomp_method, use_norm, down_sampling_layers, down_sampling_window, down_sampling_method, seg_len；【训练】num_workers, itr, train_epochs, batch_size, patience, learning_rate, des, loss, lradj；【GPU】use_gpu, gpu, gpu_type, devices；【其他】p_hidden_dims, p_hidden_layers, use_dtw, augmentation_ratio, seed, patch_len, node_dim, gcn_depth, gcn_dropout, propalpha, conv_channel, skip_channel, alpha, top_p, pos, extra_tag。【布尔标志参数（只能设 true 或不写，不能设 0/false）】distil, inverse, use_amp, use_multi_gpu, individual, jitter, scaling, permutation, randompermutation, magwarp, timewarp, windowslice, windowwarp, rotation, spawner, dtwwarp, shapedtwwarp, wdba, discdtw, discsdtw。这些参数启用时写 true（如 distil: true），不需要时不要写在配置中。【禁止使用】num_scales, stride, output_attention, embed_type, detail_freq 等未列出的参数会导致运行失败。代码中需要的非标准参数必须用 getattr(configs, 'param', default) 设置默认值。",
+      "tags": ["config", "hyperparameter", "critical"],
+      "source": "run.py_argparse",
+      "priority": 10,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "dataset_features",
+      "title": "数据集与特征数对应关系",
+      "content": "超参数配置中禁止硬编码 enc_in、dec_in、c_out，这些由数据集自动决定。常用数据集特征数：ETTh1/ETTh2/ETTm1/ETTm2=7，Weather=21，ECL(Electricity)=321，Traffic=862，Exchange=8，ILI=7，PEMS(03/04/07/08)=170/307/883/170。可通过 data 参数指定数据集名称（如 data: ETTh1），框架会自动设置对应的 enc_in/dec_in/c_out。",
+      "tags": ["dataset", "config", "critical"],
+      "source": "framework",
+      "priority": 10,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "instance_norm",
+      "title": "可逆实例归一化",
+      "content": "处理非平稳性的标准做法，几乎所有现代模型都采用：means = x_enc.mean(1, keepdim=True).detach()，stdev = torch.sqrt(torch.var(x_enc, dim=1, keepdim=True, unbiased=False) + 1e-5).detach()，归一化 x_enc = (x_enc - means) / stdev，反归一化 dec_out = dec_out * stdev + means。detach() 阻止梯度回传到统计量。",
+      "tags": ["normalization", "critical"],
+      "source": "code_analysis",
+      "priority": 10,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "decomposition",
+      "title": "序列分解技术",
+      "content": "移动平均分解：series_decomp(kernel_size)，seasonal, trend = self.decomp(x)，内部用 AvgPool1d 平滑得趋势，残差为季节。频域分解：torch.fft.rfft(x, dim=1) 得频谱，筛选 top-k 频率或掩码分离高频（时变）/低频（时不变）成分，torch.fft.irfft 恢复。分解后分别建模再相加是提升性能的有效手段。",
+      "tags": ["decomposition", "technique"],
+      "source": "code_analysis",
+      "priority": 8,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "input_processing",
+      "title": "输入处理策略",
+      "content": "Patching：x.unfold(dim=-1, size=patch_len, step=stride) 切块后 Linear(patch_len, d_model) 嵌入，降低注意力复杂度。通道处理：channel_independence=True 时 reshape [B,T,N] 为 [B*N,T,1] 独立处理；False 时特征共享嵌入。通道独立更稳定，通道混合适合强相关变量。FlattenHead 将编码输出展平投影到 pred_len。",
+      "tags": ["patching", "channel", "technique"],
+      "source": "code_analysis",
+      "priority": 8,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "architecture_patterns",
+      "title": "主流架构模式",
+      "content": "纯编码器：DataEmbedding → Encoder → Linear(d_model, pred_len/c_out)，简洁高效。MLP混合器：ResBlock 交替做时间 Linear(seq_len, d_model) 和通道 Linear(enc_in, d_model) 变换加残差。多尺度：Pool/Conv 下采样构建多分辨率表示，季节↑趋势↓方向混合后融合。倒置注意力：permute(0,2,1) 后在变量维度做注意力捕捉变量依赖。",
+      "tags": ["architecture"],
+      "source": "code_analysis",
+      "priority": 7,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "linear_techniques",
+      "title": "线性映射技术",
+      "content": "直接映射 Linear(seq_len, pred_len) 是强基线。结合分解：分别对 trend/seasonal 用独立 Linear 预测后相加。残差旁路：self.ar = Linear(seq_len, pred_len)，dec_out = model_out + ar(x.permute(0,2,1)).permute(0,2,1)，帮助梯度流动。权重可初始化为 (1/seq_len) * ones([pred_len, seq_len])。",
+      "tags": ["linear", "baseline", "residual"],
+      "source": "code_analysis",
+      "priority": 7,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "multivariate_handling",
+      "title": "多变量与外生变量",
+      "content": "倒置嵌入：DataEmbedding_inverted 用 Linear(seq_len, d_model) 将每个变量时间序列嵌入为 token，在变量维度做注意力。外生变量融合：(1) concat 后共同嵌入；(2) 独立编码后交叉注意力；(3) global token 聚合。x_mark_dec 提供未来时间戳，可用于生成预测位置编码。",
+      "tags": ["multivariate", "exogenous"],
+      "source": "code_analysis",
+      "priority": 6,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    }
+  ],
+  "metadata": {
+    "created_at": "2025-12-24T12:00:00.000000",
+    "updated_at": "2025-12-24T16:00:00.000000",
+    "item_count": 9
+  }
+}

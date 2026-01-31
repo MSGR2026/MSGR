@@ -1,0 +1,6 @@
+{
+  "id": "MCCLK_2021",
+  "model_name": "MCCLK",
+  "task": "KnowledgeAwareRecommendation",
+  "domain": "Recsys"
+}

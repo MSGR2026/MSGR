@@ -1,0 +1,15 @@
+dropout: 0.1
+embedding_size: 64
+extraction_type: local
+feat_embed_dim: 64
+knn_k: 10
+mask_ratio: 0.1
+mm_image_weight: 0.5
+n_mm_layers: 1
+n_ui_layers: 2
+reg_weight: 1e-05
+sampling_ratio: 0.4
+sparse_threshold: 0.01
+ssl_temp: 0.2
+ssl_weight: 0.01
+truncation_ratio: 0.25

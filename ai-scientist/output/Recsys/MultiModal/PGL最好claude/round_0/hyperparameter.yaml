@@ -1,0 +1,52 @@
+# PGL: Principal Graph Learning for Multimedia Recommendation
+# Hyperparameter Configuration
+
+# Embedding dimensions
+embedding_size: 64
+feat_embed_dim: 64
+
+# Graph neural network layers
+n_layers: 2
+n_mm_layers: 1
+
+# kNN graph construction
+knn_k: 10
+
+# Regularization weight for BPR loss
+reg_weight: 1e-04
+
+# PGL specific parameters
+# Extraction type: 'global' for global-aware, 'local' for local-aware
+extraction_type: 'local'
+
+# Truncation ratio (gamma) for global-aware extraction
+# Paper suggests typical value 0.25, range (0,1)
+truncation_ratio: 0.25
+
+# Sampling ratio (p) for local-aware extraction
+# Paper suggests typical value 0.3
+sampling_ratio: [0.2, 0.3, 0.4]
+
+# Sparsification threshold (epsilon) for global-aware extraction
+sparsification_threshold: 1e-3
+
+# SVD rank for global-aware extraction
+svd_rank: 64
+
+# SSL (Self-Supervised Learning) parameters
+# Paper searches in [0.005, 0.01, 0.05, 0.1, 0.5]
+ssl_weight: [0.01, 0.05, 0.1]
+
+# Temperature (tau) for contrastive loss
+# Paper suggests typical value 0.2
+ssl_temp: 0.2
+
+# Feature masking ratio (rho)
+# Paper searches in [0.05, 0.1, 0.2, 0.3, 0.4]
+mask_ratio: [0.1, 0.2, 0.3]
+
+# Multimodal fusion weight for image modality
+mm_image_weight: 0.5
+
+# Hyperparameters to search
+hyper_parameters: ["sampling_ratio", "ssl_weight", "mask_ratio"]

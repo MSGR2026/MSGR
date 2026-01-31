@@ -1,0 +1,6 @@
+{
+  "id": "NCL_2021",
+  "model_name": "NCL",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

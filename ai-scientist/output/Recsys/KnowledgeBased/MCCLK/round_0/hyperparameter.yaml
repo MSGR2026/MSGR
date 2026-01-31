@@ -1,0 +1,21 @@
+# MCCLK (Multi-level Cross-view Contrastive Learning for Knowledge-aware Recommender System)
+# Paper: SIGIR 2022
+
+# Embedding dimensions
+embedding_size: 64              # (int) The embedding size of users, items, entities and relations.
+
+# Model architecture
+n_layers: 2                     # (int) The number of propagation layers for both KG and collaborative views.
+knn_k: 10                       # (int) The number of neighbors for semantic kNN item-item graph.
+
+# Regularization
+reg_weight: 1e-5                # (float) The L2 regularization weight for embeddings.
+
+# Contrastive learning parameters
+temperature: 0.2                # (float) The temperature parameter for InfoNCE contrastive loss.
+alpha: 0.1                      # (float) Weight for local contrastive loss (cross-view item alignment).
+beta: 0.1                       # (float) Weight for global contrastive loss (user-item alignment).
+
+# Dropout rates
+node_dropout_rate: 0.0          # (float) The node dropout rate (not actively used in current implementation).
+mess_dropout_rate: 0.1          # (float) The message dropout rate during propagation.

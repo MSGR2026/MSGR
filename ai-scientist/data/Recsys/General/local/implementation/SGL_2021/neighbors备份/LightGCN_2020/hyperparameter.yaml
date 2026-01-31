@@ -1,0 +1,25 @@
+# LightGCN Hyperparameters
+
+# Model Architecture
+# REUSE: Same embedding_size used in SGL
+embedding_size: 64              # (int) The embedding size of users and items.
+# REUSE: Same n_layers used in SGL
+n_layers: 3                     # (int) The number of LightGCN layers for neighborhood aggregation.
+
+# Regularization
+# REUSE: Same reg_weight used in SGL
+reg_weight: 0.0001              # (float) The L2 regularization weight for embeddings.
+# REUSE: Same require_pow setting used in SGL
+require_pow: False              # (bool) Whether to require pow when calculating regularization loss.
+
+# DIFFERENT: SGL adds ssl_weight, ssl_temp, ssl_mode, ssl_ratio parameters for self-supervised learning
+
+# Training
+learning_rate: 0.001            # (float) Learning rate for Adam optimizer.
+train_batch_size: 2048          # (int) Training batch size.
+
+# Early Stopping
+stopping_step: 10               # (int) Number of epochs with no improvement after which training will be stopped.
+
+# Evaluation
+eval_batch_size: 4096           # (int) Evaluation batch size for full sort prediction.

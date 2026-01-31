@@ -1,0 +1,3 @@
+# SIMILAR: Both use embedding_size for feature embeddings
+# DIFFERENT: KD_DAGFM has many additional params: teacher network, phase, depth, alpha, beta, type, warm_up
+embedding_size: 10              # (int) The embedding size of features.

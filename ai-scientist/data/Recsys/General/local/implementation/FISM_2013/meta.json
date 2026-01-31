@@ -1,0 +1,6 @@
+{
+  "id": "FISM_2013",
+  "model_name": "FISM",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

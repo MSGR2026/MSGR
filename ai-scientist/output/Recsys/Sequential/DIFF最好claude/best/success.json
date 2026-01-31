@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "paper_id": "DIFF_2025",
+  "model_name": "DIFF",
+  "domain": "Recsys",
+  "task": "Sequential",
+  "best_round": 2,
+  "best_acc": 0.095,
+  "best_combo": null,
+  "best_combo_info": {
+    "combo_name": null,
+    "by_dataset": {
+      "Amazon_Beauty": "-"
+    },
+    "best_metrics": {}
+  },
+  "all_metrics": {},
+  "timestamp": "2026-01-10T18:42:27.195831",
+  "total_rounds": 3,
+  "duration": 1351.128669977188
+}

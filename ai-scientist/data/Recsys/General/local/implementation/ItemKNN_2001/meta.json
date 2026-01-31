@@ -1,0 +1,6 @@
+{
+  "id": "ItemKNN_2001",
+  "model_name": "ItemKNN",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

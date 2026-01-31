@@ -1,0 +1,17 @@
+# IDEAGRU Model Configuration
+# Reference: IDEA - Invariant Defense for Graph Adversarial Robustness (SIGIR 2025)
+
+# GRU4Rec base parameters
+embedding_size: 64              # (int) The embedding size of items.
+hidden_size: 128                # (int) The number of features in the hidden state.
+num_layers: 1                   # (int) The number of layers in GRU.
+dropout_prob: 0.3               # (float) The dropout rate.
+loss_type: 'CE'                 # (str) The type of loss function. Range in ['BPR', 'CE'].
+
+# IDEA-specific parameters
+num_subseq: 3                   # (int) Number of subsequences for environment generation. Range: [2, 3, 4]
+num_env: 4                      # (int) Number of environments for training. Range: [2, 3, 4, 5]
+temp: 0.1                       # (float) Temperature parameter for Gumbel-Softmax.
+fake_ratio: 0.0                 # (float) Ratio of fake items to inject. Range: [0, 0.05, 0.1, 0.2]
+var_hyper: 1.0                  # (float) Hyperparameter for variance regularization.
+alpha: 0.1                      # (float) Parameter for Beta distribution in mixup.

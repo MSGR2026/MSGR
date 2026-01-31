@@ -1,0 +1,9 @@
+# REUSE: same embedding_size as SINE
+embedding_size: 64              # (int) The embedding size of items.
+# DIFFERENT: GRU-specific params; SINE uses prototype_size, interest_size, tau_ratio, reg_loss_ratio instead
+hidden_size: 128                # (int) The number of features in the hidden state. 
+num_layers: 1                   # (int) The number of layers in GRU.
+dropout_prob: 0.3               # (float) The dropout rate.
+# REUSE: same loss_type and default value as SINE
+loss_type: 'CE'                 # (str) The type of loss function. Range in ['BPR', 'CE'].
+train_neg_sample_args: ~        # CE loss must disable negative sampling or RecBole will error.

@@ -1,0 +1,12 @@
+{
+  "id": "M2GRL_2020",
+  "paper_title": "M2GRL: A Multi-task Multi-view Graph Representation Learning Framework for Web-scale Recommender Systems",
+  "alias": "M2GRL",
+  "year": 2020,
+  "domain": "Recsys",
+  "task": "MultiModalRecommendation",
+  "introduction": "",
+  "method": "",
+  "experiments": "",
+  "hyperparameter": "- embedding_dim: Dimension of node/item embeddings in each view; typically around 64 in the paper, balancing representation capacity and efficiency. - num_views: Number of single-view graphs constructed from behavior and side information (e.g., 3 on Taobao: instance, category, shop; 2 on MovieLens: instance, category). - window_size: Context window size c for the skip-gram objective when generating intra-view training pairs; usually set near 9 to capture local co-occurrence patterns while keeping training efficient. - num_negative_samples: Number of negative samples k per positive skip-gram pair; controls training speed and the strength of noise-contrastive learning signal, typically 7–10 (the paper uses 10). - batch_size: Number of training samples per update step; large batches such as 2048 are used to fully utilize distributed GPU/CPU resources in web-scale training. - learning_rate: Step size for Adam/SGD optimizers when updating embeddings and alignment matrices; set around 0.01 in the main experiments to ensure stable yet fast convergence. - num_epochs: Number of passes over the training data, usually about 10 for the large Taobao and MovieLens logs. - min_task_weight (or uncertainty clip): Lower bound (e.g., 0.05) applied when converting homoscedastic-uncertainty σ² into 1/σ² task weights so that no task dominates or vanishes during multi-task optimization."
+}

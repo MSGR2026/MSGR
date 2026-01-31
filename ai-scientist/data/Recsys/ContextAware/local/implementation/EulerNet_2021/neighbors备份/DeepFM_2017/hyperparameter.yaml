@@ -1,0 +1,6 @@
+# SIMILAR: Both use embedding_size for feature embeddings
+embedding_size: 10                # (int) The embedding size of features.
+# DIFFERENT: MLP hidden sizes; EulerNet uses order_list to define interaction layer dimensions
+mlp_hidden_size: [128, 128, 128]  # (list of int) The hidden size of MLP layers.  
+# SIMILAR: Dropout rate; EulerNet has separate drop_ex and drop_im for different components
+dropout_prob: 0.2                 # (float) The dropout rate.

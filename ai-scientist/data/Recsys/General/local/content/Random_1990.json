@@ -1,0 +1,13 @@
+{
+  "id": "Random_1990",
+  "paper_title": "Random Recommendation: A Simple Baseline for Evaluation",
+  "alias": "Random",
+  "year": 1990,
+  "domain": "Recsys",
+  "task": "GeneralRecommendation",
+  "idea": "",
+  "introduction": "",
+  "method": "",
+  "experiments": "",
+  "hyperparameter": ""
+}

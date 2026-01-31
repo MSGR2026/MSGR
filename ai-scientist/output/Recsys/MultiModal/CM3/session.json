@@ -1,0 +1,47 @@
+{
+  "session_id": "CM3_20260112_170832_a318c0f6",
+  "paper_id": "CM3_2025",
+  "model_name": "CM3",
+  "domain": "Recsys",
+  "task": "MultiModal",
+  "max_rounds": 1,
+  "current_round": 1,
+  "status": "success",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/CM3/best/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/CM3/best/hyperparameter.yaml",
+      "acc": 0.0731,
+      "metrics": {
+        "recall@5": 0.0314,
+        "recall@10": 0.0486,
+        "recall@20": 0.0731,
+        "recall@50": 0.123,
+        "ndcg@5": 0.0209,
+        "ndcg@10": 0.0265,
+        "ndcg@20": 0.0328,
+        "ndcg@50": 0.0429,
+        "precision@5": 0.007,
+        "precision@10": 0.0054,
+        "precision@20": 0.0041,
+        "precision@50": 0.0028,
+        "map@5": 0.0168,
+        "map@10": 0.0191,
+        "map@20": 0.0208,
+        "map@50": 0.0223
+      },
+      "error": null,
+      "feedback": "成功: 8/8, recall@20=0.0731",
+      "duration": 415.22332978248596,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.0731,
+  "best_round": 0,
+  "started_at": "2026-01-12T17:08:32.472089",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/MultiModal/CM3"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "CORE_2020",
+  "model_name": "CORE",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

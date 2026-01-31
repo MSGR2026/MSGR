@@ -1,0 +1,71 @@
+# Recsys/General 任务配置
+# 用于 RecBole General Recommendation 任务
+# 支持模型：BPR, LightGCN, NGCF, GCMC, SpectralCF, NCL, SGL, ...
+
+task:
+  domain: Recsys
+  task: General
+  framework: RecBole
+  description: "General Recommendation using RecBole framework"
+
+execution:
+  container: container/Recsys/recbole.sif
+  entry: RECBOLE_LOGROOT=/logs/{dataset} PYTHONPATH=/app/recbole python /app/recbole/run_recbole.py -m {model} -d {dataset}
+  workdir: /app
+  timeout: 7200  # 2小时
+
+mount:
+  # RecBole 源码挂载（补齐 recbole 包）
+  recbole:
+    host: "paperbench_pro/benchmark/Recsys/RecBole"
+    container: "/app/recbole"
+
+  # 模型代码挂载
+  # General Recommendation 模型放在 general_recommender 目录
+  algorithm:
+    host: "{algorithm_path}"
+    container: "/app/recbole/recbole/model/general_recommender/{model_lower}.py"
+  
+  # 超参数配置挂载
+  hyperparameter:
+    host: "{hyperparameter_path}"
+    container: "/app/recbole/recbole/properties/model/{model}.yaml"
+  
+  # 数据集挂载
+  dataset:
+    host: "paperbench_pro/dataset/Recsys/General/{dataset}"
+    container: "/app/dataset/{dataset}"
+  
+  # 日志挂载
+  logs:
+    host: "output/logs/runs/{run_id}/tasks"
+    container: "/logs"
+
+  # 模型保存目录挂载（对应 checkpoint_dir = saved）
+  saved_logs:
+    host: "output/logs/runs/{run_id}/tasks/saved"
+    container: "/app/saved"
+  
+  # TensorBoard 日志目录挂载
+  tensorboard:
+    host: "output/logs/runs/{run_id}/tasks/tensorboard"
+    container: "/app/log_tensorboard"
+
+data:
+  # 可用数据集
+  datasets:
+    - lastfm
+  
+  root: dataset/Recsys/General
+
+eval:
+  metrics:
+    - recall@10
+    - recall@20
+    - ndcg@10
+    - ndcg@20
+    - hit@10
+    - hit@20
+  
+  primary_metric: recall@10
+  higher_is_better: true

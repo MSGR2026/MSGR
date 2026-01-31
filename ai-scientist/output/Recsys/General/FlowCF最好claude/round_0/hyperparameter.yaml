@@ -1,0 +1,14 @@
+# FlowCF Hyperparameters
+# Reference: "FlowCF: A Flow-Based Recommender for Collaborative Filtering" in KDD 2025
+
+# Flow Model Architecture
+hidden_dims: [300, 300]          # (list of int) Hidden dimensions for MLP. Paper specifies [300, 300] for ML-1M.
+embedding_size: 10               # (int) Timestep embedding dimension. Paper uses 10.
+dropout: 0.1                     # (float) Dropout rate. Paper explicitly fixes at 0.1 for effective flow matching.
+activation: 'tanh'               # (str) Activation function for MLP layers.
+norm: False                      # (bool) Whether to normalize input with L2 normalization.
+
+# Flow Discretization Parameters
+steps: 9                         # (int) Number of discretization steps N. Paper uses 9 for ML-1M.
+sampling_steps: 2                # (int) Number of inference steps. Paper achieves good performance with only 2 steps.
+start_step: 7                    # (int) Starting step index for inference (second-to-last step = N-2 = 7 for N=9).

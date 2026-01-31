@@ -1,0 +1,19 @@
+# GCMC Hyperparameters
+# Reference: Rianne van den Berg et al. "Graph Convolutional Matrix Completion" in KDD 2018.
+
+# Model Architecture
+embedding_size: 500                # (int) Dimension of graph convolution layer (hidden units). Paper uses 500.
+n_layers: 1                        # (int) Number of graph convolution layers. Paper uses single layer GC-MC.
+num_basis: 2                       # (int) Number of basis weight matrices in bilinear decoder. Paper uses 2.
+accum: 'stack'                     # (str) Message accumulation function. Range in ['stack', 'sum']. Paper uses 'stack' for most datasets.
+normalization: 'symmetric'         # (str) Adjacency matrix normalization. Range in ['left', 'symmetric']. Paper uses 'symmetric' for ML datasets.
+
+# Regularization
+dropout_prob: 0.7                  # (float) Standard dropout rate for dense layer. Paper uses dropout.
+node_dropout_prob: 0.7             # (float) Node dropout rate during graph convolution. Paper uses 0.7 for ML-100K/ML-1M, 0.3 for ML-10M.
+reg_weight: 0.0                    # (float) L2 regularization weight for model parameters. Paper doesn't explicitly mention L2 weight, start with 0.
+
+# Training Settings (handled by RecBole trainer, but documented here)
+# learning_rate: 0.01              # Paper uses Adam with lr=0.01
+# train_batch_size: 2048           # Paper uses 10,000 for ML-10M, smaller for others
+# epochs: 1000                     # Paper uses 1,000 for ML-100K, 3,500 for ML-1M

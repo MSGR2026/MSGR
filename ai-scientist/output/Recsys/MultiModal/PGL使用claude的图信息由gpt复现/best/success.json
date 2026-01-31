@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "paper_id": "PGL_2025",
+  "model_name": "PGL",
+  "domain": "Recsys",
+  "task": "MultiModal",
+  "best_round": 2,
+  "best_acc": 0.0782,
+  "best_combo": null,
+  "best_combo_info": {
+    "combo_name": null,
+    "by_dataset": {
+      "baby": "-"
+    },
+    "best_metrics": {}
+  },
+  "all_metrics": {},
+  "timestamp": "2026-01-13T10:58:35.445123",
+  "total_rounds": 3,
+  "duration": 1016.8549020290375
+}

@@ -1,0 +1,59 @@
+# Recsys/ContextAware 任务配置
+# 用于 RecBole Context-aware Recommendation 任务
+# 支持模型：DeepFM, DCN, xDeepFM, FM, FFM, AutoInt, ...
+
+task:
+  domain: Recsys
+  task: ContextAware
+  framework: RecBole
+  description: "Context-aware Recommendation using RecBole framework"
+
+execution:
+  container: container/Recsys/recbole.sif
+  entry: RECBOLE_LOGROOT=/logs/{dataset} PYTHONPATH=/app/recbole python /app/recbole/run_recbole.py -m {model} -d {dataset}
+  workdir: /app
+  timeout: 7200
+
+mount:
+  # RecBole 源码挂载（补齐 recbole 包）
+  recbole:
+    host: "paperbench_pro/benchmark/Recsys/RecBole"
+    container: "/app/recbole"
+
+  # Context-aware Recommendation 模型放在 context_aware_recommender 目录
+  algorithm:
+    host: "{algorithm_path}"
+    container: "/app/recbole/recbole/model/context_aware_recommender/{model_lower}.py"
+  
+  hyperparameter:
+    host: "{hyperparameter_path}"
+    container: "/app/recbole/recbole/properties/model/{model}.yaml"
+  
+  dataset:
+    host: "paperbench_pro/dataset/Recsys/ContextAware/{dataset}"
+    container: "/app/dataset/{dataset}"
+  
+  logs:
+    host: "output/logs/runs/{run_id}/tasks"
+    container: "/logs"
+
+  # 模型保存目录挂载（对应 checkpoint_dir = saved）
+  saved_logs:
+    host: "output/logs/runs/{run_id}/tasks/saved"
+    container: "/app/saved"
+
+data:
+  datasets:
+    - ModCloth
+    - RentTheRunway
+  
+  root: dataset/Recsys/ContextAware
+
+eval:
+  # Context-aware 通常是 CTR 预测任务
+  metrics:
+    - auc
+    - logloss
+  
+  primary_metric: auc
+  higher_is_better: true

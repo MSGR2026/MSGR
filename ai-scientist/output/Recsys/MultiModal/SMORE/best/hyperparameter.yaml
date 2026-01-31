@@ -1,0 +1,23 @@
+# SMORE: Spectral Modality Fusion for Multi-modal Recommendation
+# Hyperparameter configuration
+
+# Embedding dimensions
+embedding_size: 64
+feat_embed_dim: 64
+
+# Graph construction
+knn_k: [10, 20]
+
+# GNN layers
+n_ui_layers: 2
+n_mm_layers: 1
+
+# Loss weights
+reg_weight: 1e-04
+cl_weight: [0.01, 0.02, 0.03]
+
+# Contrastive learning temperature
+temperature: 0.2
+
+# Hyperparameters to search
+hyper_parameters: ["knn_k", "cl_weight"]

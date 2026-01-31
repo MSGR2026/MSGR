@@ -1,0 +1,6 @@
+{
+  "id": "FNN_2016",
+  "model_name": "FNN",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

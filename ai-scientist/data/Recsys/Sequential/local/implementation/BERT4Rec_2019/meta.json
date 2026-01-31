@@ -1,0 +1,6 @@
+{
+  "id": "BERT4Rec_2019",
+  "model_name": "BERT4Rec",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

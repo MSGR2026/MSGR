@@ -1,0 +1,6 @@
+{
+  "id": "CKE_2016",
+  "model_name": "CKE",
+  "task": "KnowledgeAwareRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,122 @@
+============================================================
+Task: SequentialRecommendation
+Total nodes: 31
+Total edges: 49
+============================================================
+
+[BERT4Rec_2019] <- 3 connections:
+    <- SASRec_2018 (rank: rank1)
+    <- Caser_2018 (rank: rank2)
+    <- FPMC_2010 (rank: rank5)
+
+[CORE_2020] <- 0 connections (no incoming edges)
+
+[Caser_2018] <- 1 connections:
+    <- FPMC_2010 (rank: rank3)
+
+[DIEN_2018] <- 1 connections:
+    <- DIN_2017 (rank: rank1)
+
+[DIN_2017] <- 1 connections:
+    <- SASRec_2018 (rank: rank5)
+
+[FDSA_2020] <- 0 connections (no incoming edges)
+
+[FEARec_2021] <- 2 connections:
+    <- CORE_2020 (rank: rank1)
+    <- SASRec_2018 (rank: rank5)
+
+[FOSSIL_2018] <- 0 connections (no incoming edges)
+
+[FPMC_2010] <- 2 connections:
+    <- GRU4Rec_2015 (rank: rank1)
+    <- SASRec_2018 (rank: rank4)
+
+[GCSAN_2021] <- 4 connections:
+    <- SRGNN_2019 (rank: rank1)
+    <- STAMP_2018 (rank: rank2)
+    <- NARM_2018 (rank: rank4)
+    <- FPMC_2010 (rank: rank5)
+
+[GRU4RecCPR_2020] <- 0 connections (no incoming edges)
+
+[GRU4RecF_2019] <- 0 connections (no incoming edges)
+
+[GRU4RecKG_2019] <- 0 connections (no incoming edges)
+
+[GRU4Rec_2015] <- 0 connections (no incoming edges)
+
+[HGN_2019] <- 2 connections:
+    <- SASRec_2018 (rank: rank1)
+    <- NextItNet_2018 (rank: rank2)
+
+[HRM_2020] <- 1 connections:
+    <- FPMC_2010 (rank: rank1)
+
+[KSR_2020] <- 0 connections (no incoming edges)
+
+[LightSANs_2020] <- 4 connections:
+    <- SASRec_2018 (rank: rank1)
+    <- BERT4Rec_2019 (rank: rank2)
+    <- NARM_2018 (rank: rank4)
+    <- FPMC_2010 (rank: rank5)
+
+[NARM_2018] <- 2 connections:
+    <- GRU4Rec_2015 (rank: rank1)
+    <- FPMC_2010 (rank: rank3)
+
+[NPE_2021] <- 0 connections (no incoming edges)
+
+[NextItNet_2018] <- 1 connections:
+    <- FPMC_2010 (rank: rank2)
+
+[RepeatNet_2019] <- 2 connections:
+    <- NARM_2018 (rank: rank1)
+    <- FPMC_2010 (rank: rank3)
+
+[S3Rec_2020] <- 3 connections:
+    <- BERT4Rec_2019 (rank: rank2)
+    <- SASRec_2018 (rank: rank3)
+    <- HGN_2019 (rank: rank4)
+
+[SASRecCPR_2021] <- 6 connections:
+    <- SASRec_2018 (rank: rank1)
+    <- GRU4Rec_2015 (rank: rank1)
+    <- NARM_2018 (rank: rank2)
+    <- RepeatNet_2019 (rank: rank3)
+    <- Caser_2018 (rank: rank4)
+    <- NextItNet_2018 (rank: rank5)
+
+[SASRecF_2020] <- 0 connections (no incoming edges)
+
+[SASRec_2018] <- 2 connections:
+    <- TransRec_2017 (rank: rank1)
+    <- FPMC_2010 (rank: rank2)
+
+[SHAN_2020] <- 2 connections:
+    <- HRM_2020 (rank: rank1)
+    <- FPMC_2010 (rank: rank2)
+
+[SINE_2021] <- 1 connections:
+    <- SASRec_2018 (rank: rank3)
+
+[SRGNN_2019] <- 3 connections:
+    <- STAMP_2018 (rank: rank1)
+    <- NARM_2018 (rank: rank2)
+    <- FPMC_2010 (rank: rank4)
+
+[STAMP_2018] <- 2 connections:
+    <- NARM_2018 (rank: rank1)
+    <- FPMC_2010 (rank: rank3)
+
+[TransRec_2017] <- 4 connections:
+    <- GRU4Rec_2015 (rank: rank1)
+    <- SASRec_2018 (rank: rank3)
+    <- NARM_2018 (rank: rank4)
+    <- BERT4Rec_2019 (rank: rank5)
+
+============================================================
+Summary:
+  Nodes with incoming edges: 21
+  Nodes without incoming edges: 10
+============================================================

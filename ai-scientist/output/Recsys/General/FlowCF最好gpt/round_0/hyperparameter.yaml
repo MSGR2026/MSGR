@@ -1,0 +1,23 @@
+# FlowCF_2025 (KDD 2025) - RecBole hyperparameter config (ML-1M setting)
+
+# --- Discrete flow process ---
+steps: 9                 # N, discretization steps (paper: 9 on ML-1M)
+sampling_steps: 2        # inference Euler-like updates (paper: 2)
+start_step: null         # start from second-to-last step by default (code derives s = N-1-K)
+
+# --- Flow MLP backbone ---
+embedding_size: 10       # time embedding dim (paper: 10)
+dims_dnn: [300, 300]     # MLP hidden dims (paper: [300, 300] for ML-1M)
+mlp_act_func: tanh       # typical for DiffRec-style MLP; paper does not override activation
+dropout: 0.1             # paper: fixed to 0.1
+norm: false              # keep input as raw binary vector; normalization not mentioned in paper
+
+# --- Behavior-guided prior (Bernoulli item frequency) ---
+prior_min: 1.0e-6        # numerical stability
+prior_max: 0.999999      # numerical stability
+
+# --- Optimizer / training (paper) ---
+learner: adam
+learning_rate: 0.001
+weight_decay: 0.0
+train_batch_size: 4096

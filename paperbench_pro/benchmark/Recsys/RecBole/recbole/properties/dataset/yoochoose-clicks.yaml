@@ -1,0 +1,10 @@
+dataset: yoochoose-clicks
+data_path: dataset/
+
+USER_ID_FIELD: session_id
+ITEM_ID_FIELD: item_id
+RATING_FIELD: count
+TIME_FIELD: timestamp
+
+load_col:
+  inter: [session_id, item_id, count, timestamp]

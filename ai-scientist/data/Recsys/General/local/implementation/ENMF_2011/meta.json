@@ -1,0 +1,6 @@
+{
+  "id": "ENMF_2011",
+  "model_name": "ENMF",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

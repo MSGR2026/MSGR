@@ -1,0 +1,6 @@
+{
+  "id": "Caser_2018",
+  "model_name": "Caser",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

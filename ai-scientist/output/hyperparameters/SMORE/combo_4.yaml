@@ -1,0 +1,10 @@
+cl_weight: 0.03
+dropout_rate: 0.1
+embedding_size: 64
+image_knn_k: 10
+learning_rate: 0.001
+n_mm_layers: 1
+n_ui_layers: 2
+reg_weight: 1e-04
+tau: 0.2
+text_knn_k: 10

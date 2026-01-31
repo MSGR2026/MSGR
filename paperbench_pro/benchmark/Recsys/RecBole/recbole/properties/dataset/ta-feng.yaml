@@ -1,0 +1,20 @@
+dataset: ta-feng
+data_path: dataset/
+
+USER_ID_FIELD: customer_id
+ITEM_ID_FIELD: product_id
+TIME_FIELD: transaction_date
+
+load_col:
+  inter:
+    [
+      transaction_date,
+      customer_id,
+      age_group,
+      pin_code,
+      product_subclass,
+      product_id,
+      amount,
+      asset,
+      sales_price,
+    ]

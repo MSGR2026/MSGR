@@ -1,0 +1,6 @@
+{
+  "id": "TransRec_2017",
+  "model_name": "TransRec",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "FPMC_2010",
+  "model_name": "FPMC",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

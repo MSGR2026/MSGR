@@ -1,0 +1,37 @@
+{
+  "session_id": "LDiffRec_20260106_154354_7a28e037",
+  "paper_id": "LDiffRec_2021",
+  "model_name": "LDiffRec",
+  "domain": "Recsys",
+  "task": "General",
+  "max_rounds": 1,
+  "current_round": 1,
+  "status": "success",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/General/LDiffRec/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/General/LDiffRec/round_0/hyperparameter.yaml",
+      "acc": 0.2569,
+      "metrics": {
+        "16": 17.0,
+        "recall@10": 0.2569,
+        "mrr@10": 0.101,
+        "ndcg@10": 0.1372,
+        "hit@10": 0.257,
+        "precision@10": 0.0257
+      },
+      "error": null,
+      "feedback": "成功: 1/1, recall@10=0.2569",
+      "duration": 1990.8018741607666,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.2569,
+  "best_round": 0,
+  "started_at": "2026-01-06T15:43:54.260558",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/General/LDiffRec"
+}

@@ -1,0 +1,115 @@
+{
+  "domain": "Recsys",
+  "task": "ContextAwareRecommendation",
+  "items": [
+    {
+      "id": "context_recommender_interface",
+      "title": "ContextRecommender 框架接口",
+      "content": "上下文感知模型继承 ContextRecommender，父类提供三个关键方法：concat_embed_input_fields(interaction) 返回 [batch_size, num_field, embed_dim] 的多域嵌入张量；first_order_linear(interaction) 计算一阶线性加权项；embed_input_fields(interaction) 返回带 mask 的嵌入。父类属性 num_feature_field、embedding_size、token_field_names、float_field_names 等直接可用。必须实现 forward()、calculate_loss(interaction)、predict(interaction) 三个方法，其中 forward() 返回 logits，predict() 返回 sigmoid(forward())。",
+      "tags": [
+        "framework",
+        "recbole",
+        "interface",
+        "critical"
+      ],
+      "source": "framework_analysis",
+      "priority": 10,
+      "created_at": "2025-12-26T12:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "ctr_loss_paradigm",
+      "title": "CTR 预测损失函数范式",
+      "content": "CTR 预测统一使用 nn.BCEWithLogitsLoss() 作为损失函数，它内部融合了 sigmoid 和二元交叉熵，数值稳定性优于分开计算。forward() 输出未归一化的 logits，calculate_loss() 直接将 logits 与 label 传入损失函数，predict() 对 logits 应用 sigmoid 得到点击概率。标签通过 interaction[self.LABEL] 获取。InputType 默认 POINTWISE，适用于逐点分类任务。",
+      "tags": [
+        "loss",
+        "ctr",
+        "pointwise",
+        "critical"
+      ],
+      "source": "model_analysis",
+      "priority": 10,
+      "created_at": "2025-12-26T12:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "feature_interaction_hierarchy",
+      "title": "特征交互阶数建模层次",
+      "content": "上下文感知推荐的核心是建模不同阶数的特征交互：一阶项为各特征线性加权（LR）；二阶项通过内积、Hadamard 积或外积捕捉成对特征交互（FM 系列）；高阶项有两条路径——隐式高阶用 MLP 从展平嵌入学习（FNN/DeepFM 的 Deep 部分），显式高阶用专门网络结构建模（Cross Network、CIN、Self-Attention）。总输出通常为 y = 一阶 + 二阶 + Deep/Cross，各部分输出相加或拼接后投影。",
+      "tags": [
+        "architecture",
+        "feature_interaction",
+        "design_pattern"
+      ],
+      "source": "model_analysis",
+      "priority": 10,
+      "created_at": "2025-12-26T12:00:00.000000",
+      "updated_at": "2025-12-26T20:00:00.000000"
+    },
+    {
+      "id": "auc_optimization_notes",
+      "title": "AUC 评估与CTR预测注意事项",
+      "content": "AUC 关注排序质量而非概率校准，评估时应使用 predict() 输出的点击概率而非阈值化结果。推荐实现模式：forward() 返回 logits，calculate_loss() 用 BCEWithLogitsLoss 直接喂 logits，predict() 仅做 sigmoid。标签形状需与 logits 对齐（squeeze(-1)），避免在评估端触发广播。若模型内部已对 logits 做 sigmoid（如 KD_DAGFM），评估端不要再套一层 sigmoid，否则会扭曲 AUC。",
+      "tags": [
+        "metric",
+        "auc",
+        "ctr",
+        "evaluation"
+      ],
+      "source": "evaluation_guideline",
+      "priority": 9,
+      "created_at": "2026-01-03T10:00:00.000000",
+      "updated_at": "2026-01-03T10:00:00.000000"
+    },
+    {
+      "id": "complex_interaction_engineering",
+      "title": "复杂交互模型的工程细节",
+      "content": "复杂交互（如复数空间建模）常用 cos/sin 将实值嵌入映射到相位与幅值，并在交互层中进行 log/exp 变换以保持数值稳定。实现时注意：1) 对幅值加 1e-8 防止 log(0)；2) log/exp 前后建议做 clamp（如对 log 输入限制下界，对 exp 输出限制上界）避免 NaN/Inf；3) 交互层内的 Dropout 分别作用于原始嵌入与相位/幅值分支；4) 交互输出需 reshape 回 [batch, num_field, embed_dim] 再做 LayerNorm（可选）；5) 若复数两路共享线性层，务必保持相同权重与初始化策略，减少不稳定梯度。",
+      "tags": [
+        "interaction",
+        "complex",
+        "stability",
+        "engineering"
+      ],
+      "source": "implementation_notes",
+      "priority": 8,
+      "created_at": "2026-01-03T10:00:00.000000",
+      "updated_at": "2026-01-03T10:00:00.000000"
+    },
+    {
+      "id": "distillation_phase_control",
+      "title": "蒸馏式CTR模型的阶段管理",
+      "content": "Teacher-Student 结构需明确训练阶段：teacher_training 仅更新教师；distillation 使用学生输出并引入 MSE(logits_T, logits_S)；finetuning 仅优化学生 CTR 损失。实现要点：1) distillation 阶段将 teacher 置为 eval 并阻断梯度；2) warm_up 路径需加载完整 state_dict；3) teacher 的配置建议使用 t_ 前缀覆盖（如 t_depth、t_cin），防止与学生参数混淆。",
+      "tags": [
+        "distillation",
+        "training",
+        "phase",
+        "engineering"
+      ],
+      "source": "training_guideline",
+      "priority": 8,
+      "created_at": "2026-01-03T10:00:00.000000",
+      "updated_at": "2026-01-03T10:00:00.000000"
+    },
+    {
+      "id": "yaml_hyperparameter_format",
+      "title": "超参数 YAML 格式规范",
+      "content": "YAML 采用扁平键值结构，值类型需与代码一致：int/float/bool/string 以及 list。键名必须与代码中的 config['key'] 完全一致，大小写敏感。列表仅用于结构型参数（如 order_list、t_cin），不要用列表表达搜索空间，避免运行时 TypeError。若 teacher 参数使用 t_ 前缀（如 t_depth、t_cin），需确保 teacher_config 正确覆盖。",
+      "tags": [
+        "yaml",
+        "config",
+        "format",
+        "critical"
+      ],
+      "source": "engineering_standards",
+      "priority": 9,
+      "created_at": "2026-01-03T10:40:00.000000",
+      "updated_at": "2026-01-03T10:40:00.000000"
+    }
+  ],
+  "metadata": {
+    "created_at": "2025-12-26T12:00:00.000000",
+    "updated_at": "2026-01-04T12:10:00.000000",
+    "item_count": 7
+  }
+}

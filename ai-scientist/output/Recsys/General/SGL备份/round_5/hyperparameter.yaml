@@ -1,0 +1,5 @@
+代码尝试先读取 `aug_type`，如果没有则读取 `type`。但问题是 `type` 在 RecBole 中是保留字段，不会传递给模型。所以需要在配置中明确使用 `aug_type` 而不是 `type`。
+
+当前配置中已经有 `aug_type: ED`，但从日志 `Other Hyper Parameters` 中可以看到显示的是 `type = ED` 而不是 `aug_type = ED`，这说明配置没有正确传递。
+
+让我检查当前配置 - 配置中确实有 `aug_type: ED`，但问题可能是 YAML 的缩进或格式问题。让我重新生成一个干净的配置：

@@ -1,0 +1,6 @@
+{
+  "id": "NARM_2018",
+  "model_name": "NARM",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

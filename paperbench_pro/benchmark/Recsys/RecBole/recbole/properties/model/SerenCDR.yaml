@@ -1,0 +1,24 @@
+# SerenCDR 模型超参数配置
+
+# 基础嵌入参数
+embedding_size: 128           # (int) 用户和物品的嵌入维度
+
+# SerenCDR 特有参数
+hidden_size: 128              # (int) 源域特定模块的隐藏层维度
+feature_dim: 64               # (int) 惊喜度特征维度
+num_user_groups: 64           # (int) 用户分组数量（域共享模块）
+num_item_groups: 64           # (int) 物品分组数量（域共享模块）
+
+# 正则化和损失权重
+l2_reg: 0.01                  # (float) L2 正则化系数
+aux_loss_weight: 1.0          # (float) 辅助损失权重
+
+# 跨域设置
+use_cross_domain: false       # (bool) 是否使用跨域训练（需要额外数据）
+
+# 训练参数
+learning_rate: 0.0001         # (float) 学习率
+train_batch_size: 512         # (int) 训练批次大小
+eval_batch_size: 4096         # (int) 评估批次大小
+epochs: 100                   # (int) 训练轮数
+

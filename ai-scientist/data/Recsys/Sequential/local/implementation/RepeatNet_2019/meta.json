@@ -1,0 +1,6 @@
+{
+  "id": "RepeatNet_2019",
+  "model_name": "RepeatNet",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

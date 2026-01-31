@@ -1,0 +1,23 @@
+# KGAT (Knowledge Graph Attention Network) Hyperparameters
+
+# Embedding dimensions
+# REUSE: Same embedding_size as MCCLK
+embedding_size: 64              # (int) The embedding size of users, items and entities.
+kg_embedding_size: 64           # (int) The embedding size of relations in knowledge graph (TransR relation dimension).
+
+# Model architecture
+# SIMILAR: n_layers serves similar purpose as n_hops in MCCLK
+n_layers: 3                     # (int) The number of attentive embedding propagation layers.
+# DIFFERENT: KGAT uses aggregator_type; MCCLK has fixed aggregation with attention option
+aggregator_type: 'bi-interaction'  # (str) The type of aggregator: 'gcn', 'graphsage', or 'bi-interaction'.
+
+# Regularization
+# REUSE: Same reg_weight value as MCCLK
+reg_weight: 1e-5                # (float) The L2 regularization weight for embeddings and parameters.
+
+# Training settings
+learning_rate: 0.001            # (float) Learning rate for Adam optimizer.
+
+# Graph structure
+# DIFFERENT: KGAT samples fixed neighbors; MCCLK uses full graph with dropout
+neighbor_sample_size: 8         # (int) The number of neighbors to sample for each entity in CKG.

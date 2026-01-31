@@ -1,0 +1,6 @@
+{
+  "id": "SimpleX_2021",
+  "model_name": "SimpleX",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

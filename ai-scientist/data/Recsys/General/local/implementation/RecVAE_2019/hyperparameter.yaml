@@ -1,0 +1,20 @@
+# RecVAE Hyperparameters
+
+# Embedding and Architecture
+latent_dimension: 200                    # (int) The latent dimension of the VAE (k in paper). Typical range 100-400 for collaborative filtering VAE.
+hidden_dimension: [600]                  # (list of int) Hidden layer dimensions for dense encoder. Paper uses single hidden layer of 600 following Mult-VAE.
+dropout_prob: 0.5                        # (float) Dropout probability for encoder layers. Standard value from paper.
+
+# VAE-specific Parameters
+gamma: 0.005                             # (float) KL rescaling parameter for user-specific KL weight β'(x) = γ * |X_u|. Paper uses 0.005 for MovieLens-20M, 0.0035 for Netflix, 0.01 for MSD.
+alpha: 0.75                              # (float) Composite prior mixture weight for previous epoch's posterior component. Paper uses 3/4 = 0.75 for old posterior in mixture.
+noise_prob: 0.5                          # (float) Bernoulli noise parameter μ_noise for denoising during encoder training. Paper uses 0.5.
+
+# Alternating Training
+n_enc_epochs: 3                          # (int) Number of encoder update steps per epoch relative to decoder. Paper uses M_enc = 3 * M_dec.
+n_dec_epochs: 1                          # (int) Number of decoder update steps per epoch. Paper uses M_dec = |U| / batch_size as baseline.
+
+# Training (Note: learning_rate and epochs are typically set in trainer config, included here for reference)
+# learning_rate: 5e-4                    # (float) Learning rate for Adam optimizer. Paper uses 5×10^-4.
+# epochs: 50                             # (int) Training epochs. Paper uses 50 for MovieLens-20M/Netflix, 100 for MSD.
+# batch_size: 500                        # (int) Batch size. Paper uses 500.

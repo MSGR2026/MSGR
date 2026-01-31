@@ -1,0 +1,6 @@
+{
+  "id": "LightGCN_2020",
+  "model_name": "LightGCN",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

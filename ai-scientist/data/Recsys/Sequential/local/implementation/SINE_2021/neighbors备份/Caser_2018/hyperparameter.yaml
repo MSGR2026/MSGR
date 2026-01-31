@@ -1,0 +1,11 @@
+# REUSE: Same embedding_size as SINE
+embedding_size: 64              # (int) The embedding size of users and items.
+dropout_prob: 0.4               # (float) The dropout rate. 
+# DIFFERENT: Caser uses L2 weight decay; SINE uses reg_loss_ratio for prototype diversity loss
+reg_weight: 1e-4                # (float) The L2 regularization weight.
+# DIFFERENT: CNN filter counts; SINE uses prototype_size and interest_size instead
+nv: 4                           # (int) The number of vertical Convolutional filters.
+nh: 8                           # (int) The number of horizontal Convolutional filters.
+# REUSE: Same loss_type CE as SINE default
+loss_type: 'CE'                 # (str) The type of loss function.
+train_neg_sample_args: ~        # CE loss must disable negative sampling or RecBole will error.

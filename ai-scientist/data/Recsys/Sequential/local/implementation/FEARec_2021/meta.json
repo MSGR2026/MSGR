@@ -1,0 +1,6 @@
+{
+  "id": "FEARec_2021",
+  "model_name": "FEARec",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

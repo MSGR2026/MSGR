@@ -1,0 +1,22 @@
+# SMORE_2025 (class: SMORE) hyper-parameter config
+
+embedding_size: 64          # d in paper
+knn_k: 20                   # K_m in paper (topK for modality kNN graphs)
+
+n_ui_layers: 2              # LightGCN layers on user-item graph (behavior view)
+
+lambda_cl: 0.02             # λ1 in Eq.(25), paper suggests 0.01~0.03
+tau: 0.2                    # temperature τ in Eq.(22), common choice in CL for recsys
+
+reg_weight: 1e-05           # λ2 in Eq.(25), L2 over all parameters (keep small)
+
+# training-related (paper typical)
+train_batch_size: 2048
+
+# ---- grid search (<= 16 combos) ----
+# total combos = 2 * 2 * 3 = 12
+lambda_cl: [0.01, 0.03]
+knn_k: [20, 40]
+reg_weight: [1e-06, 1e-05, 1e-04]
+
+hyper_parameters: ["lambda_cl", "knn_k", "reg_weight"]

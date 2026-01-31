@@ -1,0 +1,16 @@
+dataset: RentTheRunway
+data_path: dataset/
+
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+RATING_FIELD: rating
+TIME_FIELD: timestamp
+
+LABEL_FIELD: label
+threshold:
+  rating: 8.0
+
+load_col:
+  inter: [user_id, item_id, rating, timestamp, fit, rented_for]
+  user: [user_id, age, bust_size, weight, height, body_type]
+  item: [item_id, category, size]

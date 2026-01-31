@@ -1,0 +1,6 @@
+{
+  "id": "SASRecF_2020",
+  "model_name": "SASRecF",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

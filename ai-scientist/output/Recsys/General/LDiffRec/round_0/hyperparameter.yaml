@@ -1,0 +1,37 @@
+# L-DiffRec: Latent Diffusion Recommender Model
+# Reference: Wenjie Wang et al. "Diffusion Recommender Model." in SIGIR 2023.
+
+# Diffusion process parameters
+noise_schedule: 'linear-var'    # (str) The schedule for noise generating: [linear, linear-var, cosine]
+noise_scale: 0.0001             # (float) The scale for noise generating
+noise_min: 0.0005               # (float) Noise lower bound for noise generating
+noise_max: 0.005                # (float) Noise upper bound for noise generating
+sampling_noise: False           # (bool) Whether to use sampling noise during inference
+sampling_steps: 0               # (int) Steps of the forward process during inference
+reweight: True                  # (bool) Assign different weight to different timestep or not
+mean_type: 'x0'                 # (str) MeanType for diffusion: [x0, eps]
+steps: 5                        # (int) Diffusion steps
+history_num_per_term: 10        # (int) The number of history items needed to calculate loss weight
+beta_fixed: True                # (bool) Whether to fix the variance of the first step to prevent overfitting
+
+# VAE parameters
+n_cate: 1                       # (int) Number of item clusters for latent compression
+latent_dimension: 128           # (int) The latent dimension of each VAE encoder
+encoder_dims: [300]             # (list of int) Hidden layer dimensions for VAE encoder/decoder
+dropout_prob: 0.5               # (float) Dropout probability for encoder and DNN layers
+anneal_cap: 0.2                 # (float) Maximum weight for KL divergence term
+total_anneal_steps: 200000      # (int) Number of steps for KL annealing
+
+# Diffusion DNN parameters
+dims_dnn: [300]                 # (list of int) Hidden layer dimensions for diffusion DNN
+embedding_size: 10              # (int) Timestep embedding size
+mlp_act_func: 'tanh'            # (str) Activation function for MLP: [tanh, relu, sigmoid]
+norm: False                     # (bool) Whether to normalize input in DNN
+
+# Loss parameters
+lamda: 0.03                     # (float) Weight for diffusion loss relative to VAE loss
+
+# Time-aware reweighting (T-DiffRec variant)
+time_aware: False               # (bool) Whether to use time-aware interaction reweighting
+w_max: 1.0                      # (float) Upper bound of time-aware interaction weight
+w_min: 0.1                      # (float) Lower bound of time-aware interaction weight

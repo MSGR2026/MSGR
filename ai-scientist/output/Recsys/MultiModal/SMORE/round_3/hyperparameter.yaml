@@ -1,0 +1,9 @@
+embedding_size: 64
+knn_k: [10, 30]
+
+n_mm_layers: [1, 2]
+lambda_cl: [0.01, 0.03]
+temperature: 0.1
+batch_size: 2048
+
+hyper_parameters: ["knn_k", "n_mm_layers", "lambda_cl"]

@@ -1,0 +1,6 @@
+{
+  "id": "NextItNet_2018",
+  "model_name": "NextItNet",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

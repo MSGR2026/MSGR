@@ -1,0 +1,6 @@
+{
+  "id": "HRM_2020",
+  "model_name": "HRM",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

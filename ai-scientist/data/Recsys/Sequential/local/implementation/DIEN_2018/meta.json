@@ -1,0 +1,6 @@
+{
+  "id": "DIEN_2018",
+  "model_name": "DIEN",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,15 @@
+# LightCCF config
+embedding_size: 64
+n_layers: 3
+reg_weight: 1e-4
+ssl_weight: 5.0
+tau: 0.28
+encoder: 'MF'
+
+# Training settings
+epochs: 600
+train_batch_size: 2048  # 重要：对比学习需要较大的 batch size
+learner: adam
+learning_rate: 0.001
+eval_step: 1
+stopping_step: 10

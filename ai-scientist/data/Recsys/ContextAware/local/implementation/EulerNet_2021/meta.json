@@ -1,0 +1,6 @@
+{
+  "id": "EulerNet_2021",
+  "model_name": "EulerNet",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

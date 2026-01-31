@@ -1,0 +1,91 @@
+{
+  "domain": "TimeSeries",
+  "task": "classification",
+  "items": [
+    {
+      "id": "tsl_framework_spec",
+      "title": "Time Series Library 框架规范",
+      "content": "模型类命名为 Model，继承 nn.Module。__init__ 接收 configs 参数，包含 task_name, seq_len, enc_in, num_class, d_model, n_heads, e_layers, d_ff, dropout 等配置。必须实现 classification(x_enc, x_mark_enc) 方法返回分类 logits，以及 forward() 方法调用 classification。输入 x_enc 形状为 [B, seq_len, enc_in]，x_mark_enc 为 padding 掩码（有效位为1），输出形状为 [B, num_class]。分类使用 CrossEntropyLoss。若模型需要特殊组件而框架现有组件不支持所需参数，应在模型文件中内联定义该组件。",
+      "tags": ["framework", "interface", "critical"],
+      "source": "framework_analysis",
+      "priority": 10,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "config_params",
+      "title": "支持的超参数列表",
+      "content": "run.py 支持的参数：【基础】task_name, is_training, model_id, model, data, root_path, data_path, features, target, freq, checkpoints；【序列】seq_len, label_len, pred_len；【模型】enc_in, dec_in, c_out, d_model, n_heads, e_layers, d_layers, d_ff, moving_avg, factor, dropout, embed, activation, top_k, num_kernels；【训练】train_epochs, batch_size, patience, learning_rate, loss, lradj。布尔参数（distil, inverse等）只能设 true 或不写。未列出参数会报错，代码中用 getattr(configs, 'param', default) 设置默认值。",
+      "tags": ["config", "hyperparameter", "critical"],
+      "source": "run.py_argparse",
+      "priority": 10,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "task_adaptation_semantics",
+      "title": "任务适配时的语义变化",
+      "content": "预测模型适配到分类任务时，输入输出语义发生根本变化：【输入变化】x_mark_enc 从时间特征 [B,L,d_temporal] 变为 padding mask [B,L]；Embedding 层不应对 padding mask 做时间编码，应传 None。【输出变化】从序列预测 [B,pred_len,C] 变为类别 logits [B,num_class]；移除 Decoder 及其依赖（如外推、阻尼等预测专用组件）。【组件复用原则】Encoder 的特征提取逻辑（注意力、FFN、归一化）通常可直接复用；Decoder、Growth Damping、Seasonal Extrapolation 等预测专用组件应移除或简化。",
+      "tags": ["adaptation", "semantic", "critical"],
+      "source": "error_analysis",
+      "priority": 10,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "classification_head_pattern",
+      "title": "分类头实现模式",
+      "content": "分类任务采用 Encoder-only 架构，输出通过展平+线性投影得到类别 logits。【标准流程】enc_out → 激活(GELU) → Dropout → 掩码屏蔽 → 展平 → 线性投影。掩码操作：output = output * x_mark_enc.unsqueeze(-1) 将 padding 位置置零。展平：output.reshape(B, -1)。【投影维度】取决于编码器输出形状：若输出 [B, L, D] 则投影 L*D → num_class；若输出 [B, C, D] 则投影 C*D → num_class。简化版本可省略激活和掩码，直接 flatten+projection。",
+      "tags": ["classification", "head", "projection"],
+      "source": "implementation_analysis",
+      "priority": 9,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "sequence_representation",
+      "title": "序列表示策略",
+      "content": "将变长时序转为固定维度表示的三种范式：(1) 时间步token化：每个时间步投影为d_model维向量，输出[B,L,D]，展平得 L*D 维特征；(2) 变量token化：每个变量的完整序列投影为d_model维，输出[B,C,D]，展平得 C*D 维特征；(3) Patch token化：序列切分为固定长度patch后投影，输出[B,patch_num,D]。选择依据：时间步token化适合捕获时序动态，变量token化适合多变量关联建模，Patch token化适合捕获局部模式。",
+      "tags": ["embedding", "representation", "architecture"],
+      "source": "implementation_analysis",
+      "priority": 8,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "temporal_modeling_paradigms",
+      "title": "时序建模范式",
+      "content": "时序特征提取的三大范式：(1) 时域建模：直接在时间维度上操作（注意力/卷积/线性层）；(2) 频域建模：FFT变换→频域操作→IFFT重建，天然捕获周期性；(3) 分解建模：移动平均分离 trend/seasonal 分量分别处理。这三种范式可独立使用或组合。分类任务通常只需编码器提取特征，无需预测未来序列。",
+      "tags": ["temporal", "frequency", "decomposition"],
+      "source": "implementation_analysis",
+      "priority": 8,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "normalization_practice",
+      "title": "归一化实践",
+      "content": "时序分类常用的归一化：(1) 实例归一化（在 classification 方法内）：对每个样本沿时间维度归一化 x = (x - x.mean(1,keepdim=True)) / x.std(1,keepdim=True)，需 .detach() 防止梯度回传；(2) LayerNorm：用于 Transformer 层输出归一化；(3) BatchNorm1d：偶用于卷积层后。实例归一化可消除样本间分布差异，是时序任务的常见预处理。",
+      "tags": ["normalization", "preprocessing"],
+      "source": "implementation_analysis",
+      "priority": 7,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-24T12:00:00.000000"
+    },
+    {
+      "id": "vectorization_principle",
+      "title": "向量化计算原则",
+      "content": "【禁止 Python 循环遍历张量维度】在 forward 中使用 for 循环遍历 batch/时间步/特征维度会导致训练卡死或极慢（无法 GPU 并行）。【典型反例】for d in range(D): output[:,d] = func(x[:,d]) 或 for t in range(L): x[t] = f(x[t-1])。【正确做法】使用 PyTorch 批量操作：einsum、广播、gather/scatter、矩阵乘法。【FFT 卷积】若需对每个维度做相同操作，应 transpose 后在最后一维批量 FFT，而非循环。【.item() 禁用】循环中调用 tensor.item() 强制 GPU→CPU 同步，单次调用耗时可达毫秒级。【顺序依赖】若算法有时间步顺序依赖（如 RNN），使用 PyTorch 内置 RNN/LSTM 或 cumsum/cumprod 近似。",
+      "tags": ["performance", "vectorization", "critical"],
+      "source": "ETSformer_performance_issue",
+      "priority": 10,
+      "created_at": "2025-12-24T12:00:00.000000",
+      "updated_at": "2025-12-26T00:00:00.000000"
+    }
+  ],
+  "metadata": {
+    "created_at": "2025-12-24T12:00:00.000000",
+    "updated_at": "2025-12-26T00:00:00.000000",
+    "item_count": 8
+  }
+}

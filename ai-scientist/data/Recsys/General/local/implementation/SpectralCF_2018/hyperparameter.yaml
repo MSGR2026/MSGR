@@ -1,0 +1,20 @@
+# SpectralCF Hyperparameters
+# Reference: Zhiwei Liu et al. "Spectral Collaborative Filtering." in RecSys 2018.
+
+# Model Architecture
+embedding_size: 16              # (int) C: Dimension of initial latent factors. Range in [8, 16, 32, 64].
+n_layers: 3                     # (int) K: Number of spectral convolution layers. Range in [1, 2, 3, 4].
+n_filters: 16                   # (int) F: Number of filters per layer. Range in [8, 16, 32, 64].
+
+# Regularization
+reg_weight: 0.001               # (float) lambda_reg: L2 regularization weight. Range in [1e-5, 1e-4, 1e-3, 1e-2].
+
+# Training Settings
+learning_rate: 0.001            # (float) Learning rate for RMSprop optimizer. Range in [1e-4, 5e-4, 1e-3, 5e-3].
+train_batch_size: 1024          # (int) Training batch size. Range in [256, 512, 1024, 2048].
+epochs: 200                     # (int) Number of training epochs.
+
+# Note: The following parameters are fixed in the paper to avoid overfitting
+# - Polynomial order P=1 (fixed, not exposed as hyperparameter)
+# - Initial embeddings sampled from Gaussian N(0.01, 0.02) (hard-coded in model)
+# - Optimizer: RMSprop (should be set in trainer config, not model config)

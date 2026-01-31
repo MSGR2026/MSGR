@@ -1,0 +1,80 @@
+# Recsys/MultiModal 任务配置
+# 用于 MMRec 多模态推荐任务
+
+task:
+  domain: Recsys
+  task: MultiModal
+  framework: MMRec
+  description: "Multi-modal recommendation using MMRec framework"
+
+execution:
+  container: container/Recsys/multimodal.sif
+  entry: python replicate.py
+  workdir: /app
+  timeout: 3600
+
+mount:
+  # 新版 replicate.py（覆盖容器内的旧版）
+  replicate:
+    host: "paperbench_pro/benchmark/Recsys/MMRec/replicate.py"
+    container: "/app/replicate.py"
+  
+  # 算法文件挂载
+  # {model_lower} = model.lower()，如 BM3 -> bm3
+  algorithm:
+    host: "{algorithm_path}"
+    container: "/app/src/models/{model_lower}.py"
+  
+  # 超参数文件挂载
+  hyperparameter:
+    host: "{hyperparameter_path}"
+    container: "/app/src/configs/model/{model}.yaml"
+  
+  # 数据集挂载
+  dataset:
+    host: "paperbench_pro/dataset/Recsys/MultiModal/{dataset}"
+    container: "/app/data/{dataset}"
+  
+  # 外部日志挂载
+  logs:
+    host: "output/logs/runs/{run_id}/tasks"
+    container: "/logs"
+  
+  # MMRec 内部日志目录（容器内 ./log 是相对于 /app/src 的）
+  mmrec_log:
+    host: "output/logs/runs/{run_id}/mmrec"
+    container: "/app/src/log"
+
+data:
+  # 可用数据集
+  datasets:
+    - baby
+    # - sports
+    # - clothing
+  
+  # 数据集根目录
+  root: dataset/Recsys/MultiModal
+
+eval:
+  # 评估指标
+  metrics:
+    - recall@10
+    - recall@20
+    - ndcg@10
+    - ndcg@20
+    - map@10
+    - map@20
+  
+  # 主指标（用于选取最佳结果）
+  primary_metric: recall@20
+  higher_is_better: true
+
+args:
+  # replicate.py 的命令行参数模板
+  # 变量会被替换：{model}, {dataset}, {gpu}
+  template: >-
+    --model {model}
+    --dataset {dataset}
+    --gpu {gpu}
+    --log-dir /logs
+

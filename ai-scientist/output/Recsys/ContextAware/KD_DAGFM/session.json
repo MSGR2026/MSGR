@@ -1,0 +1,47 @@
+{
+  "session_id": "KD_DAGFM_20260105_201416_7529f8f6",
+  "paper_id": "KD_DAGFM_2021",
+  "model_name": "KD_DAGFM",
+  "domain": "Recsys",
+  "task": "ContextAware",
+  "max_rounds": 10,
+  "current_round": 2,
+  "status": "running",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/ContextAware/KD_DAGFM/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/ContextAware/KD_DAGFM/round_0/hyperparameter.yaml",
+      "acc": null,
+      "metrics": {},
+      "error": "[stderr]\n/app/recbole/recbole/config/configurator.py:654: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.\n  np.bool  # noqa: B018\ncommand line args [-m KD_DAGFM -d RentTheRunway] will not be used in RecBole\nTraceback (most recent call last):\n  File \"/app/recbole/run_recbole.py\", line 46, in <module>\n    run(\n  File \"/app/recbole/recbole/quick_start/quick_start.py\", line 51, in run\n    res = run_recbole(\n          ^^^^^^^^^^^^\n  File \"/app/recbole/recbole/quick_start/quick_start.py\", line 114, in run_recbole\n    config = Config(\n             ^^^^^^^\n  File \"/app/recbole/recbole/config/configurator.py\", line 88, in __init__\n    self.model, self.model_class, self.dataset = self._get_model_and_dataset(\n                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/recbole/recbole/config/configurator.py\", line 229, in _get_model_and_dataset\n    final_model_class = get_model(final_model)\n                        ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/recbole/recbole/utils/utils.py\", line 131, in get_model\n    if importlib.util.find_spec(module_path, __name__):\n       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib.util>\", line 92, in find_spec\n  File \"/app/recbole/recbole/model/context_aware_recommender/__init__.py\", line 17, in <module>\n    from recbole.model.context_aware_recommender.kd_dagfm import KD_DAGFM\nImportError: cannot import name 'KD_DAGFM' from 'recbole.model.context_aware_recommender.kd_dagfm' (/app/recbole/recbole/model/context_aware_recommender/kd_dagfm.py)",
+      "feedback": "执行失败:\n[stderr]\n/app/recbole/recbole/config/configurator.py:654: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.\n  np.bool  # noqa: B018\ncommand line args [-m KD_DAGFM -d RentTheRunway] will not be used in RecBole\nTraceback (most recent call last):\n  File \"/app/recbole/run_recbole.py\", line 46, in <module>\n    run(\n  File \"/app/recbole/recbole/quick_start/quick_start.py\", line 51, in run\n    res = run_recbole(\n          ^^^^^^^^^^^^\n  File \"/app/recbole/recbole/quick_start/quick_start.py\", line 114, in run_recbole\n    config = Config(\n             ^^^^^^^\n  File \"/app/recbole/recbole/config/configurator.py\", line 88, in __init__\n    self.model, self.model_class, self.dataset = self._get_model_and_dataset(\n                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/recbole/recbole/config/configurator.py\", line 229, in _get_model_and_dataset\n    final_model_class = get_model(final_model)\n                        ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/recbole/recbole/utils/utils.py\", line 131, in get_model\n    if importlib.util.find_spec(module_path, __name__):\n       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib.util>\", line 92, in find_spec\n  File \"/app/recbole/recbole/model/context_aware_recommender/__init__.py\", line 17, in <module>\n    from recbole.model.context_aware_recommender.kd_dagfm import KD_DAGFM\nImportError: cannot import name 'KD_DAGFM' from 'recbole.model.context_aware_recommender.kd_dagfm' (/app/recbole/recbole/model/context_aware_recommender/kd_dagfm.py)",
+      "duration": 72.64842009544373,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    {
+      "round": 1,
+      "algorithm_path": "ai-scientist/output/Recsys/ContextAware/KD_DAGFM/round_1/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/ContextAware/KD_DAGFM/round_1/hyperparameter.yaml",
+      "acc": 0.0,
+      "metrics": {
+        "20": 16.0,
+        "auc": 0.7066,
+        "logloss": 0.2505
+      },
+      "error": null,
+      "feedback": "成功: 2/2",
+      "duration": 222.9388439655304,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.0,
+  "best_round": 0,
+  "started_at": "2026-01-05T20:14:16.251231",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/ContextAware/KD_DAGFM"
+}

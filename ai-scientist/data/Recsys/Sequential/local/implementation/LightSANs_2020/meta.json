@@ -1,0 +1,6 @@
+{
+  "id": "LightSANs_2020",
+  "model_name": "LightSANs",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

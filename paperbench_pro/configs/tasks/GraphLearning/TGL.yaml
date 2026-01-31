@@ -1,0 +1,112 @@
+task:
+  domain: GraphLearning
+  task: TGL
+  framework: TGL
+  description: "Temporal Graph Learning (Link Prediction)"
+
+execution:
+  container: container/GraphLearning/tgl.sif
+  entry: python replicate.py
+  workdir: /app
+  timeout: 86400
+
+args:
+  # replicate.py 的命令行参数模板
+  # 变量会被替换：{model}, {dataset}, {gpu}
+  # 注意：使用相对路径 ../datasets 而不是绝对路径
+  # 因为 TGL 代码执行 root = PROJ_DIR + root
+  # 如果 PROJ_DIR = /app/tgb/，那么 ../datasets 会得到 /app/datasets
+  template: >-
+    --model {model}
+    --task linkproppred
+    --dataset {dataset}
+    --dataset_root ../datasets
+    --no_download
+    --device auto
+    --results_dir /app/results
+
+mount:
+  # 主程序文件
+  replicate:
+    host: "paperbench_pro/benchmark/GraphLearning/TGL/replicate.py"
+    container: "/app/replicate.py"
+
+  # 超参数配置文件
+  hyperparameters:
+    host: "{hyperparameter_path}"
+    container: "/app/configs/models/{model}.yaml"
+
+  model_file:
+    host: "paperbench_pro/benchmark/GraphLearning/TGL/models/{model}.py"
+    container: "/app/models/{model}.py"
+
+  # 通用配置文件（直接挂载）
+  overall_config:
+    host: "paperbench_pro/benchmark/GraphLearning/TGL/configs/overall.yaml"
+    container: "/app/configs/overall.yaml"
+
+  dataset_config:
+    host: "paperbench_pro/benchmark/GraphLearning/TGL/configs/dataset.yaml"
+    container: "/app/configs/dataset.yaml"
+
+  # 数据集目录
+  # 挂载到 /app/datasets，TGL 使用相对路径 ../datasets 访问
+  datasets:
+    host: "paperbench_pro/benchmark/GraphLearning/TGL/datasets"
+    container: "/app/datasets"
+
+  # 结果保存目录
+  results:
+    host: "output/logs/runs/{run_id}/results"
+    container: "/app/results"
+
+  # 日志挂载（匹配 Dockerfile 中的 /app/results/saved_log）
+  logs:
+    host: "output/logs/runs/{run_id}/tasks"
+    container: "/app/logs"
+  
+  convert:
+    host: "paperbench_pro/benchmark/GraphLearning/TGL/convert_numpy_datasets.py"
+    container: "/app/convert_numpy_datasets.py"
+
+data:
+  # 可用数据集（Link Prediction 任务）
+  datasets:
+    - tgbl-wiki
+    - tgbl-coin
+    - tgbl-review
+    # - tgbl-comment
+    # - tgbl-enron
+    # - tgbl-flight
+    # - tgbl-lastfm
+    # - tgbl-subreddit
+    # - tgbl-uci
+    # - tkgl-icews
+    # - tkgl-polecat
+    # - tkgl-smallpedia
+    # - tkgl-wikidata
+    # - tkgl-yago
+    # - thgl-forum
+    # - thgl-github
+    # - thgl-myket
+    # - thgl-software
+    # - ICEWS14
+    # - tgbn-trade
+    # - tgbn-genre
+
+  # 数据集根目录
+  root: paperbench_pro/benchmark/GraphLearning/TGL/datasets
+
+eval:
+  # 评估指标
+  metrics:
+    - MRR
+    - AP
+    - AUC
+    - best_validation_MRR
+    - best_validation_AP
+    - best_validation_AUC
+
+  primary_metric: MRR
+  higher_is_better: true
+

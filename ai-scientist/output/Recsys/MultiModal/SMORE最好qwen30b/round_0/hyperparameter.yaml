@@ -1,0 +1,11 @@
+embedding_size: 64
+knn_k: 20
+n_ui_layers: 2
+n_mm_layers: 1
+reg_weight: 1e-04
+lambda_cl: 0.02
+lambda_reg: 1e-04
+tau: 0.2
+batch_size: 2048
+
+hyper_parameters: ["knn_k", "lambda_cl", "reg_weight"]

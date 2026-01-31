@@ -1,0 +1,6 @@
+{
+  "id": "Pop_1995",
+  "model_name": "Pop",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "S3Rec_2020",
+  "model_name": "S3Rec",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

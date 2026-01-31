@@ -1,0 +1,229 @@
+{
+    "domain": "Recsys",
+    "task": "GeneralRecommendation",
+    "items": [
+      {
+        "id": "recbole_framework_spec",
+        "title": "RecBole 框架工程规范",
+        "content": "模型类继承 GeneralRecommender，__init__ 首行调用 super().__init__(config, dataset)，使用父类属性 self.n_users、self.n_items、self.device。配置访问用 config['key']，且读取的参数必须在 __init__ 中绑定为 self 属性。必须实现 forward()、calculate_loss(interaction)、predict(interaction)、full_sort_predict(interaction)。interaction 通过 self.USER_ID、self.ITEM_ID、self.NEG_ITEM_ID 索引。传统闭形式解方法需设 type = ModelType.TRADITIONAL 避免框架调用 backward()。参数初始化用 self.apply(xavier_normal_initialization)。",
+        "tags": [
+          "framework",
+          "recbole",
+          "interface",
+          "critical"
+        ],
+        "source": "framework_analysis",
+        "priority": 10
+      },
+      {
+        "id": "input_type_paradigm_matching",
+        "title": "InputType 与模型范式强制对应关系",
+        "content": "InputType 由模型的数据处理范式决定，不是自由选择：\n\n1. InputType.LISTWISE (必须)：\n   - 自编码器范式：VAE、DAE、Flow、Diffusion 等生成式模型\n   - 特征：输入输出都是完整的用户-物品交互向量/矩阵\n   - 数据流：get_rating_matrix(user) → [batch, n_items] → model → [batch, n_items]\n   - 继承：通常同时继承 AutoEncoderMixin\n   - 判断依据：论文中是否提到\\\"重构\\\"、\\\"生成\\\"、\\\"交互矩阵\\\"、\\\"编码-解码\\\"\n\n2. InputType.PAIRWISE (必须)：\n   - 排序学习范式：BPR、协同过滤矩阵分解\n   - 特征：比较正负样本对，使用 BPRLoss\n   - 数据流：需要 NEG_ITEM_ID，计算 score_pos - score_neg\n\n3. InputType.POINTWISE (必须)：\n   - 分类范式：logistic regression、二分类\n   - 特征：预测单个评分，使用 BCE/CrossEntropy Loss\n\n关键：如果论文描述模型为\\\"生成式\\\"、\\\"自编码器\\\"、\\\"扩散模型\\\"、\\\"流模型\\\"、\\\"VAE\\\"、使用\\\"重构损失\\\"或处理\\\"完整交互向量\\\"，则必须使用 InputType.LISTWISE。错误的 InputType 会导致框架行为完全错误。",
+        "tags": [
+          "input_type",
+          "paradigm",
+          "critical",
+          "autoencoder"
+        ],
+        "source": "paradigm_analysis",
+        "priority": 10
+      },
+      {
+        "id": "config_parameter_consistency",
+        "title": "超参数命名与 YAML 格式一致性",
+        "content": "YAML 采用扁平结构，每行一个参数，值需为标量（int/float/str/bool）或必要的整数列表（如 mlp_hidden_size: [600]），禁止搜索列表如 [0.1, 0.2, 0.3]。键名必须与代码中 config['key'] 完全一致，大小写、下划线均不能有差异。典型错误：配置写 ssl_temp 但代码读 ssl_tau、配置写 ssl_mode 但代码读 type、配置写 dropout_prob 但代码读 drop_ratio。不一致会导致 KeyError 或默认值回退，性能骤降。特定 Trainer 对模型属性有隐式要求：RecVAETrainer 期望 model.encoder 和 model.decoder 属性创建分离优化器，用 decoder_weight 等非标准命名会报 AttributeError。",
+        "tags": [
+          "config",
+          "yaml",
+          "format",
+          "trainer",
+          "critical"
+        ],
+        "source": "error_analysis",
+        "priority": 10
+      },
+      {
+        "id": "timestep_embedding_patterns",
+        "title": "时间步嵌入的标准模式与变体",
+        "content": "时间条件模型（扩散、流模型）需要时间步嵌入：\n\n标准 timestep_embedding(t, dim):\n  half = dim // 2\n  freqs = exp(-log(max_period) * arange(half) / half).to(device)\n  args = t[:, None] * freqs[None]\n  emb = cat([cos(args), sin(args)], dim=-1)\n\n变体 timestep_embedding_pi(t, dim) - 注意 2π 缩放:\n  freqs = exp(-log(max_period) * arange(half) / half) * 2 * π\n  # 其余相同\n\n关键：论文中如果函数名为 timestep_embedding_pi 或明确提到 2π，必须添加该缩放因子。这影响频率范围和时间感知能力。时间嵌入后通常通过 Linear 层处理，然后与输入拼接后送入 MLP。",
+        "tags": [
+          "time_embedding",
+          "diffusion",
+          "flow",
+          "sinusoidal"
+        ],
+        "source": "architecture_pattern",
+        "priority": 9
+      },
+      {
+        "id": "mlp_construction_patterns",
+        "title": "MLP 构建的两种模式与选择",
+        "content": "RecBole 中构建 MLP 有两种方式：\n\n方式1：使用 RecBole 的 MLPLayers 工具类（推荐）\n  from recbole.model.layers import MLPLayers\n  mlp = MLPLayers(\n    layers=[input_dim, hidden1, hidden2, output_dim],\n    dropout=0.1,\n    activation='tanh',  # 'relu', 'sigmoid', 'tanh'\n    last_activation=False  # 输出层是否激活\n  )\n  优点：简洁、与框架统一、少出错\n  何时用：论文未明确指定特殊激活/归一化时优先使用\n\n方式2：手动构建 nn.Sequential\n  layers = []\n  for hidden_dim in hidden_dims:\n    layers.append(nn.Linear(prev_dim, hidden_dim))\n    layers.append(nn.LayerNorm(hidden_dim))  # 或 BatchNorm\n    layers.append(nn.GELU())  # 或其他激活\n    layers.append(nn.Dropout(p))\n  mlp = nn.Sequential(*layers)\n  何时用：论文明确要求 LayerNorm/BatchNorm/GELU 等特殊配置\n\n选择原则：\n- 如果论文说\\\"MLP\\\"、\\\"多层感知机\\\"、\\\"全连接层\\\"但未详细说明，用 MLPLayers\n- 激活函数：传统模型（2020前）多用 tanh/relu，现代模型可能用 GELU\n- dropout：通常 0.1-0.2 是安全值，除非论文明确指定\n- 避免过度工程化：不要无依据地添加 LayerNorm、残差连接等",
+        "tags": [
+          "mlp",
+          "architecture",
+          "layers",
+          "activation"
+        ],
+        "source": "implementation_pattern",
+        "priority": 9
+      },
+      {
+        "id": "autoencoder_inference_patterns",
+        "title": "自编码器模型的推理模式",
+        "content": "生成式自编码器（VAE/DAE/Diffusion/Flow）在推理时有两种模式：\n\n1. 单次前向（VAE、DAE）：\n   full_sort_predict: 一次编码-解码得到全部物品分数\n   输出：[batch_size, n_items] 的分数矩阵\n\n2. 迭代采样（Diffusion、Flow）：\n   需要多步迭代更新，每步基于上步结果\n   模式：X_t → 预测 X_1 → 计算更新方向 → 更新 X_t → 重复\n   迭代次数：通常 2-10 步，论文会明确说明\n   关键细节：\n     - 起始点：从观测交互 X_observed 开始，不是纯噪声\n     - 更新规则：可能是连续（加噪声）或离散（阈值化）\n     - 保持约束：某些方法要求保留已知正样本不被覆盖\n\n判断依据：论文中出现\\\"采样步数\\\"、\\\"迭代\\\"、\\\"逐步去噪\\\"、\\\"推理过程\\\"章节→迭代模式。\n\n迭代模式常见错误：\n- 忘记从观测交互开始（而从随机初始化）\n- 忘记保留已知正样本（导致推荐已交互物品）\n- 步数设置错误（过多或过少）",
+        "tags": [
+          "autoencoder",
+          "inference",
+          "sampling",
+          "iteration"
+        ],
+        "source": "inference_pattern",
+        "priority": 9
+      },
+      {
+        "id": "behavior_guided_prior",
+        "title": "行为引导先验的计算模式",
+        "content": "某些生成模型（如 FlowCF）使用行为引导先验替代标准高斯先验：\n\n目的：用真实用户行为分布作为先验，而非纯噪声\n\n计算物品频率向量 f ∈ R^|I|:\n  1. 统计每个物品的交互次数：item_counts[i] = 该物品被多少用户交互过\n  2. 归一化：f[i] = item_counts[i] / n_users\n  3. 可选：截断极端值 f = clip(f, min=1e-6, max=1-1e-6)\n\n采样 X_0（先验样本）:\n  X_0 ~ Bernoulli(f)，即每个用户-物品位置独立以概率 f[i] 采样 1\n  X_0 ∈ {0,1}^(n_users × n_items)\n\n使用场景：\n- 论文提到\\\"behavior-guided\\\"、\\\"popularity-based\\\"、\\\"item frequency\\\"\n- 先验描述为 Bernoulli 而非 Gaussian\n- 强调捕捉物品流行度偏差\n\n实现要点：\n- 在 __init__ 中预计算 item_frequency，注册为 buffer 或存为属性\n- 训练时每个 batch 重新采样 X_0（不能固定）\n- 扩展为 batch：item_frequency.unsqueeze(0).expand(batch_size, -1) 再采样",
+        "tags": [
+          "prior",
+          "behavior_guided",
+          "bernoulli",
+          "frequency"
+        ],
+        "source": "generative_model_pattern",
+        "priority": 8
+      },
+      {
+        "id": "discrete_vs_continuous_interpolation",
+        "title": "离散插值与连续插值的实现区别",
+        "content": "时间条件生成模型在训练时需要插值 X_0 和 X_1：\n\n连续插值（Diffusion 标准）:\n  X_t = alpha_t * X_1 + (1 - alpha_t) * noise\n  其中 alpha_t 基于噪声schedule（如 sqrt(α_bar_t)）\n  X_t 是实数值\n\n离散插值（Binary Flow）:\n  目标：保持 X_t 二值化 X_t ∈ {0,1}\n  方法：二值掩码\n    M_t ~ Bernoulli(t)  # 每个元素独立采样\n    X_t = M_t ⊙ X_1 + (1 - M_t) ⊙ X_0\n  解释：每个位置以概率 t 选择 X_1，概率 (1-t) 选择 X_0\n  期望：E[X_t] = t*X_1 + (1-t)*X_0 仍保持线性\n\n判断依据：\n- 论文强调\\\"离散\\\"、\\\"二值\\\"、\\\"保持 binary structure\\\"→ 离散插值\n- 提到\\\"Bernoulli mask\\\"、\\\"element-wise sampling\\\"→ 离散插值\n- 否则默认连续插值\n\n实现要点（离散）:\n  t_expanded = t.unsqueeze(1).expand(-1, n_items)\n  M_t = torch.bernoulli(t_expanded)  # 每个元素独立采样\n  X_t = M_t * X_1 + (1 - M_t) * X_0",
+        "tags": [
+          "interpolation",
+          "discrete",
+          "binary",
+          "mask"
+        ],
+        "source": "training_pattern",
+        "priority": 8
+      },
+      {
+        "id": "vector_field_vs_noise_prediction",
+        "title": "向量场预测与噪声预测的实现差异",
+        "content": "时间条件模型有两种预测目标：\n\n1. 直接预测目标 X_1（常用于推荐）：\n   网络输出：predicted_X_1 = model(X_t, t)\n   损失：MSE(predicted_X_1, true_X_1)\n   优点：直接优化推荐目标，易于理解\n\n2. 预测噪声 epsilon（标准 Diffusion）：\n   网络输出：predicted_eps = model(X_t, t)\n   真实：X_t = alpha_t*X_1 + sigma_t*eps，反推 eps\n   损失：MSE(predicted_eps, true_eps)\n\n3. 预测向量场 v_t（Flow Matching）：\n   定义：v_t = (X_1 - X_t) / (1 - t)\n   可等价于预测 X_1：\n     若 model 输出 predicted_X_1\n     则 predicted_v_t = (predicted_X_1 - X_t) / (1 - t)\n   损失：MSE(predicted_X_1, X_1) 等价于优化向量场\n\n推荐系统中：大多直接预测 X_1（方法1/3），因为：\n- 更直接对应推荐任务\n- 避免噪声重参数化复杂性\n- 损失函数更简单\n\n判断依据：\n- 论文损失写成 ||predicted_X - true_X||² → 预测目标\n- 提到\\\"vector field\\\"但损失仍是 X_1 → 等价预测目标\n- 明确说\\\"predict epsilon\\\"→ 预测噪声",
+        "tags": [
+          "vector_field",
+          "prediction_target",
+          "loss"
+        ],
+        "source": "training_objective",
+        "priority": 8
+      },
+      {
+        "id": "inference_preservation_strategy",
+        "title": "推理时已知交互的保留策略",
+        "content": "迭代采样的生成模型在推理时的重要约束：\n\n问题：推理过程可能\\\"遗忘\\\"用户已交互的物品\n\n解决：每步更新后显式保留已知正样本\n\n实现模式：\n  X_observed = get_rating_matrix(user)  # 已知交互\n  X_t = X_observed.clone()  # 初始化\n  \n  for step in range(...):\n    X_predicted = model(X_t, t)\n    # 计算更新\n    v_t = (X_predicted - X_t) / (1 - t)\n    X_t_new = update_rule(X_t, v_t)  # 阈值化或加噪声\n    \n    # 关键：保留已知正样本\n    X_t = preserve_observed(X_t_new, X_observed)\n  \n  return X_predicted\n\n保留方法：\n  1. 逻辑或（二值）：X_t = torch.logical_or(X_t_new, X_observed).float()\n  2. 最大值（实数）：X_t = torch.max(X_t_new, X_observed)\n  3. 掩码替换：X_t[X_observed > 0] = 1\n\n何时需要：\n- 论文明确提到\\\"preserve observed\\\"、\\\"保持已知交互\\\"\n- 模型是迭代采样且操作二值/离散空间\n- 否则可能不需要（如单次前向的 VAE）\n\n重要性：忘记此步会导致模型推荐用户已交互物品，降低新颖性",
+        "tags": [
+          "inference",
+          "preservation",
+          "observed_interactions"
+        ],
+        "source": "inference_constraint",
+        "priority": 8
+      },
+      {
+        "id": "graph_propagation_sparse",
+        "title": "图传播与稀疏矩阵",
+        "content": "通用推荐中的图模型通常采用简化传播：对称归一化的用户-物品二部图上进行线性邻居聚合，并以层均值作为最终表征。工程上建议优先稀疏矩阵实现与缓存，避免逐点循环；构建邻接时注意对称化与度数加 epsilon，防止除零。层数一般 2-3 层，过深易过平滑。",
+        "tags": [
+          "gnn",
+          "propagation",
+          "sparse",
+          "architecture"
+        ],
+        "source": "model_analysis",
+        "priority": 7
+      },
+      {
+        "id": "general_rec_paradigms",
+        "title": "通用推荐核心范式",
+        "content": "通用推荐常见三类建模路线：(1) 协同过滤类（MF/GCN）直接学习 user/item 嵌入并用内积打分，InputType.PAIRWISE；(2) 生成式/自编码类（VAE/DAE/扩散/流）以重构交互向量为核心，InputType.LISTWISE；(3) 自监督增强类（SSL/对比学习）在主任务上叠加多视图一致性。复现时优先明确：是否需要全量物品打分、是否依赖稀疏矩阵传播、是否包含额外的自监督项与退火调度。",
+        "tags": [
+          "paradigm",
+          "mf",
+          "autoencoder",
+          "ssl"
+        ],
+        "source": "model_analysis",
+        "priority": 7
+      },
+      {
+        "id": "evaluation_engineering",
+        "title": "评估与工程一致性",
+        "content": "Recall@K 依赖 full_sort_predict 的全量物品打分输出，推荐返回 [batch_size, n_items] 的二维矩阵并避免无意的 flatten。图模型的缓存嵌入需在每轮训练/增强后刷新，避免 train/eval 视图混用导致指标漂移。稀疏图传播建议缓存归一化邻接与中间结果，降低评测开销。",
+        "tags": [
+          "evaluation",
+          "recall",
+          "engineering"
+        ],
+        "source": "evaluation_guideline",
+        "priority": 7
+      },
+      {
+        "id": "gnn_layer_semantics",
+        "title": "GNN 多层嵌入的语义差异",
+        "content": "图神经网络中不同层的嵌入捕获了不同范围的邻域信息：\n\n层级语义：\n- 第0层（初始嵌入）：节点自身特征，无邻域信息\n- 第k层嵌入：聚合了k跳邻居的信息\n- 浅层（1-2层）：捕获局部结构和直接邻居关系\n- 深层（3+层）：捕获全局图结构，但可能过度平滑\n\n实践启示：\n1. 不同层的嵌入自然形成了不同的\\\"视图\\\"，无需数据增强\n2. 相邻层之间存在信息递进关系：E^(l+1) = Aggregate(E^(l))\n3. 某些方法利用层间关系进行自监督学习，如对比相邻层的嵌入\n4. 论文中如果强调\\\"naturally existing\\\"、\\\"layer-wise\\\"、\\\"neighbor layers\\\"，可能利用了这一特性\n\n存储与使用：\n- forward() 可以返回所有层的嵌入列表 [E^(0), E^(1), ..., E^(L)]\n- 最终预测通常使用层聚合：mean/sum/weighted sum\n- 辅助任务（如对比学习）可能使用中间层嵌入\n\n常见模式：\n- LightGCN：使用所有层的平均作为最终嵌入\n- NGCF：使用拼接或加权和\n- 某些CL方法：对比不同层之间的嵌入一致性",
+        "tags": [
+          "gnn",
+          "layers",
+          "embeddings",
+          "semantics"
+        ],
+        "source": "gnn_theory",
+        "priority": 7
+      },
+      {
+        "id": "contrastive_learning_positive_sampling",
+        "title": "对比学习中正样本选择策略",
+        "content": "对比学习的核心是定义哪些样本对应该相似（正样本对），哪些应该不同（负样本对）。不同策略适用于不同场景：\n\n正样本对定义策略：\n\n1. **自我对比（Self-Contrastive）**：\n   - 正样本：同一节点在不同视图中的表示\n   - 示例：SGL中用户u的两个增强嵌入 (e_u^view1, e_u^view2)\n   - 适用：数据增强、多视图学习\n   - 特点：每个anchor只有1个positive\n\n2. **邻域对比（Neighborhood-Contrastive）**：\n   - 正样本：节点与其图邻居的表示\n   - 示例：节点u与其连接的节点集合N_u\n   - 适用：图结构学习、社区检测\n   - 特点：每个anchor有|N_u|个positives（数量可变）\n\n3. **时序对比（Temporal-Contrastive）**：\n   - 正样本：同一节点在相邻时间步的表示\n   - 示例：动态图中节点在t和t+1时刻的嵌入\n   - 适用：时序预测、轨迹学习\n\n4. **层间对比（Inter-Layer-Contrastive）**：\n   - 正样本：节点在相邻GNN层的表示（可能带邻居信息）\n   - 示例：节点u在第l层与其邻居在第l+1层的嵌入\n   - 适用：利用GNN层次结构的自监督\n   - 特点：无需额外数据增强\n\n实现考虑：\n- 单正样本：可以直接向量化计算 anchor @ positive.T\n- 多正样本：需要对每个anchor分别计算多个positive的相似度\n  - 可能需要循环：for anchor_i: sim(anchor_i, positives_of_i)\n  - 归一化：通常除以 |N_i|（正样本数量）\n- 正样本数量可变时：不能直接用矩阵运算，需要动态索引\n\n论文线索识别：\n- \\\"naturally existing\\\" → 可能使用层间或邻域对比\n- \\\"multiple positives\\\" → 邻域或多视图对比\n- \\\"neighbor\\\" / \\\"adjacent\\\" → 邻域或层间对比\n- \\\"augmentation-free\\\" → 层间或结构对比",
+        "tags": [
+          "contrastive_learning",
+          "positive_sampling",
+          "ssl"
+        ],
+        "source": "ssl_theory",
+        "priority": 8
+      },
+      {
+        "id": "infonce_loss_variants",
+        "title": "InfoNCE 损失的实现变体",
+        "content": "InfoNCE是对比学习的标准损失函数，但有多种实现方式，选择取决于正负样本的定义：\n\n标准InfoNCE（单正样本）：\nL = -log [exp(sim(anchor, pos)/τ) / Σ_neg exp(sim(anchor, neg)/τ)]\n实现：anchor和pos是等长向量，neg是全体候选集\n\n多正样本InfoNCE（邻域对比）：\nL = -1/|P| Σ_{p∈P} log [exp(sim(anchor, p)/τ) / Σ_neg exp(sim(anchor, neg)/τ)]\n或等价地：\nL = -log [Π_{p∈P} exp(sim(anchor, p)/τ) / (Σ_neg exp(sim(anchor, neg)/τ))^|P|]\n推导简化：\nL = - [Σ_{p∈P} sim(anchor, p)]/τ + |P| * log(Σ_neg exp(sim(anchor, neg)/τ))\n\n关键实现细节：\n\n1. **温度τ的作用**：\n   - 控制分布平滑度，通常 τ ∈ [0.1, 0.5]\n   - 小τ：更陡峭的分布，强化hard negatives\n   - 大τ：更平滑的分布，所有样本贡献相近\n\n2. **负样本池选择**：\n   - Batch内负样本：计算快但可能质量低\n   - 全局负样本：质量高但计算慢 O(|N|)\n   - 类型限制负样本：图结构中可能只用异构节点作为负样本\n\n3. **归一化策略**：\n   - 余弦相似度：F.normalize(emb, dim=1) 后计算点积\n   - 原始点积：直接 emb1 @ emb2.T\n   - 论文如提到\\\"cosine\\\"或\\\"normalized\\\"，必须归一化\n\n4. **数值稳定性**：\n   - 使用 logsumexp 技巧避免exp溢出\n   - pos_score - logsumexp(all_scores) 而非 log(exp(pos)/sum(exp(all)))\n\n5. **批量计算优化**：\n   - 负样本分母可以batch计算：anchor @ all_neg.T → [B, N]\n   - 正样本如果数量不等，需要逐样本循环\n   - 示例：\n     ```python\n     # 负样本分母（可batch）\n     all_scores = anchor @ neg_pool.T / tau  # [B, N]\n     denominator = torch.logsumexp(all_scores, dim=1)  # [B]\n     \n     # 正样本分子（如果数量可变，需要循环）\n     loss = 0\n     for i, anchor_i in enumerate(anchor):\n       pos_i = positives[i]  # 第i个anchor的正样本，数量可能不同\n       pos_scores = (anchor_i @ pos_i.T) / tau  # [|P_i|]\n       loss += -torch.sum(pos_scores) / len(pos_i) + denominator[i]\n     ```\n\n适用场景识别：\n- 论文公式中有 Π 或多个 Σ over neighbors → 多正样本版本\n- 论文强调\\\"全局\\\"、\\\"所有节点\\\" → 全局负样本池\n- 论文提到\\\"异构\\\"、\\\"opposite type\\\" → 类型限制负样本",
+        "tags": [
+          "infonce",
+          "contrastive_loss",
+          "implementation"
+        ],
+        "source": "loss_function",
+        "priority": 9
+      },
+      {
+        "id": "graph_neighbor_query_patterns",
+        "title": "图邻居查询的高效实现模式",
+        "content": "在图推荐系统中，经常需要查询节点的邻居。不同的存储和查询方式对性能影响巨大：\n\n方式1：稀疏邻接矩阵（隐式查询）\n优点：\n- 已用于GCN传播，无需额外存储\n- 邻居聚合可用稀疏矩阵乘法：E^(l+1) = A @ E^(l)\n缺点：\n- 无法直接获取单个节点的邻居列表\n- 不适合需要显式遍历邻居的场景\n适用：标准GCN传播\n\n方式2：显式邻居列表\n存储：Dict[int, List[int]] 或 List[Tensor]\n优点：\n- 可直接获取任意节点的邻居\n- 适合需要逐节点处理的算法\n缺点：\n- 额外内存开销\n- Python循环慢，需要优化\n实现示例：\n  ```python\n  # 构建（在__init__中）\n  inter_M = dataset.inter_matrix(form='coo')\n  self.user_neighbors = [[] for _ in range(n_users)]\n  for idx in range(inter_M.nnz):\n      user = inter_M.row[idx]\n      item = inter_M.col[idx]\n      self.user_neighbors[user].append(item)\n  \n  # 转为Tensor（可选，加速GPU查询）\n  self.user_neighbor_tensors = [\n      torch.LongTensor(neighbors) for neighbors in self.user_neighbors\n  ]\n  ```\n适用：对比学习、采样算法\n\n方式3：混合方式\n策略：\n- GCN传播用稀疏矩阵\n- 对比学习等显式查询场景构建邻居索引\n- 权衡内存和灵活性\n\n性能优化技巧：\n\n1. **避免频繁设备转移**：\n   - 预先将邻居Tensor移到GPU\n   - 或构建时就在GPU上创建\n\n2. **批量查询**：\n   - 如果多个节点需要查询，尽量合并\n   - 使用padded tensor进行批量索引\n\n3. **缓存机制**：\n   - 如果邻居查询结果会重复使用，缓存结果\n   - 示例：训练时同一batch可能查询相同节点\n\n4. **减少Python循环**：\n   - 能用torch操作就不用Python循环\n   - 但变长邻居列表有时无法避免循环\n\n5. **COO格式直接使用**：\n   - 如果只需要所有边的信息，直接遍历COO的row/col数组\n   - 比构建邻居字典更快\n\n选择依据：\n- 论文只用GCN传播 → 稀疏矩阵即可\n- 论文提到\\\"neighbor sampling\\\"、\\\"per-node\\\" → 需要显式邻居列表\n- 论文公式中有Σ over N_u → 需要显式邻居列表\n- 训练很慢 → 检查是否过度使用Python循环查询邻居",
+        "tags": [
+          "graph",
+          "neighbors",
+          "efficiency",
+          "indexing"
+        ],
+        "source": "implementation_optimization",
+        "priority": 7
+      }
+    ],
+    "metadata": {
+      "created_at": "2025-12-26T12:00:00.000000",
+      "updated_at": "2026-01-09T20:00:00.000000",
+      "item_count": 13,
+      "optimization_focus": "Improved clarity on InputType paradigm matching, timestep embedding variants, MLP construction patterns, and inference preservation strategies for better code replication from papers."
+    }
+  }

@@ -1,0 +1,42 @@
+{# ============================================================================
+   Global Graph 操作提示词模板
+
+   用途: 生成全局图的增删改合并操作
+   领域: 推荐系统 (Recsys)
+   任务: 多模态推荐 (MultiModal Recommendation)
+============================================================================ #}
+---SYSTEM_PROMPT---
+你是一位知识库维护专家，负责根据上下文对 Global Graph 进行增删改合并操作。
+请输出结构化 JSON，便于程序解析与执行。
+---USER_PROMPT---
+## 操作上下文
+{{ operation_context }}
+
+## 当前知识项
+{% if current_items %}
+{% for item in current_items %}
+- {{ item.title }} (id={{ item.id }})
+{% endfor %}
+{% else %}
+（空）
+{% endif %}
+
+{% if related_content %}
+## 相关内容
+{{ related_content }}
+{% endif %}
+
+## 建议操作
+{{ suggested_operation or "请自行判断" }}
+
+## 输出格式
+请输出 JSON 数组，例如：
+```json
+[
+  {
+    "operation": "add",
+    "title": "新知识项标题",
+    "content": "新知识项内容"
+  }
+]
+```

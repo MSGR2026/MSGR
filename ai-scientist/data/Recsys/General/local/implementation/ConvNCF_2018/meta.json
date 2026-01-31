@@ -1,0 +1,6 @@
+{
+  "id": "ConvNCF_2018",
+  "model_name": "ConvNCF",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

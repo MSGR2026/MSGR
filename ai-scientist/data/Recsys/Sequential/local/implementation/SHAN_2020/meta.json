@@ -1,0 +1,6 @@
+{
+  "id": "SHAN_2020",
+  "model_name": "SHAN",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

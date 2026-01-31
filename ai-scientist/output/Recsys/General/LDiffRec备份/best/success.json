@@ -1,0 +1,19 @@
+{
+  "success": true,
+  "paper_id": "LDiffRec_2023",
+  "model_name": "LDiffRec",
+  "domain": "Recsys",
+  "task": "General",
+  "best_round": 2,
+  "best_acc": 0.0757,
+  "best_combo": null,
+  "best_combo_info": {
+    "combo_name": null,
+    "by_dataset": {},
+    "best_metrics": {}
+  },
+  "all_metrics": {},
+  "timestamp": "2026-01-04T14:50:05.416420",
+  "total_rounds": 3,
+  "duration": 1174.3404803276062
+}

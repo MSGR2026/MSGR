@@ -1,0 +1,6 @@
+{
+  "id": "FiGNN_2019",
+  "model_name": "FiGNN",
+  "task": "ContextAwareRecommendation",
+  "domain": "Recsys"
+}

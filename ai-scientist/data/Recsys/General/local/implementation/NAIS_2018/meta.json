@@ -1,0 +1,6 @@
+{
+  "id": "NAIS_2018",
+  "model_name": "NAIS",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

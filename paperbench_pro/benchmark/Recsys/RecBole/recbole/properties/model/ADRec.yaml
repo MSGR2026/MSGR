@@ -1,0 +1,41 @@
+# ADRec Model Configuration
+# Reference: Jialei Chen et al. "Unlocking the Power of Diffusion Models in Sequential Recommendation: 
+# A Simple and Effective Approach" in KDD 2025.
+
+# Transformer Encoder Parameters
+n_layers: 2                         # (int) The number of transformer layers in causal attention module.
+n_heads: 4                          # (int) The number of attention heads for multi-head attention layer.
+hidden_size: 128                    # (int) The number of features in the hidden state.
+inner_size: 512                     # (int) The inner hidden size in feed-forward layer (4 * hidden_size).
+hidden_dropout_prob: 0.1            # (float) The probability of an element to be zeroed.
+attn_dropout_prob: 0.1              # (float) The probability of an attention score to be zeroed.
+hidden_act: 'gelu'                  # (str) The activation function in feed-forward layer.
+layer_norm_eps: 1e-12               # (float) A value added to the denominator for numerical stability.
+initializer_range: 0.02             # (float) The standard deviation for normal initialization.
+emb_dropout: 0.3                    # (float) Embedding dropout probability (applied before LayerNorm).
+
+# Diffusion Process Parameters
+diffusion_steps: 32                 # (int) The number of diffusion steps (T).
+noise_schedule: 'trunc_lin'         # (str) Noise schedule for beta. Options: ['linear', 'trunc_lin'].
+beta_a: 0.3                         # (float) Lower truncation bound for beta schedule.
+beta_b: 10                          # (float) Upper truncation bound for beta schedule.
+independent: true                   # (bool) Whether to use token-level independent diffusion process.
+lambda_uncertainty: 0.001           # (float) Coefficient for feature aggregation (λ in paper).
+rescale_timesteps: true             # (bool) Whether to rescale timesteps for numerical stability.
+
+# Denoising Decoder Parameters
+dif_decoder: 'att'                  # (str) Denoising decoder type. Options: ['att', 'mlp'].
+dif_decoder_layers: 2               # (int) Number of layers in the diffusion decoder.
+
+# Training Parameters
+loss_type: 'CE'                     # (str) The type of loss function. Range in ['BPR', 'CE'].
+use_mse_loss: true                  # (bool) Whether to use MSE loss in addition to CE loss.
+loss_scale: 1.0                     # (float) Scale factor for MSE loss (multiplied with MSE).
+
+# Note: The original code uses a simplified training approach compared to the paper:
+# - Always trains with both CE and MSE loss (when use_mse_loss=true)
+# - No explicit training stages in the code
+# - The three-stage strategy can be implemented manually if needed
+
+# Other Parameters
+train_neg_sample_args: ~            # (dict) Disable negative sampling for CE loss.

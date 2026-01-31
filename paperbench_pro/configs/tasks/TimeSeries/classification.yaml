@@ -1,0 +1,125 @@
+# TimeSeries/Classification 任务配置
+
+task:
+  domain: TimeSeries
+  task: Classification
+  framework: Time_Series_Library
+  description: "Time series classification"
+
+execution:
+  container: container/TimeSeries/timeseries.sif
+  entry: python replicate.py
+  workdir: /app
+  timeout: 28800
+
+mount:
+  # replicate.py 挂载
+  replicate:
+    host: "paperbench_pro/benchmark/TimeSeries/Time_Series_Library/replicate.py"
+    container: "/app/replicate.py"
+  
+  # experiment_registry.py 挂载（包含 DATASET_REGISTRY 和 MODEL_PARAM_OVERRIDES）
+  experiment_registry:
+    host: "paperbench_pro/benchmark/TimeSeries/Time_Series_Library/experiment_registry.py"
+    container: "/app/experiment_registry.py"
+  
+  # 算法文件挂载
+  algorithm:
+    host: "{algorithm_path}"
+    container: "/app/models/{model}.py"
+  
+  # 任务配置目录挂载
+  task_config:
+    host: "paperbench_pro/benchmark/TimeSeries/Time_Series_Library/config/classification"
+    container: "/app/config/classification"
+  
+  # 数据集配置目录挂载
+  dataset_config:
+    host: "paperbench_pro/benchmark/TimeSeries/Time_Series_Library/config/dataset"
+    container: "/app/config/dataset"
+  
+  # 超参数文件挂载
+  hyperparameter:
+    host: "{hyperparameter_path}"
+    container: "/app/config/classification/{model}.yaml"
+  
+  # overall.yaml 挂载（提供默认参数如 is_training）
+  overall_config:
+    host: "paperbench_pro/benchmark/TimeSeries/Time_Series_Library/config/overall.yaml"
+    container: "/app/config/overall.yaml"
+  
+  # data_provider 目录挂载（包含 data_factory.py，修复 KeyError: 'M4'）
+  data_provider:
+    host: "paperbench_pro/benchmark/TimeSeries/Time_Series_Library/data_provider"
+    container: "/app/data_provider"
+  
+  # 数据集挂载
+  dataset:
+    host: "paperbench_pro/benchmark/TimeSeries/Time_Series_Library/dataset"
+    container: "/app/dataset"
+  
+  # exp 目录挂载（实验代码）
+  exp:
+    host: "paperbench_pro/benchmark/TimeSeries/Time_Series_Library/exp"
+    container: "/app/exp"
+  
+  # checkpoints 挂载（用于保存模型）
+  checkpoints:
+    host: "output/logs/runs/{run_id}/checkpoints"
+    container: "/app/checkpoints"
+  
+  # test_results 挂载（用于保存测试结果）
+  test_results:
+    host: "output/logs/runs/{run_id}/test_results"
+    container: "/app/test_results"
+  
+  # results 挂载（用于保存最终评估结果）
+  results:
+    host: "output/logs/runs/{run_id}/results"
+    container: "/app/results"
+  
+  # m4_results 挂载（用于保存 M4 数据集结果）
+  m4_results:
+    host: "output/logs/runs/{run_id}/m4_results"
+    container: "/app/m4_results"
+  
+  # 日志挂载
+  logs:
+    host: "output/logs/runs/{run_id}/tasks"
+    container: "/logs"
+
+data:
+  datasets:
+    # - EthanolConcentration
+    # - FaceDetection
+    # - Handwriting
+    # - Heartbeat
+    # - JapaneseVowels
+    - PEMS-SF
+    # - SelfRegulationSCP1
+    # - SelfRegulationSCP2
+    # - SpokenArabicDigits
+    # - UWaveGestureLibrary
+  
+  root: dataset/TimeSeries/Classification
+
+eval:
+  metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1
+  
+  primary_metric: accuracy
+  higher_is_better: true
+
+args:
+  template: >-
+    --model {model}
+    --dataset {dataset}
+    --task classification
+    --gpu {gpu}
+    --log-dir /logs
+
+
+

@@ -1,0 +1,17 @@
+# KGNNLS Hyperparameter Configuration
+# Paper: Knowledge-aware Graph Neural Networks with Label Smoothness Regularization for Recommender Systems (KDD 2019)
+
+# Embedding dimensions
+embedding_size: 32  # (int) Embedding dimension for users, items, entities and relations. Paper suggests 8-64, with d=32 for most datasets
+
+# GNN architecture
+n_layers: 1  # (int) Number of GNN layers. Paper shows L=1-2 achieves best performance, L=4 causes over-smoothing
+
+# Regularization weights
+reg_weight: 1e-7  # (float) L2 regularization weight for embeddings. Following RippleNet's range (1e-7 to 1e-5)
+ls_weight: 0.5  # (float) Label smoothness regularization weight λ. Paper suggests 0.1-1.0 as preferable range
+
+# Training settings
+learning_rate: 0.001  # (float) Learning rate. Paper uses 0.5 for some datasets but standard Adam rate works better with adaptive optimization
+train_batch_size: 2048  # (int) Batch size for training
+eval_batch_size: 4096  # (int) Batch size for evaluation

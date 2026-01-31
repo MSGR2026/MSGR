@@ -1,0 +1,8 @@
+task_name: classification
+is_training: 1
+model: TimesNet
+batch_size: 16
+des: Exp
+itr: 1
+learning_rate: 0.001
+patience: 10

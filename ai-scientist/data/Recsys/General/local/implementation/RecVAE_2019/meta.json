@@ -1,0 +1,6 @@
+{
+  "id": "RecVAE_2019",
+  "model_name": "RecVAE",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

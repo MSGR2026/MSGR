@@ -1,0 +1,6 @@
+{
+  "id": "EASE_2019",
+  "model_name": "EASE",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "NCEPLRec_2021",
+  "model_name": "NCEPLRec",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,73 @@
+{
+  "session_id": "PGL_20260113_104138_96385693",
+  "paper_id": "PGL_2025",
+  "model_name": "PGL",
+  "domain": "Recsys",
+  "task": "MultiModal",
+  "max_rounds": 5,
+  "current_round": 3,
+  "status": "running",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/PGL/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/PGL/round_0/hyperparameter.yaml",
+      "acc": null,
+      "metrics": {},
+      "error": "[stdout]\ncipal_type=local\nreg_weight=1e-05\nssl_mask_ratio=0.1\nssl_tau=0.2\nssl_weight=0.1\nmodel=PGL\ndataset=baby\nvalid_metric_bigger=True\ndevice=cuda\n\n\n13 Jan 10:44    INFO baby\nThe number of users: 19445\nAverage actions of users: 8.269066598097197\nThe number of items: 7050\nAverage actions of items: 22.807375886524824\nThe number of inters: 160792\nThe sparsity of the dataset: 99.8827082752043%\n13 Jan 10:44    INFO \n====Training====\nbaby\nThe number of users: 19445\nAverage actions of users: 6.096734379017742\nThe number of items: 7047\nAverage actions of items: 16.82290336313325\nThe number of inters: 118551\nThe sparsity of the dataset: 99.9134846831415%\n13 Jan 10:44    INFO \n====Validation====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.0572897917202366\nThe number of items: 5483\nAverage actions of items: 3.749589640707642\nThe number of inters: 20559\nThe sparsity of the dataset: 99.98071694707788%\n13 Jan 10:44    INFO \n====Testing====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.1150424273592183\nThe number of items: 5549\nAverage actions of items: 3.907370697422959\nThe number of inters: 21682\nThe sparsity of the dataset: 99.97990552482683%\n13 Jan 10:44    INFO \n\n=================================\n\n\n13 Jan 10:44    INFO =========1/1: Parameters:['seed']=(999,)=======\nTraceback (most recent call last):\n  File \"/app/src/main.py\", line 43, in <module>\n    quick_start(model=args.model, dataset=args.dataset, config_dict=config_dict, save_model=True)\n  File \"/app/src/utils/quick_start.py\", line 74, in quick_start\n    model = get_model(config['model'])(config, train_data).to(config['device'])\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/src/models/pgl.py\", line 140, in __init__\n    self.feat_embed_dim = int(config.get(\"feat_embed_dim\", self.embedding_dim))\n                              ^^^^^^^^^^\nAttributeError: 'Config' object has no attribute 'get'\n============================================================\n[replicate] Exit code: 1",
+      "feedback": "执行失败:\n[stdout]\ncipal_type=local\nreg_weight=1e-05\nssl_mask_ratio=0.1\nssl_tau=0.2\nssl_weight=0.1\nmodel=PGL\ndataset=baby\nvalid_metric_bigger=True\ndevice=cuda\n\n\n13 Jan 10:44    INFO baby\nThe number of users: 19445\nAverage actions of users: 8.269066598097197\nThe number of items: 7050\nAverage actions of items: 22.807375886524824\nThe number of inters: 160792\nThe sparsity of the dataset: 99.8827082752043%\n13 Jan 10:44    INFO \n====Training====\nbaby\nThe number of users: 19445\nAverage actions of users: 6.096734379017742\nThe number of items: 7047\nAverage actions of items: 16.82290336313325\nThe number of inters: 118551\nThe sparsity of the dataset: 99.9134846831415%\n13 Jan 10:44    INFO \n====Validation====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.0572897917202366\nThe number of items: 5483\nAverage actions of items: 3.749589640707642\nThe number of inters: 20559\nThe sparsity of the dataset: 99.98071694707788%\n13 Jan 10:44    INFO \n====Testing====\nbaby\nThe number of users: 19445\nAverage actions of users: 1.1150424273592183\nThe number of items: 5549\nAverage actions of items: 3.907370697422959\nThe number of inters: 21682\nThe sparsity of the dataset: 99.97990552482683%\n13 Jan 10:44    INFO \n\n=================================\n\n\n13 Jan 10:44    INFO =========1/1: Parameters:['seed']=(999,)=======\nTraceback (most recent call last):\n  File \"/app/src/main.py\", line 43, in <module>\n    quick_start(model=args.model, dataset=args.dataset, config_dict=config_dict, save_model=True)\n  File \"/app/src/utils/quick_start.py\", line 74, in quick_start\n    model = get_model(config['model'])(config, train_data).to(config['device'])\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/src/models/pgl.py\", line 140, in __init__\n    self.feat_embed_dim = int(config.get(\"feat_embed_dim\", self.embedding_dim))\n                              ^^^^^^^^^^\nAttributeError: 'Config' object has no attribute 'get'\n============================================================\n[replicate] Exit code: 1",
+      "duration": 167.06694316864014,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    {
+      "round": 1,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/PGL/round_1/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/PGL/round_1/hyperparameter.yaml",
+      "acc": null,
+      "metrics": {},
+      "error": "[stderr]\nmux_client_request_session: session request failed: Session open refused by peer\nControlSocket /tmp/ssh_control_2400/gpu3.sock already exists, disabling multiplexing\n[stdout]\nmodels/pgl.py\", line 229, in __init__\n    self._build_fixed_mm_graph(config, dataset)\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/src/models/pgl.py\", line 259, in _build_fixed_mm_graph\n    v = self.image_trs(self.image_embedding.weight.to(self.device))\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1739, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1750, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/container.py\", line 250, in forward\n    input = module(input)\n            ^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1739, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1750, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/linear.py\", line 125, in forward\n    return F.linear(input, self.weight, self.bias)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Expected all tensors to be on the same device, but found at least two devices, cpu and cuda:0! (when checking argument for argument mat1 in method wrapper_CUDA_addmm)\n============================================================\n[replicate] Exit code: 1",
+      "feedback": "执行失败:\n[stderr]\nmux_client_request_session: session request failed: Session open refused by peer\nControlSocket /tmp/ssh_control_2400/gpu3.sock already exists, disabling multiplexing\n[stdout]\nmodels/pgl.py\", line 229, in __init__\n    self._build_fixed_mm_graph(config, dataset)\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/src/models/pgl.py\", line 259, in _build_fixed_mm_graph\n    v = self.image_trs(self.image_embedding.weight.to(self.device))\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1739, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1750, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/container.py\", line 250, in forward\n    input = module(input)\n            ^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1739, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1750, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/public/home/maoyaoxin/anaconda3/lib/python3.12/site-packages/torch/nn/modules/linear.py\", line 125, in forward\n    return F.linear(input, self.weight, self.bias)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Expected all tensors to be on the same device, but found at least two devices, cpu and cuda:0! (when checking argument for argument mat1 in method wrapper_CUDA_addmm)\n============================================================\n[replicate] Exit code: 1",
+      "duration": 44.969321489334106,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    {
+      "round": 2,
+      "algorithm_path": "ai-scientist/output/Recsys/MultiModal/PGL/round_2/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/MultiModal/PGL/round_2/hyperparameter.yaml",
+      "acc": 0.0782,
+      "metrics": {
+        "recall@5": 0.0302,
+        "recall@10": 0.048,
+        "recall@20": 0.0782,
+        "recall@50": 0.1348,
+        "ndcg@5": 0.0203,
+        "ndcg@10": 0.0261,
+        "ndcg@20": 0.0339,
+        "ndcg@50": 0.0453,
+        "precision@5": 0.0068,
+        "precision@10": 0.0054,
+        "precision@20": 0.0044,
+        "precision@50": 0.003,
+        "map@5": 0.0164,
+        "map@10": 0.0187,
+        "map@20": 0.0208,
+        "map@50": 0.0226
+      },
+      "error": null,
+      "feedback": "成功: 24/24, recall@20=0.0782",
+      "duration": 804.8186373710632,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.0782,
+  "best_round": 2,
+  "started_at": "2026-01-13T10:41:38.571384",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/MultiModal/PGL"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "DIN_2017",
+  "model_name": "DIN",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

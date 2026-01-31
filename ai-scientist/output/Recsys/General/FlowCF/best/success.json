@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "paper_id": "FlowCF_2025",
+  "model_name": "FlowCF",
+  "domain": "Recsys",
+  "task": "General",
+  "best_round": 4,
+  "best_acc": 0.0988,
+  "best_combo": null,
+  "best_combo_info": {
+    "combo_name": null,
+    "by_dataset": {
+      "lastfm": "-"
+    },
+    "best_metrics": {}
+  },
+  "all_metrics": {},
+  "timestamp": "2026-01-19T21:00:40.484894",
+  "total_rounds": 5,
+  "duration": 6201.9383893013
+}

@@ -1,0 +1,32 @@
+# CM3: Calibrated Multimodal Recommendation
+# Hyperparameter configuration based on paper description
+
+# Embedding dimensions
+embedding_size: 64
+feat_embed_dim: 64
+hidden_dim: 256
+
+# Graph convolution layers
+n_ui_layers: 3
+n_ii_layers: 1
+
+# Item-item graph construction
+knn_k: 10
+
+# Temperature for uniformity losses
+temperature: 0.2
+
+# Alignment-uniformity trade-off (paper: searched in [0.2, 3.0], optimal around 0.8)
+gamma: [0.6, 0.8, 1.0, 1.2]
+
+# Beta distribution parameter for spherical interpolation
+alpha: [0.5, 1.0]
+
+# Regularization weight
+reg_weight: [1e-4, 1e-5]
+
+# Similarity clamp range for calibrated uniformity loss
+sim_clamp_min: 0.0
+sim_clamp_max: 1.0
+
+hyper_parameters: ["gamma", "alpha", "reg_weight"]

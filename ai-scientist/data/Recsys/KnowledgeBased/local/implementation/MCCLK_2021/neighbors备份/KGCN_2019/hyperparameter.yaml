@@ -1,0 +1,21 @@
+# KGCN Hyperparameter Configuration
+# Paper: Knowledge Graph Convolutional Networks for Recommender Systems (WWW 2019)
+
+# REUSE: Same embedding dimension as MCCLK
+embedding_size: 64              # (int) Dimension of user, item and entity embeddings.
+
+# SIMILAR: n_iter serves similar purpose to n_hops in MCCLK for multi-hop propagation
+n_iter: 2                       # (int) Number of propagation iterations (H in paper).
+
+# DIFFERENT: KGCN samples fixed neighbors; MCCLK uses full graph with dropout
+neighbor_sample_size: 8         # (int) Number of neighbors to sample for each entity (K in paper).
+
+# DIFFERENT: KGCN uses sum/concat/neighbor aggregators; MCCLK uses attention-based aggregation
+aggregator: 'sum'               # (str) Type of aggregator function. Options: 'sum', 'concat', 'neighbor'.
+
+# SIMILAR: Both use L2 regularization but MCCLK has additional contrastive loss weights
+reg_weight: 1.0e-7              # (float) L2 regularization weight.
+
+# Training parameters
+learning_rate: 0.02             # (float) Learning rate for optimizer.
+train_batch_size: 1024          # (int) Batch size for training.

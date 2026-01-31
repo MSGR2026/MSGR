@@ -1,0 +1,8 @@
+# REUSE: embedding_size corresponds to hidden_size in GCSAN (same value 64)
+embedding_size: 64              # (int) The embedding size of items.
+# REUSE: step parameter identical to GCSAN's GNN layers config
+step: 1                         # (int) The number of layers in GNN.
+# REUSE: loss_type parameter identical to GCSAN
+loss_type: 'CE'                 # (str) The type of loss function. Range in ['BPR', 'CE'].
+train_neg_sample_args: ~        # CE loss must disable negative sampling or RecBole will error.
+# DIFFERENT: SRGNN lacks n_layers, n_heads, weight, reg_weight params needed for GCSAN's Transformer and regularization

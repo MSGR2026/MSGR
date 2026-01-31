@@ -1,0 +1,98 @@
+{
+  "domain": "Recsys",
+  "task": "GeneralRecommendation",
+  "items": [
+    {
+      "id": "recbole_framework_spec",
+      "title": "RecBole 框架工程规范",
+      "content": "模型类继承 GeneralRecommender，__init__ 首行调用 super().__init__(config, dataset)，使用父类属性 self.n_users、self.n_items、self.device。配置访问用 config['key']，且读取的参数必须在 __init__ 中绑定为 self 属性。必须实现 forward()、calculate_loss(interaction)、predict(interaction)、full_sort_predict(interaction)。interaction 通过 self.USER_ID、self.ITEM_ID、self.NEG_ITEM_ID 索引。传统闭形式解方法需设 type = ModelType.TRADITIONAL 避免框架调用 backward()。参数初始化用 self.apply(xavier_normal_initialization)。",
+      "tags": [
+        "framework",
+        "recbole",
+        "interface",
+        "critical"
+      ],
+      "source": "framework_analysis",
+      "priority": 10
+    },
+    {
+      "id": "input_type_paradigm_matching",
+      "title": "InputType 与模型范式的对应关系",
+      "content": "InputType 由模型的数据处理范式决定，不可随意选择。自编码器范式的模型（VAE、DAE、Flow、Diffusion等生成式模型）必须使用 InputType.LISTWISE，因为它们输入输出都是完整的用户-物品交互向量。这类模型的数据流为 get_rating_matrix(user) → [batch, n_items] → model → [batch, n_items]，通常同时继承 AutoEncoderMixin。如果论文描述模型为生成式、自编码器、扩散模型、流模型、使用重构损失或处理完整交互向量，必须使用 InputType.LISTWISE。排序学习范式（BPR、协同过滤）使用 InputType.PAIRWISE，需要 NEG_ITEM_ID 并使用 BPRLoss。错误的 InputType 会导致框架行为完全错误。",
+      "tags": [
+        "input_type",
+        "paradigm",
+        "critical",
+        "autoencoder"
+      ],
+      "source": "paradigm_analysis",
+      "priority": 10
+    },
+    {
+      "id": "config_parameter_consistency",
+      "title": "配置参数命名的一致性要求",
+      "content": "YAML 配置文件采用扁平结构，每行一个参数，值为标量或必要的列表。配置文件中的键名必须与代码中 config['key'] 完全一致，大小写、下划线均不能有差异。典型错误包括配置写 ssl_temp 但代码读 ssl_tau、配置写 dropout_prob 但代码读 drop_ratio。不一致会导致 KeyError 或默认值回退，性能骤降。特定 Trainer 对模型属性有隐式要求，例如 RecVAETrainer 期望 model.encoder 和 model.decoder 属性存在。",
+      "tags": [
+        "config",
+        "yaml",
+        "naming",
+        "critical"
+      ],
+      "source": "error_analysis",
+      "priority": 10
+    },
+    {
+      "id": "generative_model_components",
+      "title": "生成式推荐模型的核心组件",
+      "content": "生成式推荐模型（VAE、Diffusion、Flow）通常包含以下组件：时间步嵌入用于时间条件模型，标准实现使用正弦位置编码，某些变体会额外乘以 2π 改变频率范围；先验分布可能是高斯先验或行为引导先验，后者基于物品交互频率构建 Bernoulli 分布；插值机制在训练时混合观测数据和先验，连续插值使用加权和，离散插值使用 Bernoulli 采样的二值掩码；推理过程可能是单次前向（VAE）或迭代采样（Diffusion、Flow），迭代方法需要多步更新并可能需要保留已知交互避免推荐用户已交互物品；MLP 架构选择上，简单场景可用 RecBole 的 MLPLayers 工具类，复杂场景需要手动构建包含 LayerNorm、特殊激活函数等。传统推荐模型（2020年前）多用 tanh/relu 和较小的 dropout（0.1），现代模型可能用 GELU 和较大的 dropout（0.5）。",
+      "tags": [
+        "generative",
+        "vae",
+        "diffusion",
+        "flow",
+        "architecture"
+      ],
+      "source": "model_pattern",
+      "priority": 9
+    },
+    {
+      "id": "gnn_contrastive_learning",
+      "title": "图神经网络中的对比学习模式",
+      "content": "GNN 的不同层嵌入捕获了不同范围的邻域信息，第 k 层嵌入聚合了 k 跳邻居的信息。这种层次结构为对比学习提供了多种可能的视图构建方式。传统方法通过数据增强（节点删除、边扰动）创建多个视图，但增强可能引入语义噪声。某些方法利用 GNN 层间的自然差异作为对比视图，无需额外增强。对比学习的正样本定义有多种策略：自我对比将同一节点在不同视图中的表示作为正样本对，每个节点只有 1 个正样本；邻域对比将节点与其图邻居作为正样本对，每个节点有 |N_u| 个正样本且数量可变；层间对比利用节点在相邻 GNN 层的表示关系。InfoNCE 损失的实现取决于正样本数量：单正样本可以直接向量化计算，多正样本需要对每个节点分别计算其多个正样本的相似度并除以正样本数量归一化。负样本池的选择影响计算效率和学习效果，batch 内负样本计算快但可能质量低，全局负样本质量高但计算开销大，某些方法使用类型限制的负样本（如用户只以物品作为负样本）。温度参数 τ 通常在 0.1-0.5 之间，控制分布的平滑度。实现时使用 logsumexp 技巧保证数值稳定性。",
+      "tags": [
+        "gnn",
+        "contrastive_learning",
+        "ssl",
+        "infonce"
+      ],
+      "source": "gnn_cl_pattern",
+      "priority": 9
+    },
+    {
+      "id": "graph_computation_efficiency",
+      "title": "图计算的效率考虑",
+      "content": "图推荐系统中涉及大量的图结构操作，效率优化至关重要。图传播通常采用对称归一化的稀疏邻接矩阵与嵌入矩阵相乘，使用 torch.sparse.mm 进行稀疏矩阵运算比密集矩阵快数十倍。GNN 层数一般控制在 2-3 层，过深容易过平滑。\n\n邻居信息的访问模式会严重影响性能。如果只需要做 GCN 传播，稀疏邻接矩阵隐式查询即可；如果需要显式获取每个节点的邻居列表（如某些对比学习方法需要遍历每个节点的邻居来计算正样本相似度），需要预先构建邻居索引。从实践经验看，在训练循环内部动态创建 tensor 是常见的性能瓶颈。例如某些模型实现中在每个 batch、每个节点、每层都调用 torch.tensor(python_list, device='cuda')，这个操作涉及 Python list 转 numpy 再转 CPU tensor 最后转 GPU tensor，单次耗时 5-10ms。如果一个 epoch 有数千次这样的调用，累积开销可达数十秒。正确的做法是在模型初始化时将所有邻居列表预先转换为 LongTensor，训练时直接使用。如果 GPU 内存充足，甚至可以在初始化时就将这些索引 tensor 移到 GPU 并用 register_buffer 注册，避免每次循环中的设备传输。\n\n批量计算优于逐个计算。例如负样本相似度可以用矩阵乘法 anchor @ all_neg.T 一次性计算所有节点的相似度，而不是循环计算每个节点。但对于可变长度的正样本（如不同节点的邻居数量不同），可能无法完全避免循环，此时应该确保循环内部的操作尽可能高效，比如提前归一化、提前索引batch内的节点而不是全部节点。\n\n对比学习如果使用全局负样本池，计算复杂度为 O(batch_size × 全体节点数)。如果训练很慢，应该检查：是否在循环内重复创建 tensor、是否对全部节点做了不必要的归一化或计算（实际只需要 batch 内的节点）、是否可以减少对比学习的层数（某些方法证明只在前几层做对比就足够）。RecBole 框架的对比学习模型（SGL、NCL等）在这方面有较好的优化实践，可以参考它们如何平衡语义正确性和计算效率。",
+      "tags": [
+        "efficiency",
+        "graph",
+        "sparse_matrix",
+        "optimization"
+      ],
+      "source": "performance_pattern",
+      "priority": 8
+    },
+    {
+      "id": "general_rec_paradigms",
+      "title": "通用推荐的主流建模范式",
+      "content": "通用推荐常见三类建模路线：协同过滤类（MF、GCN）直接学习 user/item 嵌入并用内积打分，使用 InputType.PAIRWISE；生成式/自编码类（VAE、DAE、扩散、流）以重构交互向量为核心，使用 InputType.LISTWISE；自监督增强类（对比学习）在主任务上叠加多视图一致性损失。复现时需要明确模型是否需要全量物品打分、是否依赖稀疏矩阵传播、是否包含额外的自监督项。",
+      "tags": [
+        "paradigm",
+        "mf",
+        "autoencoder",
+        "ssl"
+      ],
+      "source": "model_taxonomy",
+      "priority": 7
+    }
+  ]
+}

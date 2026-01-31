@@ -1,0 +1,13 @@
+# GLINT-RU Model Configuration
+# Reference: GLINT-RU: Gated Linear Attention and Improved GRU for Sequential Recommendation
+
+# Model architecture parameters
+embedding_size: 64              # (int) The embedding size of items, unified with hidden_size.
+hidden_size: 64                 # (int) The number of features in the hidden state. Use 128 for ML-1M, 64 for Amazon datasets.
+dropout_prob: 0.2               # (float) The dropout rate. Use 0.2 for ML-1M, 0.5 for sparse Amazon datasets.
+kernel_size: 5                  # (int) Temporal convolution kernel size, k∈[3,7] with best around k=5.
+initializer_range: 0.02         # (float) The standard deviation for normal initialization.
+
+# Loss function configuration
+loss_type: 'CE'                 # (str) The type of loss function. Range in ['BPR', 'CE'].
+train_neg_sample_args: ~        # (dict) Disable negative sampling for CE loss.

@@ -1,0 +1,29 @@
+# BASRec model configuration
+# Reference: BASRec: Balanced data Augmentation method for Sequential Recommendation (2025)
+
+# Transformer encoder parameters
+n_layers: 2                      # (int) The number of transformer layers in transformer encoder.
+n_heads: 2                       # (int) The number of attention heads for multi-head attention layer.
+hidden_size: 64                  # (int) The number of features in the hidden state (embedding size from paper).
+inner_size: 256                  # (int) The inner hidden size in feed-forward layer.
+hidden_dropout_prob: 0.5         # (float) The probability of an element to be zeroed.
+attn_dropout_prob: 0.5           # (float) The probability of an attention score to be zeroed.
+hidden_act: 'gelu'               # (str) The activation function in feed-forward layer.
+layer_norm_eps: 1e-12            # (float) A value added to the denominator for numerical stability.
+initializer_range: 0.02          # (float) The standard deviation for normal initialization.
+loss_type: 'CE'                  # (str) The type of loss function. Range in ['BPR', 'CE'].
+
+# BASRec specific parameters
+alpha: 0.4                       # (float) Beta distribution parameter for mixup, α∈{0.2,0.3,0.4,0.5,0.6}.
+rate_min: 0.1                    # (float) Minimum augmentation rate for reorder/substitute, a∈{0.1,0.2,0.3}.
+rate_max: 0.6                    # (float) Maximum augmentation rate for reorder/substitute, b∈{0.6,0.7,0.8}.
+stage1_epochs: 50                # (int) Number of warm-up epochs (stage-1) before enabling augmentation.
+mixup_strategy: 'both'           # (str) Cross-sequence mixup strategy: 'item_wise', 'feature_wise', or 'both'.
+enable_ssa: True                 # (bool) Enable Single-sequence Augmentation (M-Reorder and M-Substitute).
+enable_csa: True                 # (bool) Enable Cross-sequence Augmentation (Nonlinear Mixup).
+similarity_top_k: 10             # (int) Top-k similar items for M-Substitute operator.
+
+# Training parameters (for reference, typically set in overall config)
+# MAX_ITEM_LIST_LENGTH: 50       # (int) Maximum sequence length from paper.
+# train_batch_size: 256          # (int) Batch size from paper.
+# learning_rate: 0.001           # (float) Learning rate from paper (Adam optimizer).

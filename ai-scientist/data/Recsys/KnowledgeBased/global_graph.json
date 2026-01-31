@@ -1,0 +1,152 @@
+{
+  "domain": "Recsys",
+  "task": "KnowledgeAwareRecommendation",
+  "items": [
+    {
+      "id": "ka_framework_interface",
+      "title": "框架接口与数据访问",
+      "content": "模型继承 KnowledgeRecommender，父类提供 n_users/n_items/n_entities/n_relations/device。KG 字段通过 HEAD_ENTITY_ID/TAIL_ENTITY_ID/RELATION_ID/NEG_TAIL_ENTITY_ID 访问。kg_graph(form='coo', value_field='relation_id') 得纯 KG，ckg_graph 得协作知识图，inter_matrix 得交互矩阵。物品是实体子集（前 n_items 个实体即物品）。",
+      "tags": [
+        "framework",
+        "interface",
+        "critical"
+      ],
+      "source": "framework_analysis",
+      "priority": 10,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-26T23:30:00.000000"
+    },
+    {
+      "id": "ka_multitask_training",
+      "title": "多任务训练与损失方法",
+      "content": "两种训练模式：单任务实现 calculate_loss(interaction)；联合训练需分离损失，实现 calculate_rs_loss(interaction) 与 calculate_kg_loss(interaction)。方法名需严格匹配，否则 Trainer 无法调用。",
+      "tags": [
+        "multitask",
+        "loss",
+        "trainer",
+        "critical"
+      ],
+      "source": "framework_analysis",
+      "priority": 10,
+      "created_at": "2025-12-26T23:00:00.000000",
+      "updated_at": "2025-12-26T23:30:00.000000"
+    },
+    {
+      "id": "ka_embedding_call",
+      "title": "Embedding 调用规范",
+      "content": "nn.Embedding 必须用 emb(indices) 调用，禁止 emb[indices]，多维索引会产生广播并导致 OOM。关系投影矩阵同理使用 projection(relation_id)。",
+      "tags": [
+        "embedding",
+        "tensor",
+        "critical"
+      ],
+      "source": "error_analysis",
+      "priority": 10,
+      "created_at": "2025-12-26T23:00:00.000000",
+      "updated_at": "2025-12-26T23:30:00.000000"
+    },
+    {
+      "id": "ka_device_consistency",
+      "title": "设备一致性",
+      "content": "张量必须在同一设备。预计算结构在 __init__ 末尾 .to(self.device)。CPU 索引 GPU 会报错。ModuleDict/ModuleList 只能放 nn.Module，不能放 Tensor。",
+      "tags": [
+        "device",
+        "tensor",
+        "critical"
+      ],
+      "source": "error_analysis",
+      "priority": 10,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-26T23:30:00.000000"
+    },
+    {
+      "id": "ka_neighbor_expansion",
+      "title": "GNN 邻居展开策略",
+      "content": "GNN 聚合从 batch 节点逐跳展开，避免对全量 n_entities 扩展。邻接表建议预计算为 [n_entities, neighbor_size]，无邻居用自身填充。",
+      "tags": [
+        "gnn",
+        "memory",
+        "critical"
+      ],
+      "source": "error_analysis",
+      "priority": 10,
+      "created_at": "2025-12-26T22:00:00.000000",
+      "updated_at": "2025-12-26T23:30:00.000000"
+    },
+    {
+      "id": "ka_aggregation_pattern",
+      "title": "邻居聚合模式",
+      "content": "聚合 reshape 为 [batch, -1, neighbor_size, dim]。注意力可用 (user_emb*relation_emb).mean(dim=-1)→softmax。sum/mean 保持维度，concat 翻倍需匹配线性层输入。",
+      "tags": [
+        "gnn",
+        "aggregation",
+        "architecture"
+      ],
+      "source": "model_analysis",
+      "priority": 9,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-26T23:30:00.000000"
+    },
+    {
+      "id": "ka_yaml_format",
+      "title": "超参数 YAML 规范",
+      "content": "YAML 保持扁平，仅写模型参数（如 embedding_size、n_hops/n_iter、neighbor_sample_size、reg_weight、temperature、alpha/beta）。不要写框架配置（metrics/eval_args/load_col），避免嵌套结构。",
+      "tags": [
+        "yaml",
+        "hyperparameter",
+        "critical"
+      ],
+      "source": "engineering_standards",
+      "priority": 10,
+      "created_at": "2025-12-26T20:00:00.000000",
+      "updated_at": "2025-12-26T23:30:00.000000"
+    },
+    {
+      "id": "ka_core_paradigm",
+      "title": "知识感知推荐核心范式",
+      "content": "知识感知推荐的主线是把用户-物品交互与知识图谱三元组合并为协作知识图(CKG)，在统一图上做多跳信息传播。典型流程：初始化 user/entity/relation 嵌入；构建交互图与 KG 图并做归一化；按 n_hops 聚合邻居得到实体/用户表征；以用户-物品表征内积或融合向量打分；用 BPR/BCE + L2 正则训练。实现时牢记物品是实体子集（前 n_items 个实体即物品），并保持 user/entity 维度一致。",
+      "tags": [
+        "concept",
+        "ckg",
+        "pipeline"
+      ],
+      "source": "model_overview",
+      "priority": 8,
+      "created_at": "2025-12-27T10:00:00.000000",
+      "updated_at": "2025-12-27T10:00:00.000000"
+    },
+    {
+      "id": "ka_multiview_contrastive",
+      "title": "多视图建模与对比学习",
+      "content": "多视图 KG 推荐通常包含三类视图：结构视图（CKG 传播）、协作视图（用户-物品图的 LightGCN 传播）、语义视图（基于实体/物品特征的 kNN item-item 图）。复现时保证视图独立编码后再融合，避免提前混合导致表示退化。对比学习一般在表示层引入投影头，并设置温度系数与加权系数控制局部/全局对齐强度，使主推荐损失与对比损失保持平衡。",
+      "tags": [
+        "multi-view",
+        "contrastive",
+        "design"
+      ],
+      "source": "model_analysis",
+      "priority": 8,
+      "created_at": "2025-12-27T10:00:00.000000",
+      "updated_at": "2025-12-27T10:00:00.000000"
+    },
+    {
+      "id": "ka_engineering_stability",
+      "title": "工程复现与评估稳定性",
+      "content": "工程实现要点：1）稀疏图构造与归一化要一致（D^-1 A 或 D^-1/2 A D^-1/2），避免重复归一化；2）kNN 语义图用 cosine+topk 构造并保持在同一设备；3）边采样/消息 dropout 只作用于稀疏邻接或中间表示，避免破坏嵌入表；4）full_sort_predict 需缓存用户/实体表示，评分时只取前 n_items；5）评估 recall@10 时确保 topk 与打分矩阵维度匹配，避免混入非物品实体。",
+      "tags": [
+        "engineering",
+        "evaluation",
+        "stability"
+      ],
+      "source": "engineering_standards",
+      "priority": 8,
+      "created_at": "2025-12-27T10:00:00.000000",
+      "updated_at": "2025-12-27T10:00:00.000000"
+    }
+  ],
+  "metadata": {
+    "created_at": "2025-12-26T20:00:00.000000",
+    "updated_at": "2025-12-27T11:10:00.000000",
+    "item_count": 10
+  }
+}

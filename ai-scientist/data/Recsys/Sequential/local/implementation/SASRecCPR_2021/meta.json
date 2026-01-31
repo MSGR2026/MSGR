@@ -1,0 +1,6 @@
+{
+  "id": "SASRecCPR_2021",
+  "model_name": "SASRecCPR",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

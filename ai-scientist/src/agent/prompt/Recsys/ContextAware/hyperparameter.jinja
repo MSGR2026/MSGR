@@ -1,0 +1,156 @@
+{# ============================================================================
+   超参数生成提示词模板
+   
+   用途: 指导 LLM 根据算法代码和论文描述生成 YAML 超参数配置
+   领域: 推荐系统 (Recsys)
+   任务: 上下文感知推荐 (Context-Aware Recommendation)
+   
+   模板输出格式:
+     使用 "---SYSTEM_PROMPT---" 和 "---USER_PROMPT---" 作为分隔符
+   
+   作者: GraphScientist Team
+============================================================================ #}
+---SYSTEM_PROMPT---
+你是一位资深的 {{ domain }} 领域超参数调优专家，专精于上下文感知推荐系统的配置优化。
+
+你的专长包括：
+- 深入理解不同推荐模型的超参数敏感性
+- 能够根据论文描述推断合理的超参数范围
+- 熟悉 CTR 预测模型（FM、DeepFM、xDeepFM等）的最佳实践配置
+- 参考类似模型的配置，设定合理的初始超参数
+- 遵循工业界最佳实践，平衡性能与效率
+
+{% if current_hyperparameter %}
+## 可用工具
+
+你可以选择以下两种方式之一：
+
+### 方式一：完整重写
+直接输出完整的 YAML 配置，用 ```yaml 和 ``` 包裹。
+
+### 方式二：局部修复 (str_replace 工具)
+如果只需要小范围修改，使用 str_replace 工具调用：
+
+<tool_call>
+<name>str_replace</name>
+<old_str>
+需要替换的旧配置（必须与原配置完全匹配）
+</old_str>
+<new_str>
+替换后的新配置
+</new_str>
+</tool_call>
+
+**重要说明**：
+- `<old_str>` 和 `<new_str>` 必须成对出现在同一个 `<tool_call>` 中
+- 可以输出多个 `<tool_call>` 块来修复多处
+- 不要在配置中单独使用这些标签
+{% endif %}
+
+请根据算法代码和论文描述，生成合理且可直接使用的超参数配置。
+---USER_PROMPT---
+## 任务描述
+
+你的任务是为论文 **{{ paper_id }}** 的算法实现生成合适的超参数配置。
+
+- **领域**: {{ domain }}
+- **任务**: {{ task }}
+
+请根据算法代码和论文中的超参数描述，生成 YAML 格式的配置文件。
+
+---
+
+## 已生成的算法代码
+
+以下是已经生成的算法实现，请基于此生成对应的超参数配置：
+
+```python
+{{ algorithm_code }}
+```
+
+---
+
+{% if hyperparameter_desc %}
+## 论文中的超参数描述
+
+{{ hyperparameter_desc }}
+
+---
+
+{% endif %}
+
+{% if neighbors and neighbors|length > 0 %}
+## 参考超参数配置
+
+以下是相关基线方法的超参数配置，供参考：
+
+{% for neighbor in neighbors[:3] %}
+{% if neighbor.hyperparameter_implementation %}
+### 参考 {{ loop.index }}: {{ neighbor.paper_id }}
+
+```yaml
+{{ neighbor.hyperparameter_implementation }}
+```
+
+{% endif %}
+{% endfor %}
+---
+
+{% endif %}
+
+{% if global_context %}
+## 领域知识
+
+{{ global_context }}
+
+---
+
+{% endif %}
+
+{% if current_hyperparameter %}
+## 当前超参数配置
+
+以下是你之前生成的配置，请根据报错信息决定是完整重写还是使用 str_replace 局部修复：
+
+```yaml
+{{ current_hyperparameter }}
+```
+
+---
+
+{% endif %}
+
+{% if history and history|length > 0 %}
+## 之前的尝试
+
+{% for round in history[-3:] %}
+### Round {{ round.round }}
+
+{% if round.acc %}
+- **结果**: acc = {{ "%.4f"|format(round.acc) }}
+{% endif %}
+{% if round.metrics %}
+- **指标**: {% for k, v in round.metrics.items() %}{{ k }}={{ "%.4f"|format(v) }}{% if not loop.last %}, {% endif %}{% endfor %}
+
+{% endif %}
+{% if round.error %}
+- **错误**: {{ round.error }}
+{% endif %}
+{% if round.feedback %}
+- **反馈**: {{ round.feedback }}
+{% endif %}
+
+{% endfor %}
+---
+
+{% endif %}
+
+
+{% if current_hyperparameter %}
+根据报错选择：
+1. **小范围修复**：输出一个或多个 `<tool_call>` 工具调用块
+2. **完整重写**：输出完整的 YAML 配置，用 ```yaml 和 ``` 包裹
+{% else %}
+请直接输出符合 RecBole 格式的 YAML 配置，用 ```yaml 和 ``` 包裹。
+{% endif %}
+

@@ -1,0 +1,104 @@
+============================================================
+Task: ContextAwareRecommendation
+Total nodes: 18
+Total edges: 57
+============================================================
+
+[AFM_2017] <- 5 connections:
+    <- DeepFM_2017 (rank: rank1)
+    <- FwFM_2018 (rank: rank2)
+    <- NFM_2017 (rank: rank3)
+    <- PNN_2016 (rank: rank4)
+    <- xDeepFM_2018 (rank: rank5)
+
+[AutoInt_2019] <- 3 connections:
+    <- xDeepFM_2018 (rank: rank2)
+    <- DCN_2017 (rank: rank3)
+    <- NFM_2017 (rank: rank4)
+
+[DCNV2_2020] <- 4 connections:
+    <- DCN_2017 (rank: rank1)
+    <- AutoInt_2019 (rank: rank2)
+    <- xDeepFM_2018 (rank: rank3)
+    <- DeepFM_2017 (rank: rank5)
+
+[DCN_2017] <- 5 connections:
+    <- DCNV2_2020 (rank: rank1)
+    <- xDeepFM_2018 (rank: rank2)
+    <- DeepFM_2017 (rank: rank3)
+    <- WideDeep_2016 (rank: rank4)
+    <- FM_2010 (rank: rank5)
+
+[DSSM_2013] <- 4 connections:
+    <- DeepFM_2017 (rank: rank1)
+    <- xDeepFM_2018 (rank: rank2)
+    <- PNN_2016 (rank: rank3)
+    <- WideDeep_2016 (rank: rank4)
+
+[DeepFM_2017] <- 4 connections:
+    <- xDeepFM_2018 (rank: rank1)
+    <- NFM_2017 (rank: rank2)
+    <- PNN_2016 (rank: rank3)
+    <- WideDeep_2016 (rank: rank4)
+
+[EulerNet_2021] <- 0 connections (no incoming edges)
+
+[FFM_2016] <- 5 connections:
+    <- FM_2010 (rank: rank1)
+    <- FwFM_2018 (rank: rank2)
+    <- DeepFM_2017 (rank: rank3)
+    <- NFM_2017 (rank: rank4)
+    <- PNN_2016 (rank: rank5)
+
+[FM_2010] <- 5 connections:
+    <- FFM_2016 (rank: rank1)
+    <- DeepFM_2017 (rank: rank2)
+    <- NFM_2017 (rank: rank3)
+    <- PNN_2016 (rank: rank4)
+    <- WideDeep_2016 (rank: rank5)
+
+[FNN_2016] <- 0 connections (no incoming edges)
+
+[FiGNN_2019] <- 4 connections:
+    <- xDeepFM_2018 (rank: rank1)
+    <- DCN_2017 (rank: rank2)
+    <- NFM_2017 (rank: rank3)
+    <- AFM_2017 (rank: rank5)
+
+[FwFM_2018] <- 2 connections:
+    <- FFM_2016 (rank: rank1)
+    <- FM_2010 (rank: rank2)
+
+[KD_DAGFM_2021] <- 0 connections (no incoming edges)
+
+[LR_2003] <- 0 connections (no incoming edges)
+
+[NFM_2017] <- 4 connections:
+    <- DeepFM_2017 (rank: rank1)
+    <- WideDeep_2016 (rank: rank2)
+    <- PNN_2016 (rank: rank3)
+    <- FFM_2016 (rank: rank5)
+
+[PNN_2016] <- 4 connections:
+    <- DeepFM_2017 (rank: rank1)
+    <- NFM_2017 (rank: rank2)
+    <- WideDeep_2016 (rank: rank4)
+    <- FM_2010 (rank: rank5)
+
+[WideDeep_2016] <- 4 connections:
+    <- xDeepFM_2018 (rank: rank1)
+    <- DeepFM_2017 (rank: rank2)
+    <- DCN_2017 (rank: rank3)
+    <- NFM_2017 (rank: rank4)
+
+[xDeepFM_2018] <- 4 connections:
+    <- DeepFM_2017 (rank: rank1)
+    <- PNN_2016 (rank: rank2)
+    <- WideDeep_2016 (rank: rank3)
+    <- DCN_2017 (rank: rank4)
+
+============================================================
+Summary:
+  Nodes with incoming edges: 14
+  Nodes without incoming edges: 4
+============================================================

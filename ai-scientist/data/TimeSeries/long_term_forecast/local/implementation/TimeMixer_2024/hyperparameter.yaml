@@ -1,0 +1,24 @@
+task_name: long_term_forecast
+is_training: 1
+seq_len: 96
+label_len: 0
+pred_len: [96, 192, 336, 720]
+batch_size: 32
+c_out: [321, 321, 321, 321]
+d_ff: 32
+d_layers: 1
+d_model: 16
+data: [custom, custom, custom, custom]
+dec_in: [321, 321, 321, 321]
+des: Exp
+down_sampling_layers: 3
+down_sampling_method: avg
+down_sampling_window: 2
+e_layers: 3
+enc_in: [321, 321, 321, 321]
+factor: 3
+features: [M, M, M, M]
+itr: 1
+learning_rate: 0.01
+patience: 10
+train_epochs: 20

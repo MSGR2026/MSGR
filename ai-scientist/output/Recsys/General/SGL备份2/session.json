@@ -1,0 +1,37 @@
+{
+  "session_id": "SGL_20260105_225751_a67980fb",
+  "paper_id": "SGL_2021",
+  "model_name": "SGL",
+  "domain": "Recsys",
+  "task": "General",
+  "max_rounds": 10,
+  "current_round": 1,
+  "status": "running",
+  "history": [
+    {
+      "round": 0,
+      "algorithm_path": "ai-scientist/output/Recsys/General/SGL/round_0/algorithm.py",
+      "hyperparameter_path": "ai-scientist/output/Recsys/General/SGL/round_0/hyperparameter.yaml",
+      "acc": 0.1696,
+      "metrics": {
+        "23": 0.0,
+        "recall@10": 0.1696,
+        "mrr@10": 0.2995,
+        "ndcg@10": 0.1633,
+        "hit@10": 0.5446,
+        "precision@10": 0.0832
+      },
+      "error": null,
+      "feedback": "成功: 1/1, recall@10=0.1696",
+      "duration": 237.34324169158936,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  ],
+  "best_acc": 0.1696,
+  "best_round": 0,
+  "started_at": "2026-01-05T22:57:51.754465",
+  "finished_at": null,
+  "output_dir": "ai-scientist/output/Recsys/General/SGL"
+}

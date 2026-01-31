@@ -1,0 +1,73 @@
+# GraphLearning/GSL 任务配置
+# Graph Structure Learning 图结构学习任务
+
+task:
+  domain: GraphLearning
+  task: GOLD
+  framework: GOLD
+  description: "Graph Structure Learning"
+
+execution:
+  container: container/GraphLearning/gold-benchmark.sif
+  entry: python main_model.py --model {model} --dataset {dataset} --DS_pair {dataset} --gpu {gpu} --config configs/config_{model}.yaml
+  workdir: /app
+  timeout: 18000
+
+mount:
+  # 关键：挂载整个 GSL 基准目录到 /app，确保 /app 目录可写
+  # main_model.py 需要在 /app 下创建临时配置文件，如果只挂载单个文件会导致 /app 只读
+  # 挂载整个目录后，/app 可写，同时 /app/configs 目录也存在
+  gold_base:
+    host: "paperbench_pro/benchmark/GraphLearning/GOLD"
+    container: "/app"
+  
+  # 超参数文件挂载（覆盖镜像中的默认配置）
+  # 注意：必须在 gsl_base 挂载之后，这样 /app/configs 目录已存在
+  hyperparameter:
+    host: "{hyperparameter_path}"
+    container: "/app/configs/config_{model}.yaml"
+  
+  # 数据集目录挂载（覆盖 gold_base 中的 data 目录）
+  data:
+    host: "paperbench_pro/benchmark/GraphLearning/GOLD/data"
+    container: "/app/data"
+  
+  # 注意：GOLD 不需要 opengsl 模块，已移除该挂载
+  
+  # results 目录挂载（main_model.py 会在这里创建 save_models 子目录）
+  results:
+    host: "output/logs/runs/{run_id}/results"
+    container: "/app/results"
+  
+  # 结果保存目录挂载（挂载到 results 下的 records 子目录，因为 /app/records 在容器中不存在）
+  result_records:
+    host: "output/logs/runs/{run_id}/records"
+    container: "/app/results/records"
+  
+  # 日志挂载
+  logs:
+    host: "output/logs/runs/{run_id}/tasks"
+    container: "/logs"
+
+data:
+  # 可用数据集
+  datasets:
+    - DHFR
+    - BZR
+    # - DD
+  
+  # 数据集根目录
+  root: paperbench_pro/benchmark/GraphLearning/GOLD/data
+
+eval:
+  # 评估指标
+  metrics:
+    - AUROC
+    - AUPRC
+    - FPR95
+  
+  primary_metric: AUROC
+  higher_is_better: true
+
+# args 部分已移除，使用 execution.entry 直接运行脚本
+# GSL 脚本不需要命令行参数，所有配置从 YAML 文件读取

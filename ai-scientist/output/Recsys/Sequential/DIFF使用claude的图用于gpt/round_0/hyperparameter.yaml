@@ -1,0 +1,47 @@
+# ----------------------------- DIFF_2025 (DIFF) -----------------------------
+# Transformer backbone (paper: embedding_size=256, num_layers=2, num_heads=2)
+n_layers: 2                     # (int) Number of DIFF blocks (Transformer layers).
+n_heads: 2                      # (int) Number of attention heads.
+hidden_size: 256                # (int) Embedding/hidden size (paper: 256).
+inner_size: 1024                # (int) FFN inner size, typically 4x hidden_size.
+
+hidden_dropout_prob: 0.2        # (float) Dropout on FFN/output/residual paths (paper not specified; good default for 256-d).
+attn_dropout_prob: 0.2          # (float) Dropout on attention weights.
+hidden_act: 'gelu'              # (str) Activation in FFN.
+layer_norm_eps: 1e-12           # (float) LayerNorm epsilon.
+initializer_range: 0.02         # (float) Weight init std (BERT/SASRec-style).
+
+# Loss (paper uses standard next-item prediction; CE is common for SASRec-like training in RecBole)
+loss_type: 'CE'                 # (str) ['CE','BPR'].
+train_neg_sample_args: ~        # (dict) Must be None for CE.
+
+# Sequence setting (paper: max_seq_len=50)
+MAX_ITEM_LIST_LENGTH: 50        # (int) Max sequence length used by RecBole dataloader.
+
+# Optimization (paper: lr in {1e-4, 1e-3}; pick 1e-3 as strong default)
+learning_rate: 1e-3             # (float) Adam learning rate.
+weight_decay: 1e-6              # (float) Small L2 for stability with embeddings.
+train_batch_size: 256           # (int) Paper: batch_size=256.
+eval_batch_size: 256            # (int) Keep consistent unless GPU memory is tight.
+epochs: 300                     # (int) Typical for sequential rec; early-stopping usually triggers earlier.
+
+# ----------------------------- DIFF specific -----------------------------
+# Item attribute sequence field names (MUST match interaction keys in your dataset)
+# Example keys could be: ['brand_id_list', 'cate_id_list'] depending on your feature pipeline.
+attribute_fields: []            # (list) Fill with your attribute sequence fields; empty -> no side info.
+
+fusion_type: 'gate'             # (str) Early fusion for E_va: 'gate' (paper: Yelp) / 'concat' (others) / 'sum'.
+score_fusion: 'sum'             # (str) Intermediate fusion of attention logits: 'sum'|'mean'|'gate'. Default stable: 'sum'.
+
+alpha: 0.5                      # (float) Final fusion weight (paper optimal ~0.5; search over {0.1..0.9}).
+
+freq_c: 3                       # (int) Frequency split cutoff c (paper: 3 for Yelp/Beauty/Sports; 5 for Toys).
+
+lambda_align: 20.0              # (float) Alignment loss weight (paper optimal ~20 on Yelp; search {1,5,10,20,50,100}).
+align_tau_init: 0.2             # (float) Learnable temperature init for alignment loss (kept small & stable).
+
+# ----------------------------- Evaluation / misc (common RecBole defaults) -----------------------------
+eval_step: 1                    # (int) Evaluate every n epochs.
+stopping_step: 20               # (int) Early stopping patience.
+clip_grad_norm: 5.0             # (float) Gradient clipping for Transformer stability.
+seed: 2025                      # (int) Reproducibility.

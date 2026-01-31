@@ -1,0 +1,6 @@
+{
+  "id": "KSR_2020",
+  "model_name": "KSR",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

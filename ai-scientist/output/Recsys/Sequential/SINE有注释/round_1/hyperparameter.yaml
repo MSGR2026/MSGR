@@ -1,0 +1,10 @@
+embedding_size: 64              # (int) The embedding size of items and prototypes.
+hidden_size: 64                 # (int) The hidden size for linear transformations.
+prototype_size: 100             # (int) L: The total number of conceptual prototypes in the concept pool.
+interest_size: 4                # (int) K: The number of activated concepts/interests per user.
+tau: 0.1                        # (float) Temperature parameter for interest aggregation softmax.
+reg_weight: 0.01                # (float) Lambda: Trade-off parameter for covariance regularization loss.
+layer_norm_eps: 1e-12           # (float) A value added to the denominator for numerical stability in LayerNorm.
+initializer_range: 0.02         # (float) The standard deviation for weight initialization.
+loss_type: 'CE'                 # (str) The type of loss function. Range in ['BPR', 'CE'].
+train_neg_sample_args: ~        # Disable negative sampling for CE loss.

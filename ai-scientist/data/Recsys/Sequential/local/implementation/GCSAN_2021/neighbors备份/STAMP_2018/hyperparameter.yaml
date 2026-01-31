@@ -1,0 +1,6 @@
+# SIMILAR: Same embedding dimension as GCSAN's hidden_size
+embedding_size: 64              # (int) The embedding size of items.
+# REUSE: Same loss_type parameter with same options
+loss_type: 'CE'                 # (str) The type of loss function. Range in ['BPR', 'CE'].
+train_neg_sample_args: ~        # CE loss must disable negative sampling or RecBole will error.
+# DIFFERENT: STAMP lacks GNN step, transformer layers, attention heads, dropout, weight, reg_weight configs

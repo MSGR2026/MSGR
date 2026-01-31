@@ -1,0 +1,31 @@
+# BASRec Model Configuration
+# Reference: Augmenting Sequential Recommendation with Balanced Relevance and Diversity (AAAI 2025)
+# Paper: Yizhou Dang et al. "Augmenting Sequential Recommendation with Balanced Relevance and Diversity"
+
+# Transformer layers configuration (same as SASRec backbone)
+n_layers: 2                     # (int) The number of transformer layers in transformer encoder.
+n_heads: 2                      # (int) The number of attention heads for multi-head attention layer.
+hidden_size: 64                 # (int) The number of features in the hidden state.
+inner_size: 256                 # (int) The inner hidden size in feed-forward layer.
+hidden_dropout_prob: 0.5        # (float) The probability of an element to be zeroed.
+attn_dropout_prob: 0.5          # (float) The probability of an attention score to be zeroed.
+hidden_act: 'gelu'              # (str) The activation function in feed-forward layer.
+layer_norm_eps: 1e-12           # (float) A value added to the denominator for numerical stability. 
+initializer_range: 0.02         # (float) The standard deviation for normal initialization.
+loss_type: 'CE'                 # (str) The type of loss function. Range in ['BPR', 'CE'].
+train_neg_sample_args: ~        # (dict) Disable negative sampling for CE loss.
+
+# BASRec specific parameters
+# Single-sequence Augmentation parameters
+alpha: 0.4                      # (float) Beta distribution parameter for mixup (α in Beta(α, α))
+rate_min: 0.1                   # (float) Minimum augmentation rate (a in paper, range: 0.1-0.3)
+rate_max: 0.7                   # (float) Maximum augmentation rate (b in paper, range: 0.6-0.8)
+
+# Cross-sequence Augmentation parameters
+tau: 1.0                        # (float) Temperature parameter for cross-sequence augmentation
+mixup_strategy: 'both'          # (str) Mixup strategy: 'item_wise', 'feature_wise', or 'both'
+
+# Two-stage training parameters
+two_stage: True                 # (bool) Whether to use two-stage training strategy
+stage1_epochs: 50               # (int) Number of epochs for stage 1 (standard training)
+

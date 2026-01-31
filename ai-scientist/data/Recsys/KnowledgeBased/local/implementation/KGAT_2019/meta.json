@@ -1,0 +1,6 @@
+{
+  "id": "KGAT_2019",
+  "model_name": "KGAT",
+  "task": "KnowledgeAwareRecommendation",
+  "domain": "Recsys"
+}

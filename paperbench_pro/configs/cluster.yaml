@@ -1,0 +1,29 @@
+# PaperBenchPro 集群配置
+
+# 共享存储根目录
+# 使用相对路径,从工作空间根目录开始
+shared_root: ./ai-scientist
+
+# SSH 配置
+ssh:
+  nodes:
+    - gpu6
+  user: ""  # 默认使用当前用户
+  timeout: 30
+
+# Singularity 配置
+singularity:
+  # 使用系统 PATH 中的 singularity,或根据实际安装位置修改
+  executable: singularity
+  options:
+    - --nv  # 启用 NVIDIA GPU 支持
+
+# 调度器配置
+scheduler:
+  gpus_per_node: 8
+  max_per_gpu: 8
+  max_concurrent: 128
+
+# 任务超时
+timeout: 10800
+

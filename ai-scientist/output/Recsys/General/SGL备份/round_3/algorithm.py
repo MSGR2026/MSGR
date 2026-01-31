@@ -1,0 +1,1 @@
+self.aug_type = config["aug_type"]

@@ -1,0 +1,6 @@
+{
+  "id": "SGL_2021",
+  "model_name": "SGL",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

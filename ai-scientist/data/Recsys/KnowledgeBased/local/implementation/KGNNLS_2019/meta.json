@@ -1,0 +1,6 @@
+{
+  "id": "KGNNLS_2019",
+  "model_name": "KGNNLS",
+  "task": "KnowledgeAwareRecommendation",
+  "domain": "Recsys"
+}

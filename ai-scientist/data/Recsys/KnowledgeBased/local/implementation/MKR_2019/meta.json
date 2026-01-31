@@ -1,0 +1,6 @@
+{
+  "id": "MKR_2019",
+  "model_name": "MKR",
+  "task": "KnowledgeAwareRecommendation",
+  "domain": "Recsys"
+}

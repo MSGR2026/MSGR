@@ -1,0 +1,6 @@
+{
+  "id": "SLIMElastic_2011",
+  "model_name": "SLIMElastic",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

@@ -1,0 +1,49 @@
+============================================================
+Task: KnowledgeAwareRecommendation
+Total nodes: 11
+Total edges: 16
+============================================================
+
+[CFKG_2018] <- 1 connections:
+    <- MCCLK_2021 (rank: rank2)
+
+[CKE_2016] <- 0 connections (no incoming edges)
+
+[KGAT_2019] <- 3 connections:
+    <- RippleNet_2018 (rank: rank1)
+    <- CFKG_2018 (rank: rank3)
+    <- MCCLK_2021 (rank: rank5)
+
+[KGCN_2019] <- 2 connections:
+    <- RippleNet_2018 (rank: rank1)
+    <- MCCLK_2021 (rank: rank2)
+
+[KGIN_2021] <- 3 connections:
+    <- KGNNLS_2019 (rank: rank1)
+    <- KGAT_2019 (rank: rank2)
+    <- MCCLK_2021 (rank: rank3)
+
+[KGNNLS_2019] <- 2 connections:
+    <- RippleNet_2018 (rank: rank1)
+    <- MCCLK_2021 (rank: rank2)
+
+[KTUP_2020] <- 1 connections:
+    <- MCCLK_2021 (rank: rank2)
+
+[Koopa_2022] <- 0 connections (no incoming edges)
+
+[MCCLK_2021] <- 1 connections:
+    <- KGAT_2019 (rank: rank4)
+
+[MKR_2019] <- 2 connections:
+    <- RippleNet_2018 (rank: rank1)
+    <- MCCLK_2021 (rank: rank3)
+
+[RippleNet_2018] <- 1 connections:
+    <- MCCLK_2021 (rank: rank1)
+
+============================================================
+Summary:
+  Nodes with incoming edges: 9
+  Nodes without incoming edges: 2
+============================================================

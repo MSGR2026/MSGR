@@ -1,0 +1,18 @@
+# KGAT (Knowledge Graph Attention Network) Hyperparameters
+
+# Embedding dimensions
+embedding_size: 64              # (int) The embedding size of users, items and entities.
+kg_embedding_size: 64           # (int) The embedding size of relations in knowledge graph (TransR relation dimension).
+
+# Model architecture
+n_layers: 3                     # (int) The number of attentive embedding propagation layers.
+aggregator_type: 'bi-interaction'  # (str) The type of aggregator: 'gcn', 'graphsage', or 'bi-interaction'.
+
+# Regularization
+reg_weight: 1e-5                # (float) The L2 regularization weight for embeddings and parameters.
+
+# Training settings
+learning_rate: 0.001            # (float) Learning rate for Adam optimizer.
+
+# Graph structure
+neighbor_sample_size: 8         # (int) The number of neighbors to sample for each entity in CKG.

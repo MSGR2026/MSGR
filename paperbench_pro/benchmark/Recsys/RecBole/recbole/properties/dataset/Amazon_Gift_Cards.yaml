@@ -1,0 +1,13 @@
+dataset: Amazon_Gift_Cards
+data_path: dataset/
+
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+RATING_FIELD: rating
+TIME_FIELD: timestamp
+
+seq_separator: ", "
+
+load_col:
+  inter: [user_id, item_id, rating, timestamp]
+  item: [item_id, title, categories, brand, sales_type, sales_rank]

@@ -1,0 +1,6 @@
+{
+  "id": "DGCF_2020",
+  "model_name": "DGCF",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

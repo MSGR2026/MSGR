@@ -1,0 +1,45 @@
+# NLGCL_2025 (RecBole) hyper-parameter config
+
+# ===== Model =====
+model: NLGCL
+embedding_size: 64
+
+# LightGCN backbone
+n_layers: 3                  # paper: L in {2,3}; default 3 (Pinterest/QB-Video style)
+g_groups: 2                  # paper: contrastive_groups(G)=2
+
+# Neighbor-layer contrastive learning
+ssl_weight: 1.0e-5           # paper: CL_weight(λ1)=1e-5
+ssl_temp: 0.2                # paper: temperature(τ)=0.2
+nl_scope: hetero             # default in code; paper discusses hetero vs entire
+# nl_scope: entire            # (optional) enable if you want stronger negatives but slower training
+
+# Regularization
+reg_weight: 1.0e-4           # paper: L2_reg(λ2)=1e-4
+require_pow: False
+
+# ===== Training =====
+epochs: 1000                 # rely on early stopping
+train_batch_size: 4096       # paper
+learner: adam                # paper: Adam
+learning_rate: 0.001         # LightGCN best-practice default for Adam
+weight_decay: 0.0            # keep 0; use reg_weight (EmbLoss) instead
+
+# ===== Evaluation / Early Stopping =====
+eval_args:
+  split: { RS: [0.8, 0.1, 0.1] }
+  group_by: user
+  order: RO
+  mode: full
+
+metrics: ["Recall", "NDCG"]
+topk: [10, 20]
+valid_metric: NDCG@20
+eval_batch_size: 4096
+stopping_step: 20            # paper: early-stop patience=20 epochs
+
+# ===== System =====
+seed: 2026
+reproducibility: True
+use_gpu: True
+device: cuda

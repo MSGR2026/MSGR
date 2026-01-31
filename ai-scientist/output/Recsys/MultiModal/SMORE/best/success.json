@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "paper_id": "SMORE_2025",
+  "model_name": "SMORE",
+  "domain": "Recsys",
+  "task": "MultiModal",
+  "best_round": 2,
+  "best_acc": 0.0902,
+  "best_combo": null,
+  "best_combo_info": {
+    "combo_name": null,
+    "by_dataset": {
+      "baby": "-"
+    },
+    "best_metrics": {}
+  },
+  "all_metrics": {},
+  "timestamp": "2026-01-23T15:43:04.422465",
+  "total_rounds": 3,
+  "duration": 616.4406414031982
+}

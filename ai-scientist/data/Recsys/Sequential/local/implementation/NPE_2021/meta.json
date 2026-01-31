@@ -1,0 +1,6 @@
+{
+  "id": "NPE_2021",
+  "model_name": "NPE",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

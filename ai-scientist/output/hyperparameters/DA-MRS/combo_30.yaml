@@ -1,0 +1,14 @@
+align_k: 10
+alpha: 3.0
+beta: 3.0
+embedding_size: 64
+feat_embed_dim: 64
+gamma: 1.0
+knn_k: 10
+lambda_1: 1.0
+lambda_2: 0.1
+learning_rate: 1e-4
+n_layers: 2
+reg_weight: 1e-4
+tau: 0.2
+xi_b: 2

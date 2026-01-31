@@ -1,0 +1,2 @@
+# L2 regularization parameter
+reg_weight: 500.0              # (float) L2-norm regularization parameter. Typical values: 500 (ML-20M), 1000 (Netflix), 200 (MSD), 3000 (ML-10M small). Much larger than SLIM (~1) due to closed-form solution. Larger values for smaller/sparser datasets.

@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "paper_id": "SGL_2021",
+  "model_name": "SGL",
+  "domain": "Recsys",
+  "task": "General",
+  "best_round": 1,
+  "best_acc": 0.1805,
+  "best_combo": null,
+  "best_combo_info": {
+    "combo_name": null,
+    "by_dataset": {
+      "lastfm": "-"
+    },
+    "best_metrics": {}
+  },
+  "all_metrics": {},
+  "timestamp": "2026-01-04T18:36:09.888448",
+  "total_rounds": 2,
+  "duration": 485.7611336708069
+}

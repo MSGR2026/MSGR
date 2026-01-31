@@ -1,0 +1,11 @@
+代码期望配置中有 `dropout_prob` 参数。但从错误日志看，配置中没有正确读取到这个值（显示为 `None`）。
+
+查看日志输出的 "Other Hyper Parameters"，我注意到 `dropout_prob` 没有出现在列表中，这意味着配置没有被正确识别。
+
+让我检查当前配置 - 配置中确实有 `dropout_prob: 0.5`，但问题可能是代码中的某些路径没有正确处理。
+
+实际上，根据错误堆栈，问题出在 `VAEDecoder` 中 `dropout` 参数为 `None`。这是因为在 `_build_vae_components` 方法中调用 `VAEDecoder` 时传递的 `self.dropout` 可能为 `None`。
+
+让我仔细检查代码逻辑 - 代码第 207 行有条件判断，但如果 `config["dropout_prob"]` 本身不存在（而不是存在但为 `None`），会抛出 `KeyError`。
+
+配置文件中确实有 `dropout_prob`，所以问题可能是配置文件的格式或其他问题。让我提供一个更完整的配置，确保所有必需参数都正确设置：

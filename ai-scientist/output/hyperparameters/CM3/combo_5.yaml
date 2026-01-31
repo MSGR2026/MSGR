@@ -1,0 +1,10 @@
+alpha: 0.5
+embedding_size: 64
+feat_embed_dim: 64
+gamma: 1.0
+hidden_dim: 256
+knn_k: 10
+mm_image_weight: 0.5
+n_ii_layers: 1
+n_ui_layers: 2
+temperature: 2.0

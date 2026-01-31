@@ -1,0 +1,6 @@
+{
+  "id": "RaCT_2021",
+  "model_name": "RaCT",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

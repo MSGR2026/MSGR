@@ -1,0 +1,15 @@
+dataset: ModCloth
+data_path: dataset/
+
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+RATING_FIELD: rating
+
+LABEL_FIELD: label
+threshold:
+  rating: 4.0
+
+load_col:
+  inter: [user_id, item_id, rating, length, fit]
+  user: [user_id, user_name, waist, cup_size, hips, bra_size, bust, height, shoe_size, shoe_width]
+  item: [item_id, category, size]

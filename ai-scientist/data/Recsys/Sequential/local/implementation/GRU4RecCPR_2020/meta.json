@@ -1,0 +1,6 @@
+{
+  "id": "GRU4RecCPR_2020",
+  "model_name": "GRU4RecCPR",
+  "task": "SequentialRecommendation",
+  "domain": "Recsys"
+}

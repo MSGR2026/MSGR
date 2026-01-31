@@ -1,0 +1,60 @@
+# Recsys/KnowledgeBased 任务配置
+# 用于 RecBole Knowledge-based Recommendation 任务
+# 支持模型：KGAT, KGCN, RippleNet, KGIN, MKR, CKE, ...
+
+task:
+  domain: Recsys
+  task: KnowledgeBased
+  framework: RecBole
+  description: "Knowledge-based Recommendation using RecBole framework"
+
+execution:
+  container: container/Recsys/recbole.sif
+  entry: RECBOLE_LOGROOT=/logs/{dataset} PYTHONPATH=/app/recbole python /app/recbole/run_recbole.py -m {model} -d {dataset}
+  workdir: /app
+  timeout: 10800  # 3小时（知识图谱模型通常更耗时）
+
+mount:
+  # RecBole 源码挂载（补齐 recbole 包）
+  recbole:
+    host: "paperbench_pro/benchmark/Recsys/RecBole"
+    container: "/app/recbole"
+
+  # Knowledge-based Recommendation 模型放在 knowledge_aware_recommender 目录
+  algorithm:
+    host: "{algorithm_path}"
+    container: "/app/recbole/recbole/model/knowledge_aware_recommender/{model_lower}.py"
+  
+  hyperparameter:
+    host: "{hyperparameter_path}"
+    container: "/app/recbole/recbole/properties/model/{model}.yaml"
+  
+  dataset:
+    host: "paperbench_pro/dataset/Recsys/KnowledgeBased/{dataset}"
+    container: "/app/dataset/{dataset}"
+  
+  logs:
+    host: "output/logs/runs/{run_id}/tasks"
+    container: "/logs"
+
+  # 模型保存目录挂载（对应 checkpoint_dir = saved）
+  saved_logs:
+    host: "output/logs/runs/{run_id}/tasks/saved"
+    container: "/app/saved"
+
+data:
+  datasets:
+    - ml-100k
+  
+  root: dataset/Recsys/KnowledgeBased
+
+eval:
+  metrics:
+    - recall@10
+    - ndcg@10
+    - mrr@10
+    - hit@10
+    - precision@10
+  
+  primary_metric: recall@10
+  higher_is_better: true

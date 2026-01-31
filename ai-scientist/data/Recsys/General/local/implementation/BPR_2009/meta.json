@@ -1,0 +1,6 @@
+{
+  "id": "BPR_2009",
+  "model_name": "BPR",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

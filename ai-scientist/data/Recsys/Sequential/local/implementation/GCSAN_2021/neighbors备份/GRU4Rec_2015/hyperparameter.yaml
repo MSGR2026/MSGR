@@ -1,0 +1,6 @@
+embedding_size: 64              # (int) The embedding size of items. # SIMILAR: corresponds to GCSAN's hidden_size
+hidden_size: 128                # (int) The number of features in the hidden state. # DIFFERENT: GCSAN uses 64 for hidden_size
+num_layers: 1                   # (int) The number of layers in GRU. # DIFFERENT: GCSAN uses n_layers=2 for Transformer
+dropout_prob: 0.3               # (float) The dropout rate. # DIFFERENT: GCSAN uses 0.5 for hidden_dropout_prob
+loss_type: 'CE'                 # (str) The type of loss function. Range in ['BPR', 'CE']. # REUSE: same as GCSAN
+train_neg_sample_args: ~        # CE loss must disable negative sampling or RecBole will error.

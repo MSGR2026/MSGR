@@ -1,0 +1,13 @@
+{
+  "id": "FNN_2016",
+  "paper_title": "Deep Neural Networks for Learning Factorization Machines",
+  "alias": "FNN",
+  "year": 2016,
+  "domain": "Recsys",
+  "task": "ContextAwareRecommendation",
+  "idea": "",
+  "introduction": "",
+  "method": "",
+  "experiments": "",
+  "hyperparameter": ""
+}

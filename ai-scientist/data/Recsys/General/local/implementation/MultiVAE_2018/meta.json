@@ -1,0 +1,6 @@
+{
+  "id": "MultiVAE_2018",
+  "model_name": "MultiVAE",
+  "task": "GeneralRecommendation",
+  "domain": "Recsys"
+}

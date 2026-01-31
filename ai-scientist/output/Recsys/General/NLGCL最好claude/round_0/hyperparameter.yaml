@@ -1,0 +1,30 @@
+# NLGCL: Neighbor Layers Graph Contrastive Learning for Recommendation
+# Reference: Neighbor Layers Graph Contrastive Learning for Recommendation (2025)
+
+# Embedding settings
+embedding_size: 64              # (int) The embedding size of users and items, as specified in paper.
+
+# GCN architecture
+n_layers: 3                     # (int) The number of GCN layers (L). Paper uses 2 for Yelp/Alibaba, 3 for Pinterest/QB-Video.
+
+# Loss weights
+reg_weight: 1e-4                # (float) L2 regularization weight (λ₂), as specified in paper.
+ssl_weight: 1e-5                # (float) Contrastive learning weight (λ₁), as specified in paper.
+
+# Contrastive learning settings
+ssl_temp: 0.2                   # (float) Temperature parameter (τ) for InfoNCE loss, as specified in paper.
+n_groups: 2                     # (int) Number of contrastive view groups (G), as specified in paper.
+ssl_scope: 'heterogeneous'      # (str) Negative sampling scope. Options: 'heterogeneous' (items for users, users for items), 'entire' (all nodes).
+
+# Regularization settings
+require_pow: False              # (bool) Whether to use power operation in regularization loss.
+
+# Training settings
+learning_rate: 0.001            # (float) Learning rate for Adam optimizer with Xavier initialization.
+train_batch_size: 4096          # (int) Training batch size, as specified in paper.
+
+# Early stopping
+stopping_step: 20               # (int) Early-stop patience in epochs, as specified in paper.
+
+# Evaluation
+eval_batch_size: 4096           # (int) Evaluation batch size for full sort prediction.
